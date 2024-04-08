@@ -1,0 +1,41 @@
+<mat-toolbar class="toolbar-list">
+    <mat-toolbar-row>
+        <button mat-icon-button color="basic">
+            <mat-icon>arrow_back_ios</mat-icon>
+        </button>
+        <span>Profesor</span>
+        <span class="spacer"></span>
+        <span>Gestión de Listas de Asistencia</span>
+        <span class="spacer"></span>
+        <button mat-icon-button color="basic">
+            <mat-icon>logout</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-grid-list cols="3" rowHeight="3:1">
+    <mat-grid-tile>
+        <button mat-raised-button class="button-gestion"> Gestionar Alumnos</button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button class="button-gestion" mat-raised-button>Crear Lista de Asistencia</button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button class="button-gestion" mat-raised-button>Generar Reporte</button>
+    </mat-grid-tile>
+</mat-grid-list>
+
+<mat-grid-list cols="4" rowHeight="2:1">
+    <mat-grid-tile>
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>04/05/2023</mat-card-title>
+                <mat-card-subtitle>Hora: 14:00 - 16:00</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-actions align="end">
+                <button mat-button color="basis">Editar</button>
+                <button mat-button color="warn">Eliminar</button>
+            </mat-card-actions>
+        </mat-card>
+    </mat-grid-tile>
+</mat-grid-list>

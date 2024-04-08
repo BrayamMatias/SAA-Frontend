@@ -1,0 +1,54 @@
+<mat-toolbar class="toolbar-list">
+    <mat-toolbar-row>
+        <button mat-icon-button color="basic">
+            <mat-icon>arrow_back_ios</mat-icon>
+        </button>
+        <span>Profesor</span>
+        <span class="spacer"></span>
+        <span>Pase de Asistencia</span>
+        <span class="spacer"></span>
+        <button mat-icon-button color="basic">
+            <mat-icon>logout</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="container">
+    <div class="user-table-container">
+        <mat-table [dataSource]="dataSource">
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="enrollment">
+                <mat-header-cell *matHeaderCellDef> Matricula </mat-header-cell>
+                <mat-cell *matCellDef="let student"> {{student.enrollment}} </mat-cell>
+            </ng-container>
+
+            <!-- Email Column -->
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                <mat-cell *matCellDef="let student"> {{student.name}} </mat-cell>
+            </ng-container>
+
+            <!-- Accion Column -->
+            <ng-container matColumnDef="attendance">
+                <mat-header-cell *matHeaderCellDef> Asistencia </mat-header-cell>
+                <mat-cell *matCellDef="let student">
+                        <mat-radio-group [(ngModel)]="labelPosition">
+                            <mat-radio-button value="full">Asistencia</mat-radio-button>
+                            <mat-radio-button value="half">Media</mat-radio-button>
+                            <mat-radio-button value="quarter">Cuarto</mat-radio-button>
+                            <mat-radio-button value="none">Nada</mat-radio-button>
+                          </mat-radio-group>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+    </div>
+
+    <div class="button-container">
+        <button mat-raised-button color="primary">Guardar</button>
+    </div>
+</div>

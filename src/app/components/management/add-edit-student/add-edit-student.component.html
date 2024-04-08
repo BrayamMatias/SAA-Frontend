@@ -1,0 +1,103 @@
+<mat-toolbar class="toolbar-student">
+    <mat-toolbar-row>
+        <span>Profesor</span>
+        <span class="spacer"></span>
+        <button mat-icon-button color="basic">
+            <mat-icon>logout</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="student-wrapper">
+
+    <div class="student-container">
+        <div class="heading">
+            <h1>Añadir Estudiantes</h1>
+            <p>Añade estudiantes a tu unidad de aprendizaje</p>
+        </div>
+
+        <div class="form-input">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Buscar</mat-label>
+                <input matInput [(ngModel)]="searchTextAdd" (keyup)="applyFilterAdd()" placeholder="Ingresa matricula o nombre">
+            </mat-form-field>
+        </div>
+
+        <!-- Tabla de Añadir Estudiantes -->
+        <div class="student-table">
+            <mat-table [dataSource]="dataSourceAdd">
+
+                <!-- Matricula Column -->
+                <ng-container matColumnDef="matricula">
+                    <mat-header-cell *matHeaderCellDef> Matricula </mat-header-cell>
+                    <mat-cell *matCellDef="let student"> {{student.matricula}} </mat-cell>
+                </ng-container>
+
+                <!-- Nombre Column -->
+                <ng-container matColumnDef="nombre">
+                    <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                    <mat-cell *matCellDef="let student"> {{student.nombre}} </mat-cell>
+                </ng-container>
+
+                <!-- Action Column (Botón de Añadir) -->
+                <ng-container matColumnDef="accion">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let student">
+                        <button mat-raised-button color="primary">
+                            Añadir<mat-icon>add</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator #paginatorAdd [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
+    <div class="student-container">
+        <div class="heading">
+            <h1>Estudiantes Inscritos</h1>
+            <p>Elimina estudiantes de tu unidad de aprendizaje</p>
+        </div>
+
+        <div class="form-input">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Buscar</mat-label>
+                <input matInput [(ngModel)]="searchTextDelete" (keyup)="applyFilterDelete()" placeholder="Ingresa matricula o nombre">
+            </mat-form-field>
+        </div>
+
+        <!-- Tabla de Eliminar Estudiantes -->
+        <div class="student-table">
+            <mat-table [dataSource]="dataSourceDelete">
+
+                <!-- Matricula Column -->
+                <ng-container matColumnDef="matricula">
+                    <mat-header-cell *matHeaderCellDef> Matricula </mat-header-cell>
+                    <mat-cell *matCellDef="let student"> {{student.matricula}} </mat-cell>
+                </ng-container>
+
+                <!-- Nombre Column -->
+                <ng-container matColumnDef="nombre">
+                    <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                    <mat-cell *matCellDef="let student"> {{student.nombre}} </mat-cell>
+                </ng-container>
+
+                <!-- Action Column (Botón de Eliminar) -->
+                <ng-container matColumnDef="accion">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let student">
+                        <button mat-raised-button color="warn">
+                            Eliminar<mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator #paginatorDelete [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+:root {
+    --primary-color: #610726; /* Color principal */
+    --primary-dark: #451b2d; /* Tono oscuro */
+    --primary-light: #7f3a4d; /* Tono claro */
+    --primary-hover: #542137; /* Color al pasar el ratón */
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+/* Estilos del toolbar */
+.toolbar-student {
+    background-color: #610726;
+    color: white;
+}
+
+/* Estilos del contenedor del formulario de registro */
+.student-wrapper {
+    background: linear-gradient(to bottom, #7f3a4d, #cfcfcf);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+
+.student-container {
+    background-color: white; /* Color de fondo */
+    border: 1px solid #7f3a4d; /* Borde */
+    border-radius: 1rem; /* Borde redondeado */
+    padding: 20px; /* Ajuste de relleno */
+    margin-top: 2rem; /* Ajuste de espaciado superior */
+    margin-left: 2rem; /* Ajuste de espaciado izquierdo */
+    margin-right: 2rem; /* Ajuste de espaciado derecho */
+    margin-bottom: 5rem; /* Ajuste de espaciado inferior */
+    width: 100%; /* Ancho */
+    max-width: 800px; /* Ancho máximo */
+    max-height: auto; /* Altura máxima */
+    
+    .heading {
+        margin-bottom: 20px; /* Ajuste de espaciado */
+        h1 {
+            margin-top: 2rem;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            color: #610726;
+            margin-bottom: 10px; /* Ajuste de espaciado */
+        }
+        p {
+            margin-top: 1rem;
+            font-size: 1rem;
+            text-align: center;
+            color: #7f3a4d;
+        }
+    }
+
+    .form-input {
+        margin-bottom: 1rem; /* Ajuste de espaciado */
+        
+    }
+
+    .full-width {
+        width: calc(100% - 20px); /* Ajuste de ancho */
+        margin: 0 10px; /* Espacio de 10px en cada lado */
+    }
+}
+
+
+
+
+

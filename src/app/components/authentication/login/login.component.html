@@ -1,0 +1,48 @@
+<!-- Interfaz Login -->
+<div class="login-wrapper">
+    <div class="login-container">
+        <div class="heading">
+            <h1>Iniciar Sesión</h1>
+            <p>Ingresa tus credenciales para acceder a tu cuenta.</p>
+        </div>
+
+        <div class="login-form">
+            <form [formGroup]="formLogin" (ngSubmit)="login()">
+
+
+                <div class="form-input">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Correo eléctronico</mat-label>
+                        <input formControlName="email" matInput placeholder="pat@example.com">
+                        <mat-error
+                            *ngIf="formLogin.get('email')?.hasError('required') && formLogin.get('email')?.touched">El
+                            campo es requerido</mat-error>
+                        <mat-error
+                            *ngIf="formLogin.get('email')?.hasError('email') && formLogin.get('email')?.touched">Por
+                            favor, introduce un correo electrónico válido</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-input">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Contraseña</mat-label>
+                        <input formControlName="password" matInput [type]="hide ? 'password' : 'text'">
+                        <mat-error
+                            *ngIf="formLogin.get('password')?.hasError('required') && formLogin.get('password')?.touched">El
+                            campo es requerido</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <a href="">¿Olvidaste tu contraseña?</a>
+                <button mat-raised-button [disabled]="formLogin.invalid" type="submit" color="warn"
+                    class="button-login">Iniciar Sesión</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<!-- Boton de ocultar y mostrar contraseña -->
+<!-- <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+</button> -->

@@ -1,0 +1,34 @@
+<mat-toolbar class="toolbar-admin">
+    <mat-toolbar-row>
+        <span>Profesor</span>
+        <span class="spacer"></span>
+        <span>Inicio</span>
+        <span class="spacer"></span>
+        <button mat-icon-button color="basic" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="buttons-container">
+
+<button mat-raised-button routerLink="/add-learning-unit" class="button">Crear Unidad de Aprendizaje</button>
+    
+</div>
+
+<mat-grid-list cols="3" rowHeight="3:2">
+    <mat-grid-tile>
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Nombre Unidad de Aprendizaje</mat-card-title>
+                <mat-card-subtitle>Grado</mat-card-subtitle>
+                <mat-card-subtitle>Grupo</mat-card-subtitle>
+                <mat-card-subtitle>Periodo</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-actions align="end">
+                <button mat-button color="basis">Editar</button>
+                <button mat-button color="warn">Eliminar</button>
+            </mat-card-actions>
+        </mat-card>
+    </mat-grid-tile>
+</mat-grid-list>

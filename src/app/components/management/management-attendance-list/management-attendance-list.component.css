@@ -1,0 +1,29 @@
+.toolbar-list{
+    background-color: #610726;
+    color: white;
+}
+
+mat-card{
+    width: 250px;
+}
+
+.register-wrapper {
+    background: linear-gradient(to bottom, #e0a7b6, #cfcfcf);
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: auto; /* Altura automática */
+}
+
+
+.button-gestion{
+    width: calc(100% - 3rem); /* Ajuste de ancho */
+    height: 3rem; /* Ajuste de alto */
+    margin: 0 10px; /* Espacio de 10px en cada lado */
+}
+
+.mat-mdc-raised-button.mat-unthemed {
+    --mdc-protected-button-container-color: #610726; 
+    --mdc-protected-button-label-text-color: #fff; 
+}
+

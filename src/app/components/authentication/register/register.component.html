@@ -1,0 +1,100 @@
+<!-- Interfaz Registro -->
+<mat-toolbar class="toolbar-admin">
+    <mat-toolbar-row>
+        <span>Administrador</span>
+        <span class="spacer"></span>
+        <button mat-icon-button color="basic" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="register-wrapper">
+    <div class="register-container">
+        <div class="heading">
+            <h1>{{operation}}</h1>
+            <p>{{operation}} un usuario</p>
+        </div>
+
+
+
+        <div class="register-form">
+            <form [formGroup]="formRegister" (ngSubmit)="createUser()">
+
+                <div class="form-input">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Nombre</mat-label>
+                        <input matInput formControlName="name" placeholder="Nombre" required>
+                        <mat-error
+                            *ngIf="formRegister.get('name')?.hasError('required') && formRegister.get('name')?.touched">El
+                            campo es requerido</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-input">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Correo electrónico</mat-label>
+                        <input matInput formControlName="email" placeholder="pat@example.com" required>
+                        <mat-error
+                            *ngIf="formRegister.get('email')?.hasError('required') && formRegister.get('email')?.touched">El
+                            campo es requerido</mat-error>
+                        <mat-error
+                            *ngIf="formRegister.get('email')?.hasError('email') && formRegister.get('email')?.touched">Por
+                            favor, introduce un correo electrónico válido</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-input">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Contraseña</mat-label>
+                        <input matInput formControlName="password" [type]="hide ? 'password' : 'text'">
+                        <mat-error
+                            *ngIf="formRegister.get('password')?.hasError('required') && formRegister.get('password')?.touched">El
+                            campo es requerido</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <button mat-raised-button mat-raised-button [disabled]="formRegister.invalid" type="submit" color="primary" class="button-register">Guardar</button>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="user-table-container">
+        <h2>Usuarios Registrados</h2>
+        <mat-table [dataSource]="dataSource">
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                <mat-cell *matCellDef="let teacher"> {{teacher.name}} </mat-cell>
+            </ng-container>
+
+            <!-- Email Column -->
+            <ng-container matColumnDef="email">
+                <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+                <mat-cell *matCellDef="let teacher"> {{teacher.email}} </mat-cell>
+            </ng-container>
+
+            <!-- Accion Column -->
+            <ng-container matColumnDef="accion">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let teacher">
+                    <button mat-icon-button color="primary">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
+    </div>
+
+</div>

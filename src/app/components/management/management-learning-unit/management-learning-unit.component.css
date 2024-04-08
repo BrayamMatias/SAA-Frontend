@@ -1,0 +1,21 @@
+.toolbar-admin{
+    background-color: #610726;
+    color: white;
+}
+
+.buttons-container{
+margin-top: 2rem;
+margin-bottom: 2rem;
+margin-inline: 5rem;
+}
+
+.button{
+    width: calc(100% - 20px); /* Ajuste de ancho */
+    height: 3rem; /* Ajuste de alto */
+    margin: 0 10px; /* Espacio de 10px en cada lado */
+}
+
+.mat-mdc-raised-button.mat-unthemed {
+    --mdc-protected-button-container-color: #610726; 
+    --mdc-protected-button-label-text-color: #fff; 
+}

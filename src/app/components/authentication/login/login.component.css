@@ -1,0 +1,85 @@
+:root {
+    --primary-color: #610726; /* Color principal */
+    --primary-dark: #451b2d; /* Tono oscuro */
+    --primary-light: #7f3a4d; /* Tono claro */
+    --primary-hover: #542137; /* Color al pasar el ratón */
+}
+
+.login-wrapper {
+    background: linear-gradient(to bottom, #7f3a4d, #cfcfcf);
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 100vh; /* 100% del viewport */
+}
+
+.login-container {
+    background-color: white;
+    width: 100%;
+    height: auto;
+    max-width: 500px;
+    border: 1px solid #7f3a4d;
+    border-radius: 1rem;
+    padding: 20px;
+
+    .heading {
+        margin-bottom: 20px; /* Ajuste de espaciado */
+        h1 {
+            margin-top: 2rem;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            color: #610726;
+            margin-bottom: 10px; /* Ajuste de espaciado */
+        }
+        p {
+            margin-top: 1rem;
+            font-size: 1rem;
+            text-align: center;
+            color: #7f3a4d;
+        }
+    }
+
+    .login-form {
+        margin-top: 5rem; /* Ajuste de espaciado */
+        margin-bottom: 1.5rem; /* Ajuste de espaciado */
+    }
+
+    .form-input {
+        margin-bottom: 1rem; /* Ajuste de espaciado */
+        
+    }
+
+    .full-width {
+        width: calc(100% - 20px); /* Ajuste de ancho */
+        margin: 0 10px; /* Espacio de 10px en cada lado */
+    }
+
+    a {
+        display: block; /* Añadido para ocupar todo el ancho */
+        text-align: center; /* Centrado */
+        margin-bottom: 2rem; /* Ajuste de espaciado */
+        color: #7f3a4d;
+    }
+
+    .button-login{
+        width: calc(100% - 20px); /* Ajuste de ancho */
+        height: 3rem; /* Ajuste de alto */
+        margin: 0 10px; /* Espacio de 10px en cada lado */
+        background-color: #610726; /* Color de fondo */
+    }
+
+    mat-icon{
+        color: #610726; /* Color del icono */
+    }
+
+    mat-label {
+        color: #610726; /* Color del texto */
+    }
+    
+}
+
+
+
+
+

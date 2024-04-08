@@ -1,0 +1,19 @@
+.toolbar-list{
+    background-color: #610726;
+    color: white;
+}
+
+.container{
+    margin: 5rem;
+    margin-top: 2rem; /* Ajuste de espaciado */
+    margin-bottom: 2rem; /* Ajuste de espaciado */
+}
+
+.user-table-container {
+    background-color: white; /* Color de fondo */
+    border: 1px solid #7f3a4d; /* Borde */
+    border-radius: 1rem; /* Borde redondeado */
+    width: 100%; /* Ancho */
+    padding: 10px; /* Ajuste de relleno */
+    max-height: auto; /* Altura máxima */ 
+}

@@ -22,8 +22,7 @@ export class AddEditLearningUnitComponent implements OnInit {
     grade: ['', Validators.required],
     group: ['', Validators.required],
     daysGiven: this.fb.array([]),
-    endTime: this.fb.array([]),
-    user: [JSON.parse(localStorage.getItem('user') || '')?.id],
+    endTime: this.fb.array([])
   });
 
   selectedDays: string[] = [];
@@ -36,7 +35,7 @@ export class AddEditLearningUnitComponent implements OnInit {
   val_grades = ['1er', '2do', '3ro', '4to', '5to', '6to', '7mo', '8vo', '9no'];
   val_groups = ['A', 'B', 'C'];
   val_days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
-  val_hours = ['14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00'];
+  val_hours = ['12:00 - 14:00', '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00'];
 
   constructor(
     private router: Router,

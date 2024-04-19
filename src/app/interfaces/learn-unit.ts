@@ -6,5 +6,4 @@ export interface LearnUnit {
     period: string;
     daysGiven: [string];
     endTime: [string];
-    user?: number;
 }

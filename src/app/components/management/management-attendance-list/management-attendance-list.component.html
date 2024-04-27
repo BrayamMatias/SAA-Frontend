@@ -13,29 +13,31 @@
     </mat-toolbar-row>
 </mat-toolbar>
 
-<mat-grid-list cols="3" rowHeight="3:1">
-    <mat-grid-tile>
-        <button mat-raised-button class="button-gestion"> Gestionar Alumnos</button>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <button class="button-gestion" mat-raised-button>Crear Lista de Asistencia</button>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <button class="button-gestion" mat-raised-button>Generar Reporte</button>
-    </mat-grid-tile>
-</mat-grid-list>
+<div class="button-container">
+    <button mat-raised-button class="button">Gestionar Alumnos</button>
+    <button mat-raised-button class="button">Crear Lista de Asistencia</button>
+    <button mat-raised-button class="button">Generar Reporte</button>
+</div>
 
-<mat-grid-list cols="4" rowHeight="2:1">
-    <mat-grid-tile>
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title>04/05/2023</mat-card-title>
-                <mat-card-subtitle>Hora: 14:00 - 16:00</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-actions align="end">
-                <button mat-button color="basis">Editar</button>
-                <button mat-button color="warn">Eliminar</button>
-            </mat-card-actions>
-        </mat-card>
-    </mat-grid-tile>
-</mat-grid-list>
+<div class="card-container">
+    <div class="card">
+        <div class="card-header">
+            <h2>103/05/2024</h2>
+            <p>Horario: 14:00 - 16:00</p>
+        </div>
+        <div class="card-footer">
+            <button mat-button color="basis">Editar</button>
+            <button mat-button color="warn">Eliminar</button>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h2>103/05/2024</h2>
+            <p>Horario: 14:00 - 16:00</p>
+        </div>
+        <div class="card-footer">
+            <button mat-button color="basis">Editar</button>
+            <button mat-button color="warn">Eliminar</button>
+        </div>
+    </div>
+</div>

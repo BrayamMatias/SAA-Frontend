@@ -13,15 +13,15 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="unit-wrapper">
-  <div class="unit-container">
+<div class="wrapper">
+  <div class="container">
     <div class="heading">
       <h1>Nueva Unidad de Aprendizaje</h1>
       <p>Complete el siguiente formulario para registrar una nueva unidad de aprendizaje.</p>
     </div>
     <!-- Formulario unidad de aprendizaje -->
     <form [formGroup]="formLearningUnit">
-      <div class="unit-form">
+      <div class="container-form">
         <div class="form-input">
 
           <!-- Campo nombre -->
@@ -109,7 +109,7 @@
             </div>
           </mat-accordion>
         </div>
-        <button mat-raised-button (click)="submitForm()" [disabled]="formLearningUnit.invalid" color="primary" class="button-register">Guardar</button>
+        <button mat-raised-button class="button" (click)="submitForm()" [disabled]="formLearningUnit.invalid" >Guardar</button>
       </div>
     </form>
 

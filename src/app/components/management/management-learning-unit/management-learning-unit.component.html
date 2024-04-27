@@ -10,25 +10,19 @@
     </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="buttons-container">
-
 <button mat-raised-button routerLink="/add-learning-unit" class="button">Crear Unidad de Aprendizaje</button>
-    
-</div>
 
-<mat-grid-list cols="3" rowHeight="3:2">
-    <mat-grid-tile>
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title>Nombre Unidad de Aprendizaje</mat-card-title>
-                <mat-card-subtitle>Grado</mat-card-subtitle>
-                <mat-card-subtitle>Grupo</mat-card-subtitle>
-                <mat-card-subtitle>Periodo</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-actions align="end">
-                <button mat-button color="basis">Editar</button>
-                <button mat-button color="warn">Eliminar</button>
-            </mat-card-actions>
-        </mat-card>
-    </mat-grid-tile>
-</mat-grid-list>
+<div class="card-container">
+    <div class="card">
+        <div class="card-header">
+            <h2>Nombre Unidad de Aprendizaje</h2>
+            <p>Grado</p>
+            <p>Grupo</p>
+            <p>Periodo</p>
+        </div>
+        <div class="card-footer">
+            <button mat-button color="basis">Editar</button>
+            <button mat-button color="warn">Eliminar</button>
+        </div>
+    </div>
+</div>

@@ -9,16 +9,14 @@
     </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="register-wrapper">
-    <div class="register-container">
+<div class="wrapper">
+    <div class="container">
         <div class="heading">
             <h1>{{operation}}</h1>
             <p>{{operation}} un usuario</p>
         </div>
 
-
-
-        <div class="register-form">
+        <div class="container-form">
             <form [formGroup]="formRegister" (ngSubmit)="createUser()">
 
                 <div class="form-input">
@@ -54,7 +52,7 @@
                     </mat-form-field>
                 </div>
 
-                <button mat-raised-button mat-raised-button [disabled]="formRegister.invalid" type="submit" color="primary" class="button-register">Guardar</button>
+                <button mat-raised-button class="button" [disabled]="formRegister.invalid" type="submit">Guardar</button>
 
             </form>
         </div>

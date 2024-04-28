@@ -10,6 +10,7 @@ import { ManagementLearningUnitComponent } from './components/management/managem
 import { ManagementAttendanceListComponent } from './components/management/management-attendance-list/management-attendance-list.component';
 import { AttendanceListComponent } from './components/management/attendance-list/attendance-list.component';
 import { ManagementReportsComponent } from './components/management/management-reports/management-reports.component';
+import { ForgotPasswordComponent } from './components/authentication/forgot-password/forgot-password.component';
 
 //Modules
 import { AppRoutingModule } from './app-routing.module';
@@ -22,6 +23,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 @NgModule({
@@ -29,12 +31,14 @@ import { HttpClientModule } from '@angular/common/http';
     AppComponent,
     LoginComponent,
     RegisterComponent,
+    ForgotPasswordComponent,
     AddEditStudentComponent,
     AddEditLearningUnitComponent,
     ManagementLearningUnitComponent,
     ManagementAttendanceListComponent,
     AttendanceListComponent,
-    ManagementReportsComponent
+    ManagementReportsComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -48,7 +52,9 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -24,7 +24,7 @@ export class AddEditStudentComponent implements OnInit {
 
   ngOnInit(): void {
     const studentsAdd: Student[] = [
-      { matricula: '11111', nombre: 'Usuario 1' },
+      { matricula: '20206677', nombre: 'Brayam García Matías' },
       { matricula: '33333', nombre: 'Usuario 3' },
       { matricula: '444441', nombre: 'Usuario 4'},
       { matricula: '444442', nombre: 'Usuario 4'},

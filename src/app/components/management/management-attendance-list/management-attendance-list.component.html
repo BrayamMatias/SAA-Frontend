@@ -1,9 +1,8 @@
-<mat-toolbar class="toolbar-list">
+<mat-toolbar  color="primary" class="toolbar-list">
     <mat-toolbar-row>
-        <button mat-icon-button color="basic">
+        <button mat-icon-button color="basic" routerLink="/home">
             <mat-icon>arrow_back_ios</mat-icon>
         </button>
-        <span>Profesor</span>
         <span class="spacer"></span>
         <span>Gestión de Listas de Asistencia</span>
         <span class="spacer"></span>
@@ -14,29 +13,22 @@
 </mat-toolbar>
 
 <div class="button-container">
-    <button mat-raised-button class="button">Gestionar Alumnos</button>
-    <button mat-raised-button class="button">Crear Lista de Asistencia</button>
+    <button mat-raised-button class="button" routerLink="/add-students">Gestionar Alumnos</button>
+    <button mat-raised-button class="button" routerLink="/attendance-list">Crear Lista de Asistencia</button>
     <button mat-raised-button class="button">Generar Reporte</button>
 </div>
 
 <div class="card-container">
     <div class="card">
         <div class="card-header">
-            <h2>103/05/2024</h2>
-            <p>Horario: 14:00 - 16:00</p>
+            <h2>03/05/2024</h2>
+            <hr>
+        </div>
+        <div class="card-info-container">
+            <h5>Horario:</h5><p>14:00 - 16:00</p>
         </div>
         <div class="card-footer">
-            <button mat-button color="basis">Editar</button>
-            <button mat-button color="warn">Eliminar</button>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header">
-            <h2>103/05/2024</h2>
-            <p>Horario: 14:00 - 16:00</p>
-        </div>
-        <div class="card-footer">
-            <button mat-button color="basis">Editar</button>
+            <button mat-raised-button color="primary">Editar</button>
             <button mat-button color="warn">Eliminar</button>
         </div>
     </div>

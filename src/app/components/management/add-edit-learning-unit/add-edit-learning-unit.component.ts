@@ -12,8 +12,8 @@ import { LearningUnitService } from 'src/app/services/learning-unit.service';
 export class AddEditLearningUnitComponent implements OnInit {
 
   id: number;
-  user = JSON.parse(localStorage.getItem('user') || '');
-  userId = this.user ? this.user.id : undefined;
+  //user = JSON.parse(localStorage.getItem('user') || '');
+  //userId = this.user ? this.user.id : undefined;
 
   formLearningUnit = this.fb.group({
     name: ['', Validators.required],

@@ -1,11 +1,9 @@
 <!-- Interfaz Registro -->
-<mat-toolbar class="toolbar-unit">
+<mat-toolbar color="primary" class="toolbar">
   <mat-toolbar-row>
     <button mat-icon-button routerLink="/home" color="basic">
       <mat-icon>arrow_back_ios</mat-icon>
     </button>
-    <span class="spacer"></span>
-    <span>Profesor</span>
     <span class="spacer"></span>
     <button mat-icon-button (click)="logout()" color="basic">
       <mat-icon>logout</mat-icon>
@@ -109,7 +107,7 @@
             </div>
           </mat-accordion>
         </div>
-        <button mat-raised-button class="button" (click)="submitForm()" [disabled]="formLearningUnit.invalid" >Guardar</button>
+        <button mat-raised-button color="primary" class="button" (click)="submitForm()" [disabled]="formLearningUnit.invalid" >Guardar</button>
       </div>
     </form>
 

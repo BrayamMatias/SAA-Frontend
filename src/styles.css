@@ -23,6 +23,10 @@ body {
     flex: 1 1 auto;
 }
 
+.toolbar-admin{
+    color: white;
+}
+
 .button{
     width: calc(100% - 20px); /* Ajuste de ancho */
     height: 2rem;
@@ -96,3 +100,6 @@ body {
 
 }
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

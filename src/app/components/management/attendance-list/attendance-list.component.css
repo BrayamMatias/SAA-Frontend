@@ -1,19 +1,26 @@
-.toolbar-list{
-    background-color: #610726;
-    color: white;
+.form-input {
+  margin: 2rem;
+  width: calc(100% - 4rem);
+  box-sizing: border-box;
 }
 
-.container{
-    margin: 5rem;
-    margin-top: 2rem; /* Ajuste de espaciado */
-    margin-bottom: 2rem; /* Ajuste de espaciado */
+.full-width {
+  width: 100%;
+}
+.button{
+  height: 3rem;
+  margin-bottom: 2rem;
 }
 
-.user-table-container {
-    background-color: white; /* Color de fondo */
-    border: 1px solid #7f3a4d; /* Borde */
-    border-radius: 1rem; /* Borde redondeado */
-    width: 100%; /* Ancho */
-    padding: 10px; /* Ajuste de relleno */
-    max-height: auto; /* Altura máxima */ 
-}
+.demo-table {
+    width: 100%;
+    overflow: auto;
+    display: block;
+    margin-bottom: 2rem;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .demo-table {
+      overflow-x: auto;
+    }
+  }

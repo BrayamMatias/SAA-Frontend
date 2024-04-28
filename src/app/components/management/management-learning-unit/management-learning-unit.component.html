@@ -1,6 +1,5 @@
-<mat-toolbar class="toolbar-admin">
+<mat-toolbar color="primary" class="toolbar-admin">
     <mat-toolbar-row>
-        <span>Profesor</span>
         <span class="spacer"></span>
         <span>Inicio</span>
         <span class="spacer"></span>
@@ -13,16 +12,20 @@
 <button mat-raised-button routerLink="/add-learning-unit" class="button">Crear Unidad de Aprendizaje</button>
 
 <div class="card-container">
-    <div class="card">
+    <div class="card" routerLink="/management-list">
         <div class="card-header">
             <h2>Nombre Unidad de Aprendizaje</h2>
-            <p>Grado</p>
-            <p>Grupo</p>
-            <p>Periodo</p>
         </div>
+        <hr>
+        <div class="card-info-container">
+            <h5>Grado: <p>1er</p></h5> 
+            <h5>Grupo: <p>A</p></h5> 
+            <h5>Periodo: <p>Primavera2024</p></h5>
+        </div> 
         <div class="card-footer">
-            <button mat-button color="basis">Editar</button>
+            <button mat-raised-button color="primary">Editar</button>
             <button mat-button color="warn">Eliminar</button>
         </div>
     </div>
 </div>
+

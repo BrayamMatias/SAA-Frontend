@@ -1,6 +1,10 @@
-<mat-toolbar class="toolbar-student">
+<mat-toolbar color="primary" class="toolbar">
     <mat-toolbar-row>
-        <span>Profesor</span>
+        <button mat-icon-button routerLink="/management-list" color="basic">
+            <mat-icon>arrow_back_ios</mat-icon>
+          </button>
+        <span class="spacer"></span>
+        <span>Gestión de alumnos</span>
         <span class="spacer"></span>
         <button mat-icon-button color="basic">
             <mat-icon>logout</mat-icon>
@@ -8,9 +12,8 @@
     </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="student-wrapper">
-
-    <div class="student-container">
+<div class="wrapper">
+    <div class="container">
         <div class="heading">
             <h1>Añadir Estudiantes</h1>
             <p>Añade estudiantes a tu unidad de aprendizaje</p>
@@ -55,7 +58,8 @@
             <mat-paginator #paginatorAdd [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
         </div>
     </div>
-    <div class="student-container">
+
+    <div class="container">
         <div class="heading">
             <h1>Estudiantes Inscritos</h1>
             <p>Elimina estudiantes de tu unidad de aprendizaje</p>

@@ -1,18 +1,15 @@
-:root {
-    --primary-color: #610726; /* Color principal */
-    --primary-dark: #451b2d; /* Tono oscuro */
-    --primary-light: #7f3a4d; /* Tono claro */
-    --primary-hover: #542137; /* Color al pasar el ratón */
+.container{
+    border: 1px solid #dddddd; /* Borde */
 }
 
-.toolbar-admin{
-    background-color: #610726;
-    color: white;
+.button { /* Ajusta el ancho del botón */
+    height: 50px; /* Ajusta la altura del botón */
+    padding: 10px 20px; /* Ajusta el padding interno del botón */
 }
 
 .user-table-container {
     background-color: white; /* Color de fondo */
-    border: 1px solid #7f3a4d; /* Borde */
+    border: 1px solid #dddddd; /* Borde */
     border-radius: 1rem; /* Borde redondeado */
     padding: 20px; /* Ajuste de relleno */
     margin: 2rem;

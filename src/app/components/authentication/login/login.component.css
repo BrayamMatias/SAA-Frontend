@@ -1,4 +1,8 @@
 
+.button { /* Ajusta el ancho del botón */
+    height: 50px; /* Ajusta la altura del botón */
+    padding: 10px 20px; /* Ajusta el padding interno del botón */
+}
 /* Media queries para dispositivos de pantalla más pequeña */
 @media only screen and (max-width: 768px) {
     .container {

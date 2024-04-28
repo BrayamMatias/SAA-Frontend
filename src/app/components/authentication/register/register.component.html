@@ -1,5 +1,5 @@
 <!-- Interfaz Registro -->
-<mat-toolbar class="toolbar-admin">
+<mat-toolbar color="primary" class="toolbar-admin">
     <mat-toolbar-row>
         <span>Administrador</span>
         <span class="spacer"></span>
@@ -13,7 +13,7 @@
     <div class="container">
         <div class="heading">
             <h1>{{operation}}</h1>
-            <p>{{operation}} un usuario</p>
+            <p>{{operation}} un usuario añadiendo su información en los campos siguientes.</p>
         </div>
 
         <div class="container-form">
@@ -52,7 +52,7 @@
                     </mat-form-field>
                 </div>
 
-                <button mat-raised-button class="button" [disabled]="formRegister.invalid" type="submit">Guardar</button>
+                <button mat-raised-button color="primary" class="button" [disabled]="formRegister.invalid" type="submit">Guardar</button>
 
             </form>
         </div>

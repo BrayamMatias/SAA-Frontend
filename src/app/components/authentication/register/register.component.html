@@ -22,9 +22,9 @@
                 <div class="form-input">
                     <mat-form-field appearance="outline" class="full-width">
                         <mat-label>Nombre</mat-label>
-                        <input matInput formControlName="name" placeholder="Nombre" required>
+                        <input matInput formControlName="fullName" placeholder="Nombre" required>
                         <mat-error
-                            *ngIf="formRegister.get('name')?.hasError('required') && formRegister.get('name')?.touched">El
+                            *ngIf="formRegister.get('fullName')?.hasError('required') && formRegister.get('name')?.touched">El
                             campo es requerido</mat-error>
                     </mat-form-field>
                 </div>

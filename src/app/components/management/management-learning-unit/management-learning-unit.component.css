@@ -8,7 +8,7 @@
 /* Estilos para el contenedor de la tarjeta */
 .card-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Inicialmente 4 columnas */
+    grid-template-columns: repeat(3, 1fr); /* Inicialmente 3 columnas */
     gap: 1rem; /* Espacio entre las tarjetas */
 }
 
@@ -44,6 +44,10 @@
         font-size: 12px;
         color: #818181;
     }
+}
+
+.card-time-container {
+  padding-bottom: 2rem;
 }
 
 /* Estilos para el pie de la tarjeta */

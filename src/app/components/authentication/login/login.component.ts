@@ -36,10 +36,10 @@ export class LoginComponent implements OnInit {
       this._loginService.login(this.formLogin.value).subscribe((data: any) => {
         //Guardamos el token en el local storage
         console.log(data);
-        console.log(data.user.name);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('user', JSON.stringify(data));
         localStorage.setItem('token', data.token);
-        this.router.navigate([this.redirectUser(data.user.role)]);
+        console.log(data.roles);
+        this.router.navigate([this.redirectUser(data.roles)]);
       });
     } 
   }

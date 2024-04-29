@@ -12,20 +12,28 @@
 <button mat-raised-button routerLink="/add-learning-unit" class="button">Crear Unidad de Aprendizaje</button>
 
 <div class="card-container">
-    <div class="card" routerLink="/management-list">
+    <div class="card" routerLink="/management-list" *ngFor="let subject of learningUnits">
         <div class="card-header">
-            <h2>Nombre Unidad de Aprendizaje</h2>
+            <h2>{{subject.name}}</h2>
         </div>
         <hr>
         <div class="card-info-container">
-            <h5>Grado: <p>1er</p></h5> 
-            <h5>Grupo: <p>A</p></h5> 
-            <h5>Periodo: <p>Primavera2024</p></h5>
-        </div> 
+            <h5>Grado: <p>{{subject.grade}}</p></h5>
+            <h5>Grupo: <p>{{subject.group}}</p></h5>
+            <h5>Periodo: <p>{{subject.period}}</p></h5>
+        </div>
+        <div class="card-time-container">
+            <h5>Horario:</h5>
+            <mat-chip-set cdkDropList cdkDropListOrientation="vertical">
+                <ng-container *ngFor="let day of subject.daysGiven; let i = index">
+                    <mat-chip cdkDrag>{{day}} - {{subject.endTime[i]}}</mat-chip>
+                </ng-container>
+            </mat-chip-set>
+        </div>
+
         <div class="card-footer">
             <button mat-raised-button color="primary">Editar</button>
             <button mat-button color="warn">Eliminar</button>
         </div>
     </div>
 </div>
-

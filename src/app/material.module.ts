@@ -19,8 +19,7 @@ import {MatListModule} from '@angular/material/list';
 import {FormsModule} from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
-
-
+import { MatChipsModule } from "@angular/material/chips";
 
 @NgModule({
   declarations: [],
@@ -44,7 +43,8 @@ import {MatRadioModule} from '@angular/material/radio';
     MatListModule,
     FormsModule,
     MatCheckboxModule,
-    MatRadioModule
+    MatRadioModule,
+    MatChipsModule
   ]
 })
 export class MaterialModule { }

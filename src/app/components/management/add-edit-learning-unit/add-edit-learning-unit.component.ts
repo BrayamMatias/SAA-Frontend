@@ -11,9 +11,7 @@ import { LearningUnitService } from 'src/app/services/learning-unit.service';
 })
 export class AddEditLearningUnitComponent implements OnInit {
 
-  id: number;
-  //user = JSON.parse(localStorage.getItem('user') || '');
-  //userId = this.user ? this.user.id : undefined;
+  id: string;
 
   formLearningUnit = this.fb.group({
     name: ['', Validators.required],
@@ -31,7 +29,7 @@ export class AddEditLearningUnitComponent implements OnInit {
 
 
   val_periods = ['Primavera 2024', 'Otoño 2024', 'Primavera 2025', 'Otoño 2025'];
-  val_grades = ['1er', '2do', '3ro', '4to', '5to', '6to', '7mo', '8vo', '9no'];
+  val_grades = ['1ro', '2do', '3ro', '4to', '5to', '6to', '7mo', '8vo', '9no'];
   val_groups = ['A', 'B', 'C'];
   val_days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
   val_hours = ['12:00 - 14:00', '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00'];
@@ -43,7 +41,7 @@ export class AddEditLearningUnitComponent implements OnInit {
     private aRouter: ActivatedRoute,) {
 
     this.addDayAndTime();
-    this.id = Number(aRouter.snapshot.paramMap.get('id'));
+    this.id = String(aRouter.snapshot.paramMap.get('id'));
   }
 
   ngOnInit(): void {
@@ -66,25 +64,14 @@ export class AddEditLearningUnitComponent implements OnInit {
 
   addLearningUnit() {
     let formValues = { ...this.formLearningUnit.value };
-  
-    if (formValues.daysGiven) {
-      formValues.daysGiven = formValues.daysGiven.map((control: any) => control.value);
-    } else {
-      formValues.daysGiven = [];
-    }
-  
-    if (formValues.endTime) {
-      formValues.endTime = formValues.endTime.map((control: any) => control.value);
-    } else {
-      formValues.endTime = [];
-    }
-  
-    if (this.id !== 0) {
+    console.log(formValues);
+    if (this.id !== 'null') {
       this._learnUnitService.updateLearningUnit(this.id.toString(), formValues as LearnUnit).subscribe(data => {
         this.router.navigate(['/home']);
       });
     } else {
       //Es agregar
+      console.log(formValues);
       this._learnUnitService.createLearningUnit(formValues as LearnUnit).subscribe(data => {
         this.router.navigate(['/home']);
       });

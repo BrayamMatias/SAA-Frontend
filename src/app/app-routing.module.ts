@@ -21,53 +21,27 @@ import { ForgotPasswordComponent } from './components/authentication/forgot-pass
 
 const routes: Routes = [
 
-  //---Default---
-  {path: '', component: LoginComponent},
   //---Authentication---
-  { path: 'login', component: LoginComponent},
-  { path: 'register', component: RegisterComponent},
+  { path: 'login', component: LoginComponent, canActivate: [LoginGuardService]},
+  { path: 'register', component: RegisterComponent, canActivate: [AdminGuardService]},
   { path: 'register/:id', component: RegisterComponent},
   { path: 'forgot-password', component: ForgotPasswordComponent},
   
   //---Management---
 
   //Students
-  { path: 'add-students', component: AddEditStudentComponent},
-  { path: 'edit-students/:id', component: AddEditStudentComponent},
+  { path: 'add-students', component: AddEditStudentComponent, canActivate: [UserGuardService]},
+  { path: 'edit-students/:id', component: AddEditStudentComponent, canActivate: [UserGuardService]},
   //Learning Units
-  { path: 'add-learning-unit', component: AddEditLearningUnitComponent},
-  { path: 'adit-learning-unit/:id', component: AddEditLearningUnitComponent},
+  { path: 'add-learning-unit', component: AddEditLearningUnitComponent, canActivate: [UserGuardService]},
+  { path: 'adit-learning-unit/:id', component: AddEditLearningUnitComponent, canActivate: [UserGuardService]},
   //Learning Units
-  { path: 'home', component: ManagementLearningUnitComponent},
+  { path: 'home', component: ManagementLearningUnitComponent, canActivate: [UserGuardService]},
   //Attendance
-  { path: 'management-list', component: ManagementAttendanceListComponent},
-  { path: 'attendance-list', component: AttendanceListComponent},
+  { path: 'management-list', component: ManagementAttendanceListComponent, canActivate: [UserGuardService]},
+  { path: 'attendance-list', component: AttendanceListComponent, canActivate: [UserGuardService]},
   //Reports
-  { path: 'management-reports', component: ManagementReportsComponent},
-
-  //Activar cuando este conectado con el backend
-
-  // //---Authentication---
-  // { path: 'login', component: LoginComponent, canActivate: [LoginGuardService]},
-  // { path: 'register', component: RegisterComponent, canActivate: [AdminGuardService]},
-  // { path: 'register/:id', component: RegisterComponent},
-  // { path: 'forgot-password', component: ForgotPasswordComponent},
-  
-  // //---Management---
-
-  // //Students
-  // { path: 'add-students', component: AddEditStudentComponent, canActivate: [UserGuardService]},
-  // { path: 'edit-students/:id', component: AddEditStudentComponent, canActivate: [UserGuardService]},
-  // //Learning Units
-  // { path: 'add-learning-unit', component: AddEditLearningUnitComponent, canActivate: [UserGuardService]},
-  // { path: 'adit-learning-unit/:id', component: AddEditLearningUnitComponent, canActivate: [UserGuardService]},
-  // //Learning Units
-  // { path: 'home', component: ManagementLearningUnitComponent, canActivate: [UserGuardService]},
-  // //Attendance
-  // { path: 'management-list', component: ManagementAttendanceListComponent, canActivate: [UserGuardService]},
-  // { path: 'attendance-list', component: AttendanceListComponent, canActivate: [UserGuardService]},
-  // //Reports
-  // { path: 'management-reports', component: ManagementReportsComponent, canActivate: [UserGuardService]},
+  { path: 'management-reports', component: ManagementReportsComponent, canActivate: [UserGuardService]},
 
   //any other path
   { path: '**', redirectTo: 'login'},

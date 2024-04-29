@@ -11,7 +11,7 @@ export class AdminGuardService implements CanActivate{
 
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree{
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if(user && user.role && user.role.includes('ADMIN_ROLE')){
+    if(user && user.roles && user.roles.includes('ADMIN_ROLE')){
       return true;
     }
     return this.router.parseUrl('/login');

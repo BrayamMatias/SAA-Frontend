@@ -11,12 +11,12 @@ export class LoginGuardService implements CanActivate{
 
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if(user && user.role){
-      if(user.role.includes('ADMIN_ROLE')){
+    if(user && user.roles){
+      if(user.roles.includes('ADMIN_ROLE')){
         this.router.navigate(['/register']);
         return false;
       }
-      if(user.role.includes('USER_ROLE')){
+      if(user.roles.includes('USER_ROLE')){
         this.router.navigate(['/home']);
         return false;
       }

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, Form, FormArray, FormBuilder, FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, delay } from 'rxjs';
 import { LearnUnit } from 'src/app/interfaces/learn-unit';
 import { LearningUnitService } from 'src/app/services/learning-unit.service';
+import { SweetAlertService } from 'src/app/services/sweet-alert.service';
 
 @Component({
   selector: 'app-add-edit-learning-unit',
@@ -12,6 +14,7 @@ import { LearningUnitService } from 'src/app/services/learning-unit.service';
 export class AddEditLearningUnitComponent implements OnInit {
 
   id: string;
+  operacion: string = 'Agregar';
 
   formLearningUnit = this.fb.group({
     name: ['', Validators.required],
@@ -38,14 +41,19 @@ export class AddEditLearningUnitComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private _learnUnitService: LearningUnitService,
-    private aRouter: ActivatedRoute,) {
-
+    private aRouter: ActivatedRoute,
+    private _sweetAlertService: SweetAlertService) {
     this.addDayAndTime();
+    
     this.id = String(aRouter.snapshot.paramMap.get('id'));
   }
 
   ngOnInit(): void {
-
+    console.log(this.id);
+    if (this.id !== 'null') {
+      this.operacion = 'Actualizar';
+      this.getLearningUnit(this.id);
+    }
   }
 
   getLearningUnit(id: string) {
@@ -56,24 +64,48 @@ export class AddEditLearningUnitComponent implements OnInit {
         period: data.period,
         grade: data.grade,
         group: data.group,
-        daysGiven: data.daysGiven,
-        endTime: data.endTime,
+      });
+  
+      // Clear the FormArrays
+      const daysGivenControl = this.formLearningUnit.get('daysGiven') as FormArray;
+      daysGivenControl.clear();
+      const endTimeControl = this.formLearningUnit.get('endTime') as FormArray;
+      endTimeControl.clear();
+  
+      // Set the values for the 'daysGiven' FormArray
+      data.daysGiven.forEach(day => {
+        daysGivenControl.push(this.fb.control(day));
+      });
+  
+      // Set the values for the 'endTime' FormArray
+      data.endTime.forEach(time => {
+        endTimeControl.push(this.fb.control(time));
       });
     });
   }
 
   addLearningUnit() {
     let formValues = { ...this.formLearningUnit.value };
-    console.log(formValues);
+  
     if (this.id !== 'null') {
-      this._learnUnitService.updateLearningUnit(this.id.toString(), formValues as LearnUnit).subscribe(data => {
+      //Es actualizar
+      this._learnUnitService.updateLearningUnit(this.id, formValues as LearnUnit).subscribe(() => {
         this.router.navigate(['/home']);
+        this._sweetAlertService.showSuccessToast('Unidad de aprendizaje actualizada con éxito');
+      }, 
+      (error) => {
+        console.error('Error actualizando la unidad de aprendizaje', error);
+        this._sweetAlertService.showErrorToast('Los datos coinciden con otra unidad de aprendizaje o hubo un error al actualizarla');
       });
     } else {
       //Es agregar
-      console.log(formValues);
-      this._learnUnitService.createLearningUnit(formValues as LearnUnit).subscribe(data => {
+      this._learnUnitService.createLearningUnit(formValues as LearnUnit).subscribe(() => {
         this.router.navigate(['/home']);
+        this._sweetAlertService.showSuccessToast('Unidad de aprendizaje creada con éxito');
+      }, 
+      (error) => {
+        console.error('Error creando la unidad de aprendizaje', error);
+        this._sweetAlertService.showErrorToast('La unidad de aprendizaje ya existe o hubo un error al crearla');
       });
     }
   }

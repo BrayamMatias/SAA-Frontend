@@ -5,6 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegisterService } from 'src/app/services/register.service';
+import { User } from 'src/app/interfaces/user';
+import { SweetAlertService } from 'src/app/services/sweet-alert.service';
 
 
 @Component({
@@ -16,9 +18,9 @@ import { RegisterService } from 'src/app/services/register.service';
 export class RegisterComponent implements OnInit{
   formRegister: FormGroup;
   displayedColumns: string[] = ['name', 'email', 'accion'];
-  dataSource = new MatTableDataSource<Teacher>();
+  dataSource = new MatTableDataSource<User>();
   operation: string = 'Registrar';
-  id: number;
+  id: string;  // Cambiado a string
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -29,6 +31,7 @@ export class RegisterComponent implements OnInit{
     private aRouter: ActivatedRoute,
     private fb: FormBuilder,
     private _registerService: RegisterService,
+    private _sweetAlertService: SweetAlertService,
     ) { 
       this.formRegister = this.fb.group({
         fullName: ['', Validators.required],
@@ -40,42 +43,97 @@ export class RegisterComponent implements OnInit{
         password: ['', Validators.required]
       });
 
-      this.id = Number(aRouter.snapshot.paramMap.get('id'));
+      this.id = aRouter.snapshot.paramMap.get('id') || '';  // Obteniendo id como string
     }
 
   ngOnInit(): void {
-    if(this.id != 0 ){
-      this.operation = 'Editar';
+    if(this.id != '' ){  // Comprobando si id no es una cadena vacía
+      this.operation = 'Actualizar';
+      this.getUser(this.id);  // Llamando a getUser si estamos actualizando
     }
-    const techers: Teacher[] = [
-      {name: 'User 1', email: 'asdfas'},
-      {name: 'User 2', email: 'asdfas'},
-      {name: 'User 3', email: 'asdfas'},
-      {name: 'User 4', email: 'asdfas'},
-      {name: 'User 5', email: 'asdfas'},
-      {name: 'User 6', email: 'asdfas'},
-      {name: 'User 7', email: 'asdfas'},
-      {name: 'User 8', email: 'asdfas'},
-      {name: 'User 9', email: 'asdfas'},
-      {name: 'User 10', email: 'asdfas'},
-    ];
-
-    this.dataSource = new MatTableDataSource(techers);
+    this.getUsers();
   }
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   };
 
-  createUser(){
+  editUser(id: string){
+    this.id = id;
+    this.operation = 'Actualizar';
+    this.getUser(id);
+  }
+
+  getUser(id: string){
+    this._registerService.getUser(this.id).subscribe(data => {  // No necesitas llamar a toString() aquí
+      this.formRegister.setValue({
+        fullName: data.fullName,
+        email: data.email,
+        password: ''
+      });
+      // Deshabilita el campo de contraseña
+      this.formRegister?.get('password')?.disable();
+    });
+  }
+
+  getUsers(){
+    this._registerService.getUsers().subscribe(data => {
+      this.dataSource.data = data;
+      console.log(data);
+    });
+  
+  }
+
+  updateUser(){
     if(this.formRegister.valid){
-      this._registerService.createUser(this.formRegister.value).subscribe(data => {
+      this._registerService.updateUser(this.id, this.formRegister.value).subscribe(data => {
         console.log(data);
+        this.operation = 'Registrar';
+        this.id = '';
         this.formRegister.reset();
         this.router.navigate(['/register']);
+        this.getUsers();
+        this._sweetAlertService.showSuccessToast('Usuario actualizado correctamente');
+        this.formRegister?.get('password')?.enable();
+      }, (error) => {
+        this._sweetAlertService.showErrorAlert(error.error.message);
       });
     }
-  
+  }
+
+  createUser(){
+    if(this.operation === 'Registrar'){
+      if(this.formRegister.valid){
+        this._registerService.createUser(this.formRegister.value).subscribe(data => {
+          console.log(data);
+          this.formRegister.reset();
+          this.router.navigate(['/register']);
+          this._sweetAlertService.showSuccessToast('Usuario registrado correctamente');
+          this.getUsers();
+        }, (error) => {
+          console.error('Error creando el usuario', error);
+          this._sweetAlertService.showErrorAlert(error.error.message);
+        });
+      }
+    } else if(this.operation === 'Actualizar'){
+      this.updateUser();
+    }
+  }
+
+  deleteUser(id: string){
+    this._sweetAlertService.showDeleteConfirmation().then(result => {
+      if(result.isConfirmed){
+        this._registerService.deleteUser(id).subscribe(data => {
+          console.log(data);
+          this.getUsers();
+          this._sweetAlertService.showSuccessToast('Usuario eliminado correctamente');
+        }, 
+        (error) => {
+          console.error('Error eliminando el usuario', error);
+          this._sweetAlertService.showErrorToast('Error eliminando el usuario');
+        });
+      }
+    });
   }
 
   hide = true;
@@ -85,9 +143,4 @@ export class RegisterComponent implements OnInit{
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
-}
-
-export interface Teacher {
-  name: string;
-  email: string;
 }

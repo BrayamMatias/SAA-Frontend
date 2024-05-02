@@ -8,8 +8,12 @@
         </button>
     </mat-toolbar-row>
 </mat-toolbar>
+<div class="button-container">
+    <button mat-raised-button color="primary" routerLink="/register-student">Registrar alumnos</button>
+</div>
 
 <div class="wrapper">
+    
     <div class="container">
         <div class="heading">
             <h1>{{operation}}</h1>
@@ -24,7 +28,7 @@
                         <mat-label>Nombre</mat-label>
                         <input matInput formControlName="fullName" placeholder="Nombre" required>
                         <mat-error
-                            *ngIf="formRegister.get('fullName')?.hasError('required') && formRegister.get('name')?.touched">El
+                            *ngIf="formRegister.get('fullName')?.hasError('required') && formRegister.get('fullName')?.touched">El
                             campo es requerido</mat-error>
                     </mat-form-field>
                 </div>
@@ -57,34 +61,32 @@
             </form>
         </div>
     </div>
-
     <div class="user-table-container">
-        <h2>Usuarios Registrados</h2>
+        <h2>Docentes Registrados</h2>
         <mat-table [dataSource]="dataSource">
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-                <mat-cell *matCellDef="let teacher"> {{teacher.name}} </mat-cell>
+                <mat-cell *matCellDef="let user"> {{user.fullName}} </mat-cell>
             </ng-container>
 
             <!-- Email Column -->
             <ng-container matColumnDef="email">
                 <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
-                <mat-cell *matCellDef="let teacher"> {{teacher.email}} </mat-cell>
+                <mat-cell *matCellDef="let user"> {{user.email}} </mat-cell>
             </ng-container>
 
             <!-- Accion Column -->
             <ng-container matColumnDef="accion">
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                <mat-cell *matCellDef="let teacher">
-                    <button mat-icon-button color="primary">
+                <mat-cell *matCellDef="let user">
+                    <button mat-icon-button color="primary" (click)="editUser(user.id)">
                         <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-icon-button color="warn">
+                    <button mat-icon-button color="warn" (click)="deleteUser(user.id)">
                         <mat-icon>delete</mat-icon>
                     </button>
-
                 </mat-cell>
             </ng-container>
 

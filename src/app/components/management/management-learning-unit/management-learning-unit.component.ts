@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LearningUnitService } from 'src/app/services/learning-unit.service';
+import { SweetAlertService } from 'src/app/services/sweet-alert.service';
 
 @Component({
   selector: 'app-management-learning-unit',
@@ -13,7 +14,8 @@ export class ManagementLearningUnitComponent implements OnInit{
   
   constructor(
     private router: Router,
-    private __learnUnitService: LearningUnitService
+    private _learnUnitService: LearningUnitService,
+    private _sweetAlertService: SweetAlertService,
 
   ) { }
 
@@ -21,8 +23,12 @@ export class ManagementLearningUnitComponent implements OnInit{
     this.getLearningUnits();
   }
 
+  managementList(id: string) {
+    this.router.navigate(['/management-list', id]);
+    }
+
   getLearningUnits(){
-    this.__learnUnitService.getLearningUnits().subscribe((data) => {
+    this._learnUnitService.getLearningUnits().subscribe((data) => {
       this.learningUnits = data.map((unit: any) => {
         if (unit.name) {
           unit.name = unit.name.replace(/-/g, ' ')
@@ -33,6 +39,26 @@ export class ManagementLearningUnitComponent implements OnInit{
         return unit;
       });
       console.log(this.learningUnits);
+    });
+  }
+
+  editLearningUnit(id: string){
+    this.router.navigate(['/edit-learning-unit', id]);
+  }
+
+  deleteLearningUnit(id: string){
+    this._sweetAlertService.showDeleteConfirmation().then((result) => {
+      if (result.isConfirmed) {
+        this._learnUnitService.deleteLearningUnit(id).subscribe(() => {
+          this.getLearningUnits();
+          console.log('Learning Unit deleted');
+          this._sweetAlertService.showSuccessToast('Unidad de Aprendizaje eliminada correctamente');
+        },
+        (error) => {
+          console.error('Error deleting Learning Unit', error);
+          this._sweetAlertService.showErrorToast('Error al eliminar la Unidad de Aprendizaje');
+        });
+      }
     });
   }
 

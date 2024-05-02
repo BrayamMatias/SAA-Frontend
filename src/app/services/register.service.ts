@@ -17,9 +17,14 @@ export class RegisterService {
     this.myApiUrl = 'api/auth';
   }
 
+  getUser(id: string): Observable<User> {
+    const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
+    return this.http.get<User>(`${this.myAppUrl}${this.myApiUrl}/users/${id}`, {headers});
+  }
+
   getUsers(): Observable<User[]> {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.get<User[]>(`${this.myAppUrl}${this.myApiUrl}/`, {headers});
+    return this.http.get<User[]>(`${this.myAppUrl}${this.myApiUrl}/users`, {headers});
   }
   createUser(user: User): Observable<User> {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
@@ -28,12 +33,12 @@ export class RegisterService {
 
   updateUser(id: string, user: Partial<User>): Observable<User> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.patch<User>(`${this.myAppUrl}${this.myApiUrl}/register/${id}`, user, { headers });
+    return this.http.patch<User>(`${this.myAppUrl}${this.myApiUrl}/users/${id}`, user, { headers });
   }
 
   deleteUser(id: string): Observable<User> {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.delete<User>(`${this.myAppUrl}${this.myApiUrl}/register/${id}`, {headers});
+    return this.http.delete<User>(`${this.myAppUrl}${this.myApiUrl}/users/${id}`, {headers});
   }
 
 }

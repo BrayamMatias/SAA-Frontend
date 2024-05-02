@@ -18,8 +18,8 @@ export class LearningUnitService {
   }
   
   getLearningUnit(id: string): Observable<LearnUnit> {
-    const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.get<LearnUnit>(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
+    return this.http.get<LearnUnit>(`${this.myAppUrl}${this.myApiUrl}/${id}`, { headers });
   }
   
   getLearningUnits(): Observable<LearnUnit[]> {
@@ -34,7 +34,7 @@ export class LearningUnitService {
   
   updateLearningUnit(id: string, learnUnit: Partial<LearnUnit>): Observable<LearnUnit> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.put<LearnUnit>(`${this.myAppUrl}${this.myApiUrl}/${id}`, learnUnit, { headers });
+    return this.http.patch<LearnUnit>(`${this.myAppUrl}${this.myApiUrl}/${id}`, learnUnit, { headers });
   }
   
   deleteLearningUnit(id: string): Observable<LearnUnit> {

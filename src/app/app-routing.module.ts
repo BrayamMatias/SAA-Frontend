@@ -17,6 +17,7 @@ import { AttendanceListComponent } from './components/management/attendance-list
 import { ManagementReportsComponent } from './components/management/management-reports/management-reports.component';
 import { LoginGuardService } from './services/login-guard.service';
 import { ForgotPasswordComponent } from './components/authentication/forgot-password/forgot-password.component';
+import { RegisterStudentComponent } from "./components/authentication/register-student/register-student.component";
 
 
 const routes: Routes = [
@@ -24,21 +25,22 @@ const routes: Routes = [
   //---Authentication---
   { path: 'login', component: LoginComponent, canActivate: [LoginGuardService]},
   { path: 'register', component: RegisterComponent, canActivate: [AdminGuardService]},
-  { path: 'register/:id', component: RegisterComponent},
-  { path: 'forgot-password', component: ForgotPasswordComponent},
+  { path: 'register/:id', component: RegisterComponent, canActivate: [AdminGuardService]},
+  { path: 'register-student', component: RegisterStudentComponent,canActivate: [AdminGuardService]},
+  { path: 'register-student/:id', component: RegisterStudentComponent,canActivate: [AdminGuardService]},
+  { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [LoginGuardService]},
   
   //---Management---
 
   //Students
-  { path: 'add-students', component: AddEditStudentComponent, canActivate: [UserGuardService]},
-  { path: 'edit-students/:id', component: AddEditStudentComponent, canActivate: [UserGuardService]},
+  { path: 'add-students/:id', component: AddEditStudentComponent, canActivate: [UserGuardService]},
   //Learning Units
   { path: 'add-learning-unit', component: AddEditLearningUnitComponent, canActivate: [UserGuardService]},
-  { path: 'adit-learning-unit/:id', component: AddEditLearningUnitComponent, canActivate: [UserGuardService]},
+  { path: 'edit-learning-unit/:id', component: AddEditLearningUnitComponent, canActivate: [UserGuardService]},
   //Learning Units
   { path: 'home', component: ManagementLearningUnitComponent, canActivate: [UserGuardService]},
   //Attendance
-  { path: 'management-list', component: ManagementAttendanceListComponent, canActivate: [UserGuardService]},
+  { path: 'management-list/:id', component: ManagementAttendanceListComponent, canActivate: [UserGuardService]},
   { path: 'attendance-list', component: AttendanceListComponent, canActivate: [UserGuardService]},
   //Reports
   { path: 'management-reports', component: ManagementReportsComponent, canActivate: [UserGuardService]},

@@ -11,6 +11,7 @@ import { ManagementAttendanceListComponent } from './components/management/manag
 import { AttendanceListComponent } from './components/management/attendance-list/attendance-list.component';
 import { ManagementReportsComponent } from './components/management/management-reports/management-reports.component';
 import { ForgotPasswordComponent } from './components/authentication/forgot-password/forgot-password.component';
+import { RegisterStudentComponent } from './components/authentication/register-student/register-student.component';
 
 //Modules
 import { AppRoutingModule } from './app-routing.module';
@@ -38,6 +39,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     ManagementAttendanceListComponent,
     AttendanceListComponent,
     ManagementReportsComponent,
+    RegisterStudentComponent
     
   ],
   imports: [

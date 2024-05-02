@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
 import { User } from 'src/app/interfaces/user';
+import { SweetAlertService } from 'src/app/services/sweet-alert.service';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private _loginService: LoginService,
     private router: Router,
+    private _sweetAlertService: SweetAlertService,
   ) {
     this.formLogin = this.fb.group({
       email: ['', [
@@ -40,6 +42,8 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', data.token);
         console.log(data.roles);
         this.router.navigate([this.redirectUser(data.roles)]);
+      }, (error) => {
+        this._sweetAlertService.showErrorAlert(error.error.message);
       });
     } 
   }

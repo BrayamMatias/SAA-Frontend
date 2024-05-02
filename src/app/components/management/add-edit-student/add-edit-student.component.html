@@ -2,7 +2,7 @@
     <mat-toolbar-row>
         <button mat-icon-button routerLink="/management-list" color="basic">
             <mat-icon>arrow_back_ios</mat-icon>
-          </button>
+        </button>
         <span class="spacer"></span>
         <span>Gestión de alumnos</span>
         <span class="spacer"></span>
@@ -39,14 +39,14 @@
                 <!-- Nombre Column -->
                 <ng-container matColumnDef="nombre">
                     <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-                    <mat-cell *matCellDef="let student"> {{student.nombre}} </mat-cell>
+                    <mat-cell *matCellDef="let student"> {{student.fullName}} </mat-cell>
                 </ng-container>
 
                 <!-- Action Column (Botón de Añadir) -->
                 <ng-container matColumnDef="accion">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     <mat-cell *matCellDef="let student">
-                        <button mat-raised-button color="primary">
+                        <button mat-raised-button color="primary" (click)="createEnrollment(student.id)">
                             Añadir<mat-icon>add</mat-icon>
                         </button>
                     </mat-cell>

@@ -9,10 +9,13 @@
     </mat-toolbar-row>
 </mat-toolbar>
 
-<button mat-raised-button routerLink="/add-learning-unit" class="button">Crear Unidad de Aprendizaje</button>
+<div class="button-container">
+    <button mat-raised-button color="primary" routerLink="/add-learning-unit">Crear Unidad de Aprendizaje</button>
+</div>
+
 
 <div class="card-container">
-    <div class="card" routerLink="/management-list" *ngFor="let subject of learningUnits">
+    <div class="card" (click)="managementList(subject.id)" *ngFor="let subject of learningUnits">
         <div class="card-header">
             <h2>{{subject.name}}</h2>
         </div>
@@ -22,18 +25,36 @@
             <h5>Grupo: <p>{{subject.group}}</p></h5>
             <h5>Periodo: <p>{{subject.period}}</p></h5>
         </div>
-        <div class="card-time-container">
+        <mat-accordion (click)="$event.stopPropagation()">
+            <mat-expansion-panel (opened)="true" (closed)="false">
+                <mat-expansion-panel-header>
+                    <mat-panel-title >
+                        Horario
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        Abrir para ver el horario.
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-chip-set cdkDropList cdkDropListOrientation="vertical">
+                    <ng-container *ngFor="let day of subject.daysGiven; let i = index">
+                        <mat-chip cdkDrag>{{day}} - {{subject.endTime[i]}}</mat-chip>
+                    </ng-container>
+                </mat-chip-set>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+        <!-- <div class="card-time-container">
             <h5>Horario:</h5>
             <mat-chip-set cdkDropList cdkDropListOrientation="vertical">
                 <ng-container *ngFor="let day of subject.daysGiven; let i = index">
                     <mat-chip cdkDrag>{{day}} - {{subject.endTime[i]}}</mat-chip>
                 </ng-container>
             </mat-chip-set>
-        </div>
+        </div> -->
 
         <div class="card-footer">
-            <button mat-raised-button color="primary">Editar</button>
-            <button mat-button color="warn">Eliminar</button>
+            <button mat-raised-button color="primary" (click)="editLearningUnit(subject.id); $event.stopPropagation()">Editar</button>
+            <button mat-button color="warn" (click)="deleteLearningUnit(subject.id); $event.stopPropagation()">Eliminar</button>
         </div>
     </div>
 </div>

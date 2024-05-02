@@ -1,5 +1,5 @@
 export interface Student {
     id?: number;
-    enrollment: string;
-    name: string;
+    fullName: string;
+    matricula: string;
 }

@@ -5,6 +5,13 @@
     margin: 2rem 10px; /* Espacio de 10px en cada lado */
 }
 
+.button-container{
+    width: calc(100% - 2rem); /* Ancho */
+    display: flex; /* Flexbox */
+    justify-content: right; /* Justifica el contenido */
+    margin-top: 1rem; /* Margen */
+}
+
 /* Estilos para el contenedor de la tarjeta */
 .card-container {
     display: grid;
@@ -52,6 +59,7 @@
 
 /* Estilos para el pie de la tarjeta */
 .card-footer {
+    margin-top: 1rem;
     display: flex;
     justify-content: flex-end; /* Alinear botones a la derecha */
     gap: 1rem; /* Espacio entre las tarjetas */

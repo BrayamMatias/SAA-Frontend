@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LearnUnit } from '../interfaces/learn-unit';
+import { LearnUnit } from '../../interfaces/learn-unit';
 import { environment } from 'src/environment/environment';
 
 @Injectable({
@@ -24,7 +24,7 @@ export class LearningUnitService {
   
   getLearningUnits(): Observable<LearnUnit[]> {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.get<LearnUnit[]>(`${this.myAppUrl}${this.myApiUrl}`, {headers});
+    return this.http.get<LearnUnit[]>(`${this.myAppUrl}${this.myApiUrl}/own-subjects`, {headers});
   }
   
   createLearningUnit(learnUnit: LearnUnit): Observable<LearnUnit> {

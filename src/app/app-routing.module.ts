@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 //Guardian de rutas
-import { AdminGuardService } from './services/admin-guard.service';
-import { UserGuardService } from './services/user-guard.service';
+import { AdminGuardService } from './services/guards/admin-guard.service';
+import { UserGuardService } from './services/guards/user-guard.service';
 
 
 //Components
@@ -15,9 +15,11 @@ import { ManagementLearningUnitComponent } from './components/management/managem
 import { ManagementAttendanceListComponent } from './components/management/management-attendance-list/management-attendance-list.component';
 import { AttendanceListComponent } from './components/management/attendance-list/attendance-list.component';
 import { ManagementReportsComponent } from './components/management/management-reports/management-reports.component';
-import { LoginGuardService } from './services/login-guard.service';
+import { LoginGuardService } from './services/guards/login-guard.service';
 import { ForgotPasswordComponent } from './components/authentication/forgot-password/forgot-password.component';
 import { RegisterStudentComponent } from "./components/authentication/register-student/register-student.component";
+import { PartialComponent } from './components/authentication/partial/partial.component';
+import { PeriodsComponent } from './components/authentication/periods/periods.component';
 
 
 const routes: Routes = [
@@ -29,7 +31,9 @@ const routes: Routes = [
   { path: 'register-student', component: RegisterStudentComponent,canActivate: [AdminGuardService]},
   { path: 'register-student/:id', component: RegisterStudentComponent,canActivate: [AdminGuardService]},
   { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [LoginGuardService]},
-  
+  {path: 'partial', component: PartialComponent, canActivate: [AdminGuardService]},
+  {path: 'periods', component: PeriodsComponent, canActivate: [AdminGuardService]},
+
   //---Management---
 
   //Students

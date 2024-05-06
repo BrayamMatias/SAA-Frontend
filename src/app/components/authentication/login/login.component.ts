@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LoginService } from 'src/app/services/login.service';
+import { LoginService } from 'src/app/services/auth/login.service';
 import { Router } from '@angular/router';
 import { User } from 'src/app/interfaces/user';
-import { SweetAlertService } from 'src/app/services/sweet-alert.service';
+import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
 
 @Component({
   selector: 'app-login',

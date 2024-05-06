@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LearningUnitService } from 'src/app/services/learning-unit.service';
-import { SweetAlertService } from 'src/app/services/sweet-alert.service';
+import { LearningUnitService } from 'src/app/services/management/learning-unit.service';
+import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
 
 @Component({
   selector: 'app-management-learning-unit',
@@ -38,7 +38,6 @@ export class ManagementLearningUnitComponent implements OnInit{
         }
         return unit;
       });
-      console.log(this.learningUnits);
     });
   }
 

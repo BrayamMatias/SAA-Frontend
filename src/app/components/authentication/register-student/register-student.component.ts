@@ -5,8 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Student } from 'src/app/interfaces/student';
-import { SweetAlertService } from 'src/app/services/sweet-alert.service';
-import { StudentService } from 'src/app/services/student.service';
+import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
+import { StudentService } from 'src/app/services/auth/student.service';
 
 @Component({
   selector: 'app-register-student',

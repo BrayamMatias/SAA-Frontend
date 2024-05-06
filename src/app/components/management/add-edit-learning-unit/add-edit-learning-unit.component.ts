@@ -3,8 +3,8 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, ValidatorFn, Vali
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, delay } from 'rxjs';
 import { LearnUnit } from 'src/app/interfaces/learn-unit';
-import { LearningUnitService } from 'src/app/services/learning-unit.service';
-import { SweetAlertService } from 'src/app/services/sweet-alert.service';
+import { LearningUnitService } from 'src/app/services/management/learning-unit.service';
+import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
 
 @Component({
   selector: 'app-add-edit-learning-unit',

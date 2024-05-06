@@ -1,4 +1,4 @@
 export interface Enrollment {
-    subjectId: string;
+    selected?: boolean;
     studentId: string;
 }

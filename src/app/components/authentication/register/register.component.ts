@@ -4,9 +4,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RegisterService } from 'src/app/services/register.service';
+import { RegisterService } from 'src/app/services/auth/register.service';
 import { User } from 'src/app/interfaces/user';
-import { SweetAlertService } from 'src/app/services/sweet-alert.service';
+import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
 
 
 @Component({

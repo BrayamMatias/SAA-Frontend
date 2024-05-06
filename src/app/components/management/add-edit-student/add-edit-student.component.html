@@ -6,7 +6,7 @@
         <span class="spacer"></span>
         <span>Gestión de alumnos</span>
         <span class="spacer"></span>
-        <button mat-icon-button color="basic">
+        <button mat-icon-button color="basic" (click)="logout()">
             <mat-icon>logout</mat-icon>
         </button>
     </mat-toolbar-row>
@@ -30,6 +30,14 @@
         <div class="student-table">
             <mat-table [dataSource]="dataSourceAdd">
 
+                <!-- Seleccion Column -->
+                <ng-container matColumnDef="selected">
+                    <mat-header-cell *matHeaderCellDef> Seleccion </mat-header-cell>
+                    <mat-cell *matCellDef="let student">
+                        <mat-checkbox (change)="onCheckboxChangeAdd(student, $event.checked)"></mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+
                 <!-- Matricula Column -->
                 <ng-container matColumnDef="matricula">
                     <mat-header-cell *matHeaderCellDef> Matricula </mat-header-cell>
@@ -47,7 +55,7 @@
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     <mat-cell *matCellDef="let student">
                         <button mat-raised-button color="primary" (click)="createEnrollment(student.id)">
-                            Añadir<mat-icon>add</mat-icon>
+                            Añadir
                         </button>
                     </mat-cell>
                 </ng-container>
@@ -57,6 +65,7 @@
             </mat-table>
             <mat-paginator #paginatorAdd [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
         </div>
+        <button mat-raised-button color="primary" class="button" [disabled]="selectedStudentsAdd.length === 0" (click)="createEnrollments(selectedStudentsAdd)">Añadir seleccionados</button>
     </div>
 
     <div class="container">
@@ -76,6 +85,14 @@
         <div class="student-table">
             <mat-table [dataSource]="dataSourceDelete">
 
+                <!-- Seleccion Column -->
+                <ng-container matColumnDef="selected">
+                    <mat-header-cell *matHeaderCellDef> Seleccion </mat-header-cell>
+                    <mat-cell *matCellDef="let student">
+                        <mat-checkbox (change)="onCheckboxChangeDelete(student, $event.checked)"></mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+
                 <!-- Matricula Column -->
                 <ng-container matColumnDef="matricula">
                     <mat-header-cell *matHeaderCellDef> Matricula </mat-header-cell>
@@ -85,15 +102,15 @@
                 <!-- Nombre Column -->
                 <ng-container matColumnDef="nombre">
                     <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-                    <mat-cell *matCellDef="let student"> {{student.nombre}} </mat-cell>
+                    <mat-cell *matCellDef="let student"> {{student.fullName}} </mat-cell>
                 </ng-container>
 
                 <!-- Action Column (Botón de Eliminar) -->
                 <ng-container matColumnDef="accion">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     <mat-cell *matCellDef="let student">
-                        <button mat-raised-button color="warn">
-                            Eliminar<mat-icon>delete</mat-icon>
+                        <button mat-raised-button color="warn" (click)="deleteEnrollment(student.enrollmentId)">
+                            Eliminar
                         </button>
                     </mat-cell>
                 </ng-container>
@@ -103,5 +120,6 @@
             </mat-table>
             <mat-paginator #paginatorDelete [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
         </div>
+        <button mat-raised-button color="warn" class="button" [disabled]="selectedStudentsDelete.length === 0" (click)="deleteEnrollments(selectedStudentsDelete)">Añadir seleccionados</button>
     </div>
 </div>

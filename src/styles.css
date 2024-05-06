@@ -60,6 +60,10 @@ body {
             color: #1f1f1f;
             margin-bottom: 10px; /* Ajuste de espaciado */
         }
+        h2{
+            margin-top: 4rem;
+            margin-left: 2rem;
+        }
         p {
             margin-top: 2rem;
             margin-left: 2rem;

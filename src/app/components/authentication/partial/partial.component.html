@@ -1,0 +1,71 @@
+<mat-toolbar color="primary" class="toolbar-admin">
+    <mat-toolbar-row>
+        <button mat-icon-button routerLink="/register" color="basic">
+            <mat-icon>arrow_back_ios</mat-icon>
+        </button>
+        <span>Administrador</span>
+        <span class="spacer"></span>
+        <button mat-icon-button color="basic" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="wrapper">
+    <div class="container">
+        <div class="heading">
+            <h1>Configurar Fechas Parciales</h1>
+            <p>Llena los siguientes campos con las fechas correspondientes a cada parcial</p>
+        </div>
+        <form [formGroup]="dataPartial">
+            <div class="heading">
+                <h2>1er Parcial</h2>
+                <p>Ingresa las fechas correspondientes al inicio y fin del 1er parcial</p>
+            </div>
+            <mat-form-field formGroupName="first" class="full-width">
+                <mat-label>1er parcial</mat-label>
+                <mat-date-range-input [rangePicker]="picker1">
+                    <input matStartDate formControlName="startDate" placeholder="Fecha inicio" required>
+                    <input matEndDate formControlName="finishDate" placeholder="Fecha final" required>
+                </mat-date-range-input>
+                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker1></mat-date-range-picker>
+            </mat-form-field>
+
+            <div class="heading">
+                <h2>2do Parcial</h2>
+                <p>Ingresa las fechas correspondientes al inicio y fin del 2do parcial</p>
+            </div>
+            <mat-form-field formGroupName="second" class="full-width">
+                <mat-label>2do parcial</mat-label>
+                <mat-date-range-input [rangePicker]="picker2">
+                    <input matStartDate formControlName="startDate" placeholder="Fecha inicio" required>
+                    <input matEndDate formControlName="finishDate" placeholder="Fecha final" required>
+                </mat-date-range-input>
+                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker2></mat-date-range-picker>
+            </mat-form-field>
+
+            <div class="heading">
+                <h2>3er Parcial</h2>
+                <p>Ingresa las fechas correspondientes al inicio y fin del 3er parcial</p>
+            </div>
+            <mat-form-field formGroupName="third" class="full-width">
+                <mat-label>Ingresa el rango del 3er parcial</mat-label>
+                <mat-date-range-input [rangePicker]="picker3">
+                    <input matStartDate formControlName="startDate" placeholder="Fecha inicio" required>
+                    <input matEndDate formControlName="finishDate" placeholder="Fecha final" required>
+                </mat-date-range-input>
+                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker3></mat-date-range-picker>
+            </mat-form-field>
+
+        </form>
+
+        <button mat-raised-button color="primary" class="button" [disabled]="dataPartial.invalid" (click)="createDataPartial()">Guardar parciales</button>
+    </div>
+
+</div>

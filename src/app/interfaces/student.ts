@@ -1,5 +1,10 @@
 export interface Student {
-    id?: number;
+    enrollmentId?: string;
+    id?: string;
     fullName: string;
     matricula: string;
+}
+
+export interface StudentEnrollment {
+    enrollmentId: string;
 }

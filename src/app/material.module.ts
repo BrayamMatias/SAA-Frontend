@@ -20,6 +20,9 @@ import {FormsModule} from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
 import { MatChipsModule } from "@angular/material/chips";
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatStepperModule} from '@angular/material/stepper';
 
 @NgModule({
   declarations: [],
@@ -44,7 +47,10 @@ import { MatChipsModule } from "@angular/material/chips";
     FormsModule,
     MatCheckboxModule,
     MatRadioModule,
-    MatChipsModule
+    MatChipsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatStepperModule
   ]
 })
 export class MaterialModule { }

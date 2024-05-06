@@ -1,45 +1,43 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environment/environment';
-import { Student } from '../interfaces/student';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class StudentService {
-
+export class PartialService {
   private myAppUrl: string;
   private myApiUrl: string;
 
   constructor(private http: HttpClient) { 
     this.myAppUrl = environment.endpoint;
-    this.myApiUrl = 'api/students';
+    this.myApiUrl = 'api/partial';
   }
 
-  getStudent(id: string): Observable<Student> {
+  getPartial(id: string) {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.get<Student>(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});
+    return this.http.get(`${this.myAppUrl}${this.myApiUrl}/partial/${id}`, {headers});
   }
 
-  getStudents(): Observable<Student[]> {
+  getPartials() {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.get<Student[]>(`${this.myAppUrl}${this.myApiUrl}`, {headers});
+    return this.http.get(`${this.myAppUrl}${this.myApiUrl}`, {headers});
   }
 
-  createStudent(student: Student): Observable<Student> {
+  createPartial(partial: any[]) {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.post<Student>(`${this.myAppUrl}${this.myApiUrl}`, student, {headers});
+    return this.http.post(`${this.myAppUrl}${this.myApiUrl}`, partial, {headers});
   }
 
-  updateStudent(id: string, student: Partial<Student>): Observable<Student> {
+  updatePartial(id: string, partial: any[]) {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.patch<Student>(`${this.myAppUrl}${this.myApiUrl}/${id}`, student, { headers });
+    return this.http.put(`${this.myAppUrl}${this.myApiUrl}/${id}`, partial, { headers });
   }
 
-  deleteStudent(id: string): Observable<Student> {
+  deletePartial(id: string) {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.delete<Student>(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});
+    return this.http.delete(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});
   }
+  
 
 }

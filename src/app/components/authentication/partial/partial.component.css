@@ -1,0 +1,14 @@
+
+/* Media queries para dispositivos de pantalla más pequeña */
+@media only screen and (max-width: 768px) {
+    .container {
+        max-width: calc(100% - 4rem); /* Resta el margen para mantener el ancho correcto */
+    }
+}
+/* Media queries para dispositivos de pantalla más pequeña */
+@media only screen and (max-width: 768px) {
+    .wrapper {
+        flex-direction: column; /* Cambia la dirección del flexbox a vertical */
+        padding: 20px; /* Agrega espacio alrededor del contenido */
+    }
+}

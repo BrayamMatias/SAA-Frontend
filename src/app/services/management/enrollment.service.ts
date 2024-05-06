@@ -1,7 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environment/environment';
-import { Enrollment } from '../interfaces/enrollment';
+import { Enrollment } from '../../interfaces/enrollment';
+import { Observable } from 'rxjs';
+import { Student, StudentEnrollment} from 'src/app/interfaces/student';
+import { User } from 'src/app/interfaces/user';
 
 @Injectable({
   providedIn: 'root'
@@ -16,28 +19,23 @@ export class EnrollmentService {
     this.myApiUrl = 'api/enrollments';
    }
 
-   getEnrollment(id: string){
+   getEnrollment(id: string): Observable<Student>{
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.get(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});
+    return this.http.get<Student>(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});
    }
 
-   getEnrollments(){
+   getEnrollments(id: string): Observable<Student[]>{
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.get(`${this.myAppUrl}${this.myApiUrl}`, {headers});
+    return this.http.get<Student[]>(`${this.myAppUrl}${this.myApiUrl}/subject/${id}`, {headers});
    }
 
-  createEnrollment(enrollment: Enrollment){
+  createEnrollment(id: string,enrollments: Enrollment[]){
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.post(`${this.myAppUrl}${this.myApiUrl}`, enrollment, {headers});
+    return this.http.post(`${this.myAppUrl}${this.myApiUrl}/${id}`, enrollments, {headers});
   }
 
-  updateEnrollment(id: string, enrollment: Partial<Enrollment>){
+  deleteEnrollments(enrollments: StudentEnrollment[]) {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.patch(`${this.myAppUrl}${this.myApiUrl}/${id}`, enrollment, { headers });
-  }
-
-  deleteEnrollment(id: string){
-    const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.delete(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});
-  }
+    return this.http.request('delete', `${this.myAppUrl}${this.myApiUrl}/many-enrollments`, { body: enrollments, headers });
+}
 }

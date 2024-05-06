@@ -25,6 +25,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { PartialComponent } from './components/authentication/partial/partial.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     ManagementAttendanceListComponent,
     AttendanceListComponent,
     ManagementReportsComponent,
-    RegisterStudentComponent
+    RegisterStudentComponent,
+    PartialComponent
     
   ],
   imports: [

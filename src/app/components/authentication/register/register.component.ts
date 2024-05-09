@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit{
   displayedColumns: string[] = ['name', 'email', 'accion'];
   dataSource = new MatTableDataSource<User>();
   operation: string = 'Registrar';
-  id: string;  // Cambiado a string
+  id: string; 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

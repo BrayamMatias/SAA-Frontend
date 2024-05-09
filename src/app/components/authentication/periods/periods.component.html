@@ -1,1 +1,50 @@
-<p>periods works!</p>
+<mat-toolbar color="primary" class="toolbar-admin">
+    <mat-toolbar-row>
+        <button mat-icon-button routerLink="/register" color="basic">
+            <mat-icon>arrow_back_ios</mat-icon>
+        </button>
+        <span>Administrador</span>
+        <span class="spacer"></span>
+        <button mat-icon-button color="basic" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="wrapper">
+    <div class="container">
+        <div class="heading">
+            <h1>{{operation}} el periodo</h1>
+            <p>Ingresa la informacion para {{operation.toLowerCase()}} un periodo</p>
+        </div>
+
+        <form [formGroup]="formPeriod">
+            <mat-form-field class="form-field">
+                <mat-label>Periodo</mat-label>
+                <mat-select  formControlName="name">
+                  <mat-option>--</mat-option>
+                  <mat-option [value]="period" *ngFor="let period of periods">
+                    {{period}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+            <div class="form-input">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Periodo</mat-label>
+                    <input matInput formControlName="year" placeholder="Año de periodo" required>
+                    <mat-error
+                        *ngIf="formPeriod.get('year')?.hasError('required') && formPeriod.get('year')?.touched">El
+                        campo es requerido</mat-error>
+                </mat-form-field>
+            </div>
+
+        </form>
+        <div class="button-form">
+            <button mat-raised-button color="primary" class="button" [disabled]="formPeriod.invalid"
+                (click)="createPeriod()">Guardar parciales</button>
+        </div>
+
+    </div>
+
+</div>

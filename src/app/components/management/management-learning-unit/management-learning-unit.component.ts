@@ -16,7 +16,6 @@ export class ManagementLearningUnitComponent implements OnInit{
     private router: Router,
     private _learnUnitService: LearningUnitService,
     private _sweetAlertService: SweetAlertService,
-
   ) { }
 
   ngOnInit(): void{
@@ -29,6 +28,7 @@ export class ManagementLearningUnitComponent implements OnInit{
 
   getLearningUnits(){
     this._learnUnitService.getLearningUnits().subscribe((data) => {
+      console.log(data);
       this.learningUnits = data.map((unit: any) => {
         if (unit.name) {
           unit.name = unit.name.replace(/-/g, ' ')

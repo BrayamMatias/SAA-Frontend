@@ -17,6 +17,14 @@ export class SweetAlertService {
     })
   }
 
+  showSuccessAlert(successMessage: string) {
+    Swal.fire({
+      icon: 'success',
+      title: '¡Éxito!',
+      text: successMessage,
+    })
+  }
+
   showSuccessToast(message: string) {
     const Toast = Swal.mixin({
       toast: true,

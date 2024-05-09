@@ -16,7 +16,7 @@ export class PartialService {
 
   getPartial(id: string) {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.get(`${this.myAppUrl}${this.myApiUrl}/partial/${id}`, {headers});
+    return this.http.get(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});
   }
 
   getPartials() {
@@ -24,14 +24,14 @@ export class PartialService {
     return this.http.get(`${this.myAppUrl}${this.myApiUrl}`, {headers});
   }
 
-  createPartial(partial: any[]) {
+  createPartial(periodId: String,partial: any[]) {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.post(`${this.myAppUrl}${this.myApiUrl}`, partial, {headers});
+    return this.http.post(`${this.myAppUrl}${this.myApiUrl}/${periodId}`, partial, {headers});
   }
 
-  updatePartial(id: string, partial: any[]) {
+  updatePartial(id: string, partial: any) {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.put(`${this.myAppUrl}${this.myApiUrl}/${id}`, partial, { headers });
+    return this.http.patch(`${this.myAppUrl}${this.myApiUrl}/${id}`, partial, { headers });
   }
 
   deletePartial(id: string) {

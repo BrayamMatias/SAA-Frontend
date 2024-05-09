@@ -26,6 +26,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { PartialComponent } from './components/authentication/partial/partial.component';
+import { PeriodsComponent } from './components/authentication/periods/periods.component';
+import { ResetPasswordComponent } from './components/authentication/reset-password/reset-password.component';
 
 
 @NgModule({
@@ -34,6 +36,7 @@ import { PartialComponent } from './components/authentication/partial/partial.co
     LoginComponent,
     RegisterComponent,
     ForgotPasswordComponent,
+    ResetPasswordComponent,
     AddEditStudentComponent,
     AddEditLearningUnitComponent,
     ManagementLearningUnitComponent,
@@ -41,7 +44,8 @@ import { PartialComponent } from './components/authentication/partial/partial.co
     AttendanceListComponent,
     ManagementReportsComponent,
     RegisterStudentComponent,
-    PartialComponent
+    PartialComponent,
+    PeriodsComponent
     
   ],
   imports: [

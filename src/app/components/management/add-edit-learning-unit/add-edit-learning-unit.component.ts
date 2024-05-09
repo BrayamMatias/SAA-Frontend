@@ -3,6 +3,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, ValidatorFn, Vali
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, delay } from 'rxjs';
 import { LearnUnit } from 'src/app/interfaces/learn-unit';
+import { PeriodsService } from 'src/app/services/auth/periods.service';
 import { LearningUnitService } from 'src/app/services/management/learning-unit.service';
 import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
 
@@ -15,6 +16,7 @@ export class AddEditLearningUnitComponent implements OnInit {
 
   id: string;
   operacion: string = 'Agregar';
+  periods: any;
 
   formLearningUnit = this.fb.group({
     name: ['', Validators.required],
@@ -40,9 +42,11 @@ export class AddEditLearningUnitComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private _learnUnitService: LearningUnitService,
     private aRouter: ActivatedRoute,
-    private _sweetAlertService: SweetAlertService) {
+    private _learnUnitService: LearningUnitService,
+    private _sweetAlertService: SweetAlertService,
+    private _periodService: PeriodsService
+  ) {
     this.addDayAndTime();
     
     this.id = String(aRouter.snapshot.paramMap.get('id'));
@@ -54,6 +58,14 @@ export class AddEditLearningUnitComponent implements OnInit {
       this.operacion = 'Actualizar';
       this.getLearningUnit(this.id);
     }
+    this.getPeriods();
+  }
+
+  getPeriods(){
+    this._periodService.getPeriods().subscribe(data => {
+      console.log(data);
+      this.periods = data;
+    });
   }
 
   getLearningUnit(id: string) {

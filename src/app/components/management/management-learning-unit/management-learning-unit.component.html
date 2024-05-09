@@ -23,7 +23,7 @@
         <div class="card-info-container">
             <h5>Grado: <p>{{subject.grade}}</p></h5>
             <h5>Grupo: <p>{{subject.group}}</p></h5>
-            <h5>Periodo: <p>{{subject.period}}</p></h5>
+            <h5>Periodo: <p>{{subject.period.name}}</p></h5>
         </div>
         <mat-accordion (click)="$event.stopPropagation()">
             <mat-expansion-panel (opened)="true" (closed)="false">

@@ -38,8 +38,8 @@
             <mat-label>Periodo</mat-label>
             <mat-select  formControlName="period">
               <mat-option>--</mat-option>
-              <mat-option [value]="period" *ngFor="let period of val_periods">
-                {{period}}
+              <mat-option [value]="period.id" *ngFor="let period of periods">
+                {{period.name}}
               </mat-option>
             </mat-select>
           </mat-form-field>

@@ -20,6 +20,7 @@ import { ForgotPasswordComponent } from './components/authentication/forgot-pass
 import { RegisterStudentComponent } from "./components/authentication/register-student/register-student.component";
 import { PartialComponent } from './components/authentication/partial/partial.component';
 import { PeriodsComponent } from './components/authentication/periods/periods.component';
+import { ResetPasswordComponent } from './components/authentication/reset-password/reset-password.component';
 
 
 const routes: Routes = [
@@ -31,9 +32,9 @@ const routes: Routes = [
   { path: 'register-student', component: RegisterStudentComponent,canActivate: [AdminGuardService]},
   { path: 'register-student/:id', component: RegisterStudentComponent,canActivate: [AdminGuardService]},
   { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [LoginGuardService]},
-  {path: 'partial', component: PartialComponent, canActivate: [AdminGuardService]},
-  {path: 'periods', component: PeriodsComponent, canActivate: [AdminGuardService]},
-
+  { path: 'partial', component: PartialComponent, canActivate: [AdminGuardService]},
+  { path: 'periods', component: PeriodsComponent, canActivate: [AdminGuardService]},
+  { path: 'reset-password/:token', component: ResetPasswordComponent},
   //---Management---
 
   //Students

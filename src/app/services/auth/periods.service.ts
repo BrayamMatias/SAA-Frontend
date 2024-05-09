@@ -18,5 +18,10 @@ export class PeriodsService {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
     return this.http.get(`${this.myAppUrl}${this.myApiUrl}`, {headers});
   }
+
+  createPeriod(period: any){
+    const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
+    return this.http.post(`${this.myAppUrl}${this.myApiUrl}`, period,{headers});
+  }
   
 }

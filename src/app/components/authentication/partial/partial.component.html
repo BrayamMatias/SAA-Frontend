@@ -14,9 +14,24 @@
 <div class="wrapper">
     <div class="container">
         <div class="heading">
-            <h1>Configurar Fechas Parciales</h1>
+            <h1>{{operation}} Fechas Parciales</h1>
             <p>Llena los siguientes campos con las fechas correspondientes a cada parcial</p>
         </div>
+
+        <div class="heading">
+            <h2>Periodo</h2>
+            <p>Selecciona el periodo al que corresponden los parciales</p>
+        </div>
+        <form [formGroup]="dataPeriod">
+            <mat-form-field class="full-width">
+                <mat-label>Periodo</mat-label>
+                <mat-select formControlName="id" required>
+                    <mat-option *ngFor="let period of periods" [value]="period.id">{{period.name}}</mat-option>
+                </mat-select>
+                <mat-hint>Selecciona el periodo</mat-hint>
+            </mat-form-field>
+        </form>
+
         <form [formGroup]="dataPartial">
             <div class="heading">
                 <h2>1er Parcial</h2>
@@ -53,7 +68,7 @@
                 <p>Ingresa las fechas correspondientes al inicio y fin del 3er parcial</p>
             </div>
             <mat-form-field formGroupName="third" class="full-width">
-                <mat-label>Ingresa el rango del 3er parcial</mat-label>
+                <mat-label>3er parcial</mat-label>
                 <mat-date-range-input [rangePicker]="picker3">
                     <input matStartDate formControlName="startDate" placeholder="Fecha inicio" required>
                     <input matEndDate formControlName="finishDate" placeholder="Fecha final" required>
@@ -64,8 +79,59 @@
             </mat-form-field>
 
         </form>
+        <div class="button-form">
+            <button mat-raised-button color="primary" class="button" [disabled]="dataPartial.invalid"
+                (click)="createDataPartial()">Guardar parciales</button>
+        </div>
 
-        <button mat-raised-button color="primary" class="button" [disabled]="dataPartial.invalid" (click)="createDataPartial()">Guardar parciales</button>
+    </div>
+
+    <div class="user-table-container">
+        <h2>Parciales Registrados</h2>
+        <mat-table [dataSource]="dataSource">
+
+            <!-- Period Column -->
+            <ng-container matColumnDef="period">
+                <mat-header-cell *matHeaderCellDef> Periodo </mat-header-cell>
+                <mat-cell *matCellDef="let partials"> {{partials.period.name}} </mat-cell>
+            </ng-container>
+
+            <!-- Partial Column -->
+            <ng-container matColumnDef="partial">
+                <mat-header-cell *matHeaderCellDef> Parcial </mat-header-cell>
+                <mat-cell *matCellDef="let partials"> {{partials.partial}} </mat-cell>
+            </ng-container>
+
+            <!-- StartDate Column -->
+            <ng-container matColumnDef="startDate">
+                <mat-header-cell *matHeaderCellDef> Fecha Inicio </mat-header-cell>
+                <mat-cell *matCellDef="let partials"> {{partials.startDate}} </mat-cell>
+            </ng-container>
+
+            <!-- FinishDate Column -->
+            <ng-container matColumnDef="finishDate">
+                <mat-header-cell *matHeaderCellDef> Fecha Final </mat-header-cell>
+                <mat-cell *matCellDef="let partials"> {{partials.finishDate}} </mat-cell>
+            </ng-container>
+
+            <!-- Accion Column -->
+            <ng-container matColumnDef="accion">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let partials">
+                    <button mat-icon-button color="primary" (click)="editPartial(partials.id)" >
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deletePartial(partials.id)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
     </div>
 
 </div>

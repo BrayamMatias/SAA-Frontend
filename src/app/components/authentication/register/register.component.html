@@ -65,6 +65,10 @@
     </div>
     <div class="user-table-container">
         <h2>Docentes Registrados</h2>
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Buscar</mat-label>
+            <input matInput [(ngModel)]="searchText" (keyup)="applyFilter()" placeholder="Ingresa el nombre o correo">
+        </mat-form-field>
         <mat-table [dataSource]="dataSource">
 
             <!-- Name Column -->

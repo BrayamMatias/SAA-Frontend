@@ -46,7 +46,9 @@ const routes: Routes = [
   { path: 'home', component: ManagementLearningUnitComponent, canActivate: [UserGuardService]},
   //Attendance
   { path: 'management-list/:id', component: ManagementAttendanceListComponent, canActivate: [UserGuardService]},
-  { path: 'attendance-list', component: AttendanceListComponent, canActivate: [UserGuardService]},
+  { path: 'add-attendance-list/:id', component: AttendanceListComponent, canActivate: [UserGuardService]},
+  { path: 'edit-attendance-list/:id', component: AttendanceListComponent, canActivate: [UserGuardService]},
+
   //Reports
   { path: 'management-reports', component: ManagementReportsComponent, canActivate: [UserGuardService]},
 

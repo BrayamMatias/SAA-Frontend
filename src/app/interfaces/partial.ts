@@ -1,5 +1,5 @@
 export interface Partial{
-    period?: string;
+    id?: string;
     partial: string;
     startDate: string;
     finishDate: string;

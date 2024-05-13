@@ -22,7 +22,10 @@
     margin: 2rem;
     width: 100%; /* Ancho */
     max-width: 50%; /* Ancho máximo */
-    max-height: auto; /* Altura máxima */  
+    max-height: auto; /* Altura máxima */ 
+    .full-width {
+        width: 100%;
+    } 
 }
 
 /* Media queries para dispositivos de pantalla más pequeña */

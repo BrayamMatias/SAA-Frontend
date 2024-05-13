@@ -32,8 +32,6 @@ export class AddEditLearningUnitComponent implements OnInit {
 
   step = 0;
 
-
-  val_periods = ['Primavera 2024', 'Otoño 2024', 'Primavera 2025', 'Otoño 2025'];
   val_grades = ['1ro', '2do', '3ro', '4to', '5to', '6to', '7mo', '8vo', '9no'];
   val_groups = ['A', 'B', 'C'];
   val_days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];

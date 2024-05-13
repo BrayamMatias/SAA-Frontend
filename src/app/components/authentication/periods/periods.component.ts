@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, MaxLengthValidator, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, MaxLengthValidator, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Periods } from 'src/app/interfaces/periods';
 import { PeriodsService } from 'src/app/services/auth/periods.service';
+import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
 
 @Component({
   selector: 'app-periods',
@@ -13,13 +14,18 @@ import { PeriodsService } from 'src/app/services/auth/periods.service';
   styleUrl: './periods.component.css'
 })
 export class PeriodsComponent implements OnInit{
+  searchText: string = '';
   formPeriod: FormGroup;
-  displayedColumns: string[] = ['name', 'accion'];
-  dataSource = new MatTableDataSource<Periods>
   operation: string = 'Registrar';
   id: string;
 
-  periods = ['Primavera', 'Otoño'];
+  periods: any;
+  periodData: any;
+
+  periods_values = ['Primavera', 'Otoño'];
+
+  displayedColumns: string[] = ['name', 'accion'];
+  dataSource = new MatTableDataSource<Periods>
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -28,11 +34,12 @@ export class PeriodsComponent implements OnInit{
     private router: Router,
     private aRouter: ActivatedRoute,
     private fb: FormBuilder,
-    private _periodsService: PeriodsService
+    private _periodsService: PeriodsService,
+    private _sweetAlertService: SweetAlertService
   ) {
     this.formPeriod = this.fb.group({
-      name: ['', Validators.required],
-      year: ['', Validators.required]
+      name: new FormControl('', [Validators.required]),
+      year: new FormControl('', [Validators.required, Validators.pattern(/^\d{4}$/)])
     });
 
     this.id = aRouter.snapshot.paramMap.get('id') || '';
@@ -41,14 +48,34 @@ export class PeriodsComponent implements OnInit{
   ngOnInit(): void {
     if(this.id != ''){
       this.operation = 'Actualizar';
+      this.getPeriod(this.id);
     }
+    this.getPeriods();
+  }
+
+  editPeriod(id: string){
+    this.id = id;
+    this.operation = 'Actualizar';
+    this.getPeriod(id);
+  }
+
+  getPeriod(id: string){
+    this._periodsService.getPeriod(id).subscribe( data => {
+      this.periodData = data;
+      let [name, year] = this.periodData.name.split(' ');
+      this.formPeriod.setValue({
+        name: name,
+        year: year
+      })
+    })
   }
 
   getPeriods(){
     this._periodsService.getPeriods().subscribe( data => {
-      console.log(data);
+      this.periods = data;
+      this.dataSource.data = this.periods;
     }, (error) => {
-      console.log(error);
+      this._sweetAlertService.showErrorToast(error.error.message);
     })
   }
 
@@ -56,14 +83,51 @@ export class PeriodsComponent implements OnInit{
     let period = {
       name: `${this.formPeriod.value.name} ${this.formPeriod.value.year}`
     }
-    
-    this._periodsService.createPeriod(period).subscribe(data => {
-      console.log(data)
-    })
+    if(this.operation === 'Registrar'){
+      if(this.formPeriod.valid){
+        this._periodsService.createPeriod(period).subscribe(data => {
+          this.getPeriods();
+          this.formPeriod.reset();
+          this._sweetAlertService.showSuccessAlert('Periodo creado correctamente');
+        }, (error) => {
+          this._sweetAlertService.showErrorAlert(error.error.message);
+        })
+      }
+    }else if(this.operation === 'Actualizar'){
+      if(this.formPeriod.valid){
+        this._periodsService.updatePeriod(this.id, period).subscribe(data => {
+          this.getPeriods();
+          this.formPeriod.reset();
+          this.operation = 'Registrar';
+          this._sweetAlertService.showSuccessToast('Periodo actualizado correctamente');
+        }, (error) => {
+          this._sweetAlertService.showErrorAlert(error.error.message);
+        })
+      }
+    }
   }
 
-  
+  deletePeriod(id: string) {
+    this._sweetAlertService.showMessageConfirmation('Todos los elementos asociados a este periodo serán eliminados en cascada; esta acción no podrá revertirse.').then(result => {
+      if(result.isConfirmed){
+        this._periodsService.deletePeriod(id).subscribe(data => {
+          this.getPeriods();
+          this._sweetAlertService.showSuccessToast('Parcial eliminado exitosamente');
+        }, 
+        (error) => {
+          this._sweetAlertService.showErrorToast('Error eliminando el parcial');
+        });
+      }
+    });
+}
 
+  applyFilter() {
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      return data.name.toLowerCase().includes(filter);
+    };
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
+  
   logout() {
     localStorage.removeItem('user');
     localStorage.removeItem('token');

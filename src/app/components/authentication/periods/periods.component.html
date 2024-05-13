@@ -19,23 +19,30 @@
         </div>
 
         <form [formGroup]="formPeriod">
-            <mat-form-field class="form-field">
-                <mat-label>Periodo</mat-label>
-                <mat-select  formControlName="name">
-                  <mat-option>--</mat-option>
-                  <mat-option [value]="period" *ngFor="let period of periods">
-                    {{period}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+            <div class="form-input">
+                <mat-form-field class="form-field" class="full-width">
+                    <mat-label>Periodo</mat-label>
+                    <mat-select formControlName="name">
+                        <mat-option>--</mat-option>
+                        <mat-option [value]="period" *ngFor="let period of periods_values">
+                            {{period}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
 
             <div class="form-input">
                 <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Periodo</mat-label>
-                    <input matInput formControlName="year" placeholder="Año de periodo" required>
+                    <mat-label>Año</mat-label>
+                    <input matInput formControlName="year" type="number" placeholder="Año del periodo" required
+                        minlength="4" maxlength="4">
                     <mat-error
                         *ngIf="formPeriod.get('year')?.hasError('required') && formPeriod.get('year')?.touched">El
                         campo es requerido</mat-error>
+                    <mat-error *ngIf="formPeriod.get('year')?.hasError('minlength')">El año debe tener al menos 4
+                        dígitos</mat-error>
+                    <mat-error *ngIf="formPeriod.get('year')?.hasError('maxlength')">El año no puede tener más de 4
+                        dígitos</mat-error>
                 </mat-form-field>
             </div>
 
@@ -45,6 +52,41 @@
                 (click)="createPeriod()">Guardar parciales</button>
         </div>
 
+    </div>
+
+    <div class="table-container">
+        <h2>Periodos Registrados</h2>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Buscar</mat-label>
+            <input matInput [(ngModel)]="searchText" (keyup)="applyFilter()" placeholder="Ingresa el periodo o año">
+        </mat-form-field>
+
+        <mat-table [dataSource]="dataSource">
+            <!-- Period Column -->
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef> Periodo </mat-header-cell>
+                <mat-cell *matCellDef="let data "> {{data.name}} </mat-cell>
+            </ng-container>
+
+            <!-- Accion Column -->
+            <ng-container matColumnDef="accion">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let data">
+                    <button mat-icon-button color="primary" (click)="editPeriod(data.id)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deletePeriod(data.id)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
     </div>
 
 </div>

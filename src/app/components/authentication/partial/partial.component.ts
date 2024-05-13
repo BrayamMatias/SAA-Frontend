@@ -16,21 +16,17 @@ import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.servi
 })
 
 export class PartialComponent implements OnInit {
-  dataPartial: FormGroup;
+  partialForm: FormGroup;
+  periodForm: any;
   operation: string = 'Registrar';
+  partials_values: string[] = ['first', 'second', 'third']
+  searchText: string = '';
 
   dataPartials: any[] = [];
-  dataPeriod: any;
   periods: any;
   partials: any;
   partialData: any;
   id: string;
-
-  partial: Partial[] = [
-    { partial: 'first', startDate: '', finishDate: '' },
-    { partial: 'second', startDate: '', finishDate: '' },
-    { partial: 'third', startDate: '', finishDate: '' },
-  ];
 
   displayedColumns: string[] = ['period', 'partial', 'startDate', 'finishDate', 'accion'];
   dataSource = new MatTableDataSource<Partial>;
@@ -47,25 +43,17 @@ export class PartialComponent implements OnInit {
     private _sweetAlertService: SweetAlertService,
   ) {
 
-    this.dataPeriod = this.fb.group({
+    this.periodForm = this.fb.group({
       id: ['', Validators.required],
       name: ['', Validators.required],
     });
 
-    this.dataPartial = this.fb.group({
-      first: this.fb.group({
+    this.partialForm = this.fb.group({
+        partial: ['', Validators.required],
         startDate: ['', Validators.required],
-        finishDate: ['', Validators.required],
-      }),
-      second: this.fb.group({
-        startDate: ['', Validators.required],
-        finishDate: ['', Validators.required],
-      }),
-      third: this.fb.group({
-        startDate: ['', Validators.required],
-        finishDate: ['', Validators.required],
-      }),
-    });
+        finishDate: ['', Validators.required]
+      });
+
     this.id = aRouter.snapshot.paramMap.get('id') || '';
   }
 
@@ -88,7 +76,7 @@ export class PartialComponent implements OnInit {
     this._periodsService.getPeriods().subscribe(data => {
       this.periods = data;
     }, (error) => {
-      console.log(error);
+      this._sweetAlertService.showErrorToast('Error obteniendo los periodos');
     });
   }
 
@@ -100,101 +88,96 @@ export class PartialComponent implements OnInit {
 
   getPartial(id: string) {
     this._partialService.getPartial(id).subscribe(data => {
-      console.log(data);
       this.partialData = data;
-      this.dataPeriod.reset();
-      this.dataPeriod.setValue({
+      this.periodForm.reset();
+      this.periodForm.setValue({
         id: this.partialData.period.id,
         name: this.partialData.period.name,
       });
-
-      let partial = this.partialData.partial;
-      if (['first', 'second', 'third'].includes(partial)) {
-
-        this.dataPartial.reset();
-        this.dataPartial.get(partial)?.enable();
-        this.dataPartial.get(partial)?.setValue({
-          startDate: this.partialData.startDate,
-          finishDate: this.partialData.finishDate,
-        });
-
-        ['first', 'second', 'third'].forEach(key => {
-          if (key !== partial) {
-            this.dataPartial.get(key)?.disable();
-          }
-        });
-      }
+  
+      var startDate = new Date(this.partialData.startDate);
+      startDate.setDate(startDate.getDate() + 1);
+      var startDateString = startDate.toISOString().split('T')[0];
+  
+      var finishDate = new Date(this.partialData.finishDate);
+      finishDate.setDate(finishDate.getDate() + 1);
+      var finishDateString = finishDate.toISOString().split('T')[0];
+  
+      this.partialForm.setValue({
+        partial: this.partialData.partial,
+        startDate: startDateString,
+        finishDate: finishDateString,
+      });
     }, (error) => {
-      console.log(error);
+      this._sweetAlertService.showErrorToast('Error obteniendo el parcial');
     });
   }
 
   getPartials() {
     this._partialService.getPartials().subscribe(data => {
       this.partials = data;
-      console.log(this.partials);
       this.dataSource.data = this.partials;
     }, (error) => {
-      console.log(error);
+      this._sweetAlertService.showErrorToast('Error obteniendo los parciales');
     });
   }
 
   createDataPartial() {
     if (this.operation === 'Registrar') {
-      if (this.dataPartial.valid) {
-        const periodId = this.dataPeriod.get('id').value;
-        console.log(periodId);
-        this.dataPartials = Object.keys(this.dataPartial.value).map(key => {
-          const startDate = this.dataPartial.value[key].startDate;
-          const finishDate = this.dataPartial.value[key].finishDate;
-          return {
-            partial: key,
-            startDate: startDate ? new Date(startDate).toISOString().slice(0, 10) : '',
-            finishDate: finishDate ? new Date(finishDate).toISOString().slice(0, 10) : ''
-          };
-        });
-        console.log(this.dataPartials);
-        this._partialService.createPartial(periodId, this.dataPartials).subscribe(data => {
-          this.dataPeriod.reset();
-          this.dataPartial.reset();
+      if (this.partialForm.valid) {
+        const periodId = this.periodForm.get('id').value;
+        var startDate = new Date(this.partialForm.value.startDate);
+        startDate.setMinutes(startDate.getMinutes() - startDate.getTimezoneOffset());
+        var startDateString = startDate.toISOString().slice(0, 10);
+  
+        var finishDate = new Date(this.partialForm.value.finishDate);
+        finishDate.setMinutes(finishDate.getMinutes() - finishDate.getTimezoneOffset());
+        var finishDateString = finishDate.toISOString().slice(0, 10);
+  
+        let data = {
+          period: periodId,
+          partial: this.partialForm.value.partial,
+          startDate: startDateString,
+          finishDate: finishDateString,
+        }
+        this._partialService.createPartial(data).subscribe(data => {
+          this.periodForm.reset();
+          this.partialForm.reset();
           this.getPartials();
           this._sweetAlertService.showSuccessToast('Parcial creado exitosamente');
         }, (error) => {
-          this._sweetAlertService.showErrorAlert('Ya existen parciales para este periodo');
+          this._sweetAlertService.showErrorAlert(error.error.message);
         });
       }
-
+  
     } else if (this.operation === 'Actualizar') {
-      console.log('Actualizar');
       this.updatePartial();
     }
   }
 
   updatePartial() {
-    if (this.dataPartial.valid) {
-      var data = this.dataPartial.value;
-      let firstKey = Object.keys(data)[0];
-      var startDate = new Date(data[firstKey].startDate).toISOString().slice(0, 10);
-      var finishDate = new Date(data[firstKey].finishDate).toISOString().slice(0, 10);
-      var periodId = this.dataPeriod.get('id').value;
-      console.log(periodId)
-
-      let parcial = {
+    if (this.partialForm.valid) {
+      const periodId = this.periodForm.get('id').value;
+      var startDate = new Date(this.partialForm.value.startDate);
+      startDate.setMinutes(startDate.getMinutes() - startDate.getTimezoneOffset());
+      var startDateString = startDate.toISOString().slice(0, 10);
+  
+      var finishDate = new Date(this.partialForm.value.finishDate);
+      finishDate.setMinutes(finishDate.getMinutes() - finishDate.getTimezoneOffset());
+      var finishDateString = finishDate.toISOString().slice(0, 10);
+  
+      let data = {
         period: periodId,
-        startDate: startDate,
-        finishDate: finishDate,  
+        partial: this.partialForm.value.partial,
+        startDate: startDateString,
+        finishDate: finishDateString,
       }
-
-      this._partialService.updatePartial(this.id, parcial).subscribe(data => {
-        this.dataPartial.reset();
-        this.dataPeriod.reset();
-        this.dataPartial.get('first')?.enable();
-        this.dataPartial.get('second')?.enable();
-        this.dataPartial.get('third')?.enable();
+      this._partialService.updatePartial(this.id, data).subscribe(data => {
+        this.partialForm.reset();
+        this.periodForm.reset();
         this.operation = 'Registrar';
         this._sweetAlertService.showSuccessToast('Parcial actualizado exitosamente');
         this.getPartials();
-        console.log(data);
       }, (error) => {
         this._sweetAlertService.showErrorToast('Ya existen parciales para este periodo');
       });
@@ -202,14 +185,25 @@ export class PartialComponent implements OnInit {
   }
 
   deletePartial(id: string) {
-    this._partialService.deletePartial(id).subscribe(data => {
-      this.getPartials();
-      this._sweetAlertService.showSuccessToast('Parcial eliminado exitosamente');
-    }, (error) => {
-      console.log(error);
+    this._sweetAlertService.showMessageConfirmation('Todos los elementos asociados a este parcial serán eliminados en cascada; esta acción no podrá revertirse.').then(result => {
+      if(result.isConfirmed){
+        this._partialService.deletePartial(id).subscribe(data => {
+          this.getPartials();
+          this._sweetAlertService.showSuccessToast('Parcial eliminado exitosamente');
+        }, 
+        (error) => {
+          this._sweetAlertService.showErrorToast('Error eliminando el parcial');
+        });
+      }
     });
   }
 
+  applyFilter() {
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      return data.partial.toLowerCase().includes(filter) || data.period.name.toLowerCase().includes(filter);
+    };
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
 
   logout() {
     localStorage.removeItem('user');

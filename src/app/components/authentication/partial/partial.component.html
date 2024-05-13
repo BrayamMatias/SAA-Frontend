@@ -22,7 +22,7 @@
             <h2>Periodo</h2>
             <p>Selecciona el periodo al que corresponden los parciales</p>
         </div>
-        <form [formGroup]="dataPeriod">
+        <form [formGroup]="periodForm">
             <mat-form-field class="full-width">
                 <mat-label>Periodo</mat-label>
                 <mat-select formControlName="id" required>
@@ -32,64 +32,46 @@
             </mat-form-field>
         </form>
 
-        <form [formGroup]="dataPartial">
-            <div class="heading">
-                <h2>1er Parcial</h2>
-                <p>Ingresa las fechas correspondientes al inicio y fin del 1er parcial</p>
-            </div>
-            <mat-form-field formGroupName="first" class="full-width">
-                <mat-label>1er parcial</mat-label>
-                <mat-date-range-input [rangePicker]="picker1">
-                    <input matStartDate formControlName="startDate" placeholder="Fecha inicio" required>
-                    <input matEndDate formControlName="finishDate" placeholder="Fecha final" required>
-                </mat-date-range-input>
-                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker1></mat-date-range-picker>
+        <form [formGroup]="partialForm">
+            <mat-form-field class="full-width">
+                <mat-label>Parcial</mat-label>
+                <mat-select formControlName="partial" required>
+                    <mat-option *ngFor="let parcial of partials_values" [value]="parcial">{{parcial}}</mat-option>
+                </mat-select>
+                <mat-hint>Selecciona el periodo</mat-hint>
             </mat-form-field>
 
-            <div class="heading">
-                <h2>2do Parcial</h2>
-                <p>Ingresa las fechas correspondientes al inicio y fin del 2do parcial</p>
-            </div>
-            <mat-form-field formGroupName="second" class="full-width">
-                <mat-label>2do parcial</mat-label>
-                <mat-date-range-input [rangePicker]="picker2">
+            <mat-form-field class="full-width">
+                <mat-label>Rango del parcial</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
                     <input matStartDate formControlName="startDate" placeholder="Fecha inicio" required>
+                    <mat-error *ngIf="partialForm.get('startDate')?.invalid">Fecha de inicio inválida</mat-error>
                     <input matEndDate formControlName="finishDate" placeholder="Fecha final" required>
+                    <mat-error *ngIf="partialForm.get('finishDate')?.invalid">Fecha final inválida</mat-error>
                 </mat-date-range-input>
                 <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker2></mat-date-range-picker>
-            </mat-form-field>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
 
-            <div class="heading">
-                <h2>3er Parcial</h2>
-                <p>Ingresa las fechas correspondientes al inicio y fin del 3er parcial</p>
-            </div>
-            <mat-form-field formGroupName="third" class="full-width">
-                <mat-label>3er parcial</mat-label>
-                <mat-date-range-input [rangePicker]="picker3">
-                    <input matStartDate formControlName="startDate" placeholder="Fecha inicio" required>
-                    <input matEndDate formControlName="finishDate" placeholder="Fecha final" required>
-                </mat-date-range-input>
-                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker3></mat-date-range-picker>
             </mat-form-field>
-
         </form>
+
         <div class="button-form">
-            <button mat-raised-button color="primary" class="button" [disabled]="dataPartial.invalid"
+            <button mat-raised-button color="primary" class="button" [disabled]="partialForm.invalid"
                 (click)="createDataPartial()">Guardar parciales</button>
         </div>
 
     </div>
 
-    <div class="user-table-container">
+<div class="table-container">
         <h2>Parciales Registrados</h2>
-        <mat-table [dataSource]="dataSource">
 
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Buscar</mat-label>
+            <input matInput [(ngModel)]="searchText" (keyup)="applyFilter()" placeholder="Ingresa parcial o periodo">
+        </mat-form-field>
+
+        <mat-table [dataSource]="dataSource">
             <!-- Period Column -->
             <ng-container matColumnDef="period">
                 <mat-header-cell *matHeaderCellDef> Periodo </mat-header-cell>
@@ -118,7 +100,7 @@
             <ng-container matColumnDef="accion">
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>
                 <mat-cell *matCellDef="let partials">
-                    <button mat-icon-button color="primary" (click)="editPartial(partials.id)" >
+                    <button mat-icon-button color="primary" (click)="editPartial(partials.id)">
                         <mat-icon>edit</mat-icon>
                     </button>
                     <button mat-icon-button color="warn" (click)="deletePartial(partials.id)">

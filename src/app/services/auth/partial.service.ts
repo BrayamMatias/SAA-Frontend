@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Partial } from 'src/app/interfaces/partial';
 import { environment } from 'src/environment/environment';
 
 @Injectable({
@@ -24,9 +25,9 @@ export class PartialService {
     return this.http.get(`${this.myAppUrl}${this.myApiUrl}`, {headers});
   }
 
-  createPartial(periodId: String,partial: any[]) {
+  createPartial(partial: Partial) {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.post(`${this.myAppUrl}${this.myApiUrl}/${periodId}`, partial, {headers});
+    return this.http.post(`${this.myAppUrl}${this.myApiUrl}`, partial, {headers});
   }
 
   updatePartial(id: string, partial: any) {

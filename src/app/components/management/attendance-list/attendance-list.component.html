@@ -19,36 +19,38 @@
     </mat-form-field>
 </div>
 
+
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
     <!-- Name Column -->
-    <ng-container matColumnDef="enrollment">
+    <ng-container matColumnDef="matricula">
         <mat-header-cell *matHeaderCellDef> Matricula </mat-header-cell>
-        <mat-cell *matCellDef="let student"> {{student.enrollment}} </mat-cell>
+        <mat-cell *matCellDef="let data"> {{data.matricula}} </mat-cell>
     </ng-container>
 
     <!-- Email Column -->
-    <ng-container matColumnDef="name">
+    <ng-container matColumnDef="fullName">
         <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-        <mat-cell *matCellDef="let student"> {{student.name}} </mat-cell>
+        <mat-cell *matCellDef="let data"> {{data.fullName}} </mat-cell>
     </ng-container>
 
     <!-- Accion Column -->
-    <ng-container matColumnDef="attendance">
-        <mat-header-cell *matHeaderCellDef> Asistencia </mat-header-cell>
-        <mat-cell *matCellDef="let student">
-            <div class="attendance-options">
-                <mat-radio-group [(ngModel)]="student.attendance">
-                    <mat-radio-button value="full">Asistencia</mat-radio-button>
-                    <mat-radio-button value="half">Media</mat-radio-button>
-                    <mat-radio-button value="quarter">Cuarto</mat-radio-button>
-                    <mat-radio-button value="none">Nada</mat-radio-button>
-                </mat-radio-group>
-            </div>
-        </mat-cell>
-    </ng-container>
+        <ng-container matColumnDef="attendance">
+            <mat-header-cell *matHeaderCellDef> Asistencia </mat-header-cell>
+            <mat-cell *matCellDef="let data">
+                <div class="attendance-options">
+                    <mat-radio-group [(ngModel)]="data.attendance">
+                        <mat-radio-button [value]="+1">Asistencia</mat-radio-button>
+                        <mat-radio-button [value]="+0.5">Media</mat-radio-button>
+                        <mat-radio-button [value]="+0.25">Cuarto</mat-radio-button>
+                        <mat-radio-button [value]="+0">Nada</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </mat-cell>
+        </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
 
-<button mat-raised-button color="primary" class="button">Guardar</button>
+
+<button mat-raised-button color="primary" class="button" (click)="createAttendanceList()">Guardar</button>

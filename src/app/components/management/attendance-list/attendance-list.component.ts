@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl } from '@angular/forms';
+import { EnrollmentService } from 'src/app/services/management/enrollment.service';
+import { ActivatedRoute } from '@angular/router';
+import { AttendancesService } from 'src/app/services/management/attendances.service';
 
 
 @Component({
@@ -9,35 +11,52 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./attendance-list.component.css']
 })
 export class AttendanceListComponent implements OnInit {
+  attendanceArray: any;
   searchText: string = '';
-  displayedColumns: string[] = ['enrollment', 'name', 'attendance'];
-  labelPosition: 'full' | 'half' | 'quarter' | 'none' = 'full';
-  dataSource = new MatTableDataSource<Student>();
-  
-  constructor() { }
+  subjectId: string;
+  displayedColumns: string[] = ['matricula', 'fullName', 'attendance'];
+  dataSource = new MatTableDataSource<any>();
 
-  ngOnInit(){
-    const students: Student[] = [
-      { enrollment: '20206677', name: 'Brayam García Matías', attendance: 'half'},
-      { enrollment: '2', name: 'User 2', attendance: 'none'},
-      // Más estudiantes aquí...
-   ];
+  constructor(
+    private aRouter: ActivatedRoute,
+    private _enrollmentService: EnrollmentService,
+    private _attendanceService: AttendancesService
+  ) {
+    this.subjectId = String(aRouter.snapshot.paramMap.get('id'));
+  }
 
-    this.dataSource = new MatTableDataSource(students);
+  ngOnInit() {
+    this.getStudentAttendance();
+  }
+
+  getStudentAttendance() {
+    this._enrollmentService.getEnrollments(this.subjectId).subscribe( data => {
+      this.dataSource.data = data;
+    });
+  }
+
+  getAttendanceArray() {
+    this.attendanceArray = this.dataSource.data.map(student => ({
+      enrollmentId: student.enrollmentId,
+      attendance: student.attendance || 0
+    }));
+    return this.attendanceArray;
+  }
+
+  createAttendanceList() {
+    const attendanceList = this.getAttendanceArray();
+    this._attendanceService.createAttendance(attendanceList).subscribe( data => {
+      console.log(data);
+    });
   }
 
   applyFilterAdd() {
-    this.dataSource.filterPredicate = (data: Student, filter: string) => {
-      return data.enrollment.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      return data.matricula.toLowerCase().includes(filter) || data.fullName.toLowerCase().includes(filter);
     };
     this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
 }
 
-export interface Student {
-  enrollment: string;
-  name: string;
-  attendance: 'full' | 'half' | 'quarter' | 'none';
-}
 

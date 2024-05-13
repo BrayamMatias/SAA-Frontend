@@ -1,5 +1,4 @@
 export interface Attendance {
-    id?: number;
-    date: string;
-    attendance: [string];
+    enrollmentId: string;
+    attendance: number;
 }

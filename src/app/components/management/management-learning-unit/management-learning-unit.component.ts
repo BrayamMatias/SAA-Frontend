@@ -28,7 +28,6 @@ export class ManagementLearningUnitComponent implements OnInit{
 
   getLearningUnits(){
     this._learnUnitService.getLearningUnits().subscribe((data) => {
-      console.log(data);
       this.learningUnits = data.map((unit: any) => {
         if (unit.name) {
           unit.name = unit.name.replace(/-/g, ' ')
@@ -50,11 +49,9 @@ export class ManagementLearningUnitComponent implements OnInit{
       if (result.isConfirmed) {
         this._learnUnitService.deleteLearningUnit(id).subscribe(() => {
           this.getLearningUnits();
-          console.log('Learning Unit deleted');
           this._sweetAlertService.showSuccessToast('Unidad de Aprendizaje eliminada correctamente');
         },
         (error) => {
-          console.error('Error deleting Learning Unit', error);
           this._sweetAlertService.showErrorToast('Error al eliminar la Unidad de Aprendizaje');
         });
       }

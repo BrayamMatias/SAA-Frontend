@@ -14,6 +14,11 @@ export class PeriodsService {
     this.myApiUrl = 'api/periods';
   }
 
+  getPeriod(id: string){
+    const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
+    return this.http.get(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});
+  }
+
   getPeriods(){
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
     return this.http.get(`${this.myAppUrl}${this.myApiUrl}`, {headers});
@@ -22,6 +27,16 @@ export class PeriodsService {
   createPeriod(period: any){
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
     return this.http.post(`${this.myAppUrl}${this.myApiUrl}`, period,{headers});
+  }
+
+  updatePeriod(id: string,period: any){
+    const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
+    return this.http.patch(`${this.myAppUrl}${this.myApiUrl}/${id}`, period,{headers});
+  }
+
+  deletePeriod(id: string){
+    const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
+    return this.http.delete(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});
   }
   
 }

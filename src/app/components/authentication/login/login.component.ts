@@ -36,11 +36,8 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.formLogin.valid) {
       this._loginService.login(this.formLogin.value).subscribe((data: any) => {
-        //Guardamos el token en el local storage
-        console.log(data);
         localStorage.setItem('user', JSON.stringify(data));
         localStorage.setItem('token', data.token);
-        console.log(data.roles);
         this.router.navigate([this.redirectUser(data.roles)]);
       }, (error) => {
         this._sweetAlertService.showErrorAlert(error.error.message);

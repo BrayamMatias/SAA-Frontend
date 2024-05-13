@@ -15,6 +15,7 @@ import { StudentService } from 'src/app/services/auth/student.service';
 })
 
 export class RegisterStudentComponent implements OnInit{
+  searchText: string = '';
   formRegisterStudent: FormGroup;
   displayedColumns: string[] = ['fullName', 'matricula', 'accion'];
   dataSource = new MatTableDataSource<Student>();
@@ -70,14 +71,12 @@ export class RegisterStudentComponent implements OnInit{
   getStudents(){
     this._studentService.getStudents().subscribe(data => {
       this.dataSource.data = data;
-      console.log(data);
     });
   }
 
   updateStudent(){
     if(this.formRegisterStudent.valid){
       this._studentService.updateStudent(this.id, this.formRegisterStudent.value).subscribe(data => {
-        console.log(data);
         this.operation = 'Registrar';
         this.id = '';
         this.formRegisterStudent.reset();
@@ -85,7 +84,6 @@ export class RegisterStudentComponent implements OnInit{
         this.getStudents();
         this._sweetAlertService.showSuccessToast('Alumno actualizado correctamente');
       }, (error) => {
-        console.error('Error actualizando al alumno', error);
         this._sweetAlertService.showErrorAlert('Los datos coinciden con otro alumno o hubo un error al actualizar');
       });
     }
@@ -95,7 +93,6 @@ export class RegisterStudentComponent implements OnInit{
     if(this.operation === 'Registrar'){
       if(this.formRegisterStudent.valid){
         this._studentService.createStudent(this.formRegisterStudent.value).subscribe(data => {
-          console.log(data);
           this.formRegisterStudent.reset();
           this.router.navigate(['/register-student']);
           this._sweetAlertService.showSuccessToast('Alumno registrado correctamente');
@@ -113,12 +110,10 @@ export class RegisterStudentComponent implements OnInit{
     this._sweetAlertService.showDeleteConfirmation().then(result => {
       if(result.isConfirmed){
         this._studentService.deleteStudent(id).subscribe(data => {
-          console.log(data);
           this.getStudents();
           this._sweetAlertService.showSuccessToast('Alumno eliminado correctamente');
         }, 
         (error) => {
-          console.error('Error eliminando al alumno', error);
           this._sweetAlertService.showErrorToast('Error eliminando al alumno');
         });
       }
@@ -126,6 +121,13 @@ export class RegisterStudentComponent implements OnInit{
   }
 
   hide = true;
+
+  applyFilter() {
+    this.dataSource.filterPredicate = (data: Student, filter: string) => {
+      return data.fullName.toLowerCase().includes(filter) || data.matricula.toLowerCase().includes(filter);
+    };
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
 
   logout() {
     localStorage.removeItem('user');

@@ -15,16 +15,17 @@ import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.servi
   styleUrls: ['./register.component.css']
 })
 
-export class RegisterComponent implements OnInit{
+export class RegisterComponent implements OnInit {
+  searchText: string = '';
   formRegister: FormGroup;
   displayedColumns: string[] = ['name', 'email', 'accion'];
   dataSource = new MatTableDataSource<User>();
   operation: string = 'Registrar';
-  id: string; 
+  id: string;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  
+
 
   constructor(
     private router: Router,
@@ -32,22 +33,22 @@ export class RegisterComponent implements OnInit{
     private fb: FormBuilder,
     private _registerService: RegisterService,
     private _sweetAlertService: SweetAlertService,
-    ) { 
-      this.formRegister = this.fb.group({
-        fullName: ['', Validators.required],
-        email: ['', [
-          Validators.required,
-          Validators.email,
-          Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$'),
-        ]],
-        password: ['', Validators.required]
-      });
+  ) {
+    this.formRegister = this.fb.group({
+      fullName: ['', Validators.required],
+      email: ['', [
+        Validators.required,
+        Validators.email,
+        Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$'),
+      ]],
+      password: ['', Validators.required]
+    });
 
-      this.id = aRouter.snapshot.paramMap.get('id') || '';  // Obteniendo id como string
-    }
+    this.id = aRouter.snapshot.paramMap.get('id') || '';  // Obteniendo id como string
+  }
 
   ngOnInit(): void {
-    if(this.id != '' ){  // Comprobando si id no es una cadena vacía
+    if (this.id != '') {  // Comprobando si id no es una cadena vacía
       this.operation = 'Actualizar';
       this.getUser(this.id);  // Llamando a getUser si estamos actualizando
     }
@@ -58,13 +59,13 @@ export class RegisterComponent implements OnInit{
     this.dataSource.sort = this.sort;
   };
 
-  editUser(id: string){
+  editUser(id: string) {
     this.id = id;
     this.operation = 'Actualizar';
     this.getUser(id);
   }
 
-  getUser(id: string){
+  getUser(id: string) {
     this._registerService.getUser(this.id).subscribe(data => {  // No necesitas llamar a toString() aquí
       this.formRegister.setValue({
         fullName: data.fullName,
@@ -76,18 +77,16 @@ export class RegisterComponent implements OnInit{
     });
   }
 
-  getUsers(){
+  getUsers() {
     this._registerService.getUsers().subscribe(data => {
       this.dataSource.data = data;
-      console.log(data);
     });
-  
+
   }
 
-  updateUser(){
-    if(this.formRegister.valid){
+  updateUser() {
+    if (this.formRegister.valid) {
       this._registerService.updateUser(this.id, this.formRegister.value).subscribe(data => {
-        console.log(data);
         this.operation = 'Registrar';
         this.id = '';
         this.formRegister.reset();
@@ -101,42 +100,45 @@ export class RegisterComponent implements OnInit{
     }
   }
 
-  createUser(){
-    if(this.operation === 'Registrar'){
-      if(this.formRegister.valid){
+  createUser() {
+    if (this.operation === 'Registrar') {
+      if (this.formRegister.valid) {
         this._registerService.createUser(this.formRegister.value).subscribe(data => {
-          console.log(data);
           this.formRegister.reset();
           this.router.navigate(['/register']);
           this._sweetAlertService.showSuccessToast('Usuario registrado correctamente');
           this.getUsers();
         }, (error) => {
-          console.error('Error creando el usuario', error);
           this._sweetAlertService.showErrorAlert(error.error.message);
         });
       }
-    } else if(this.operation === 'Actualizar'){
+    } else if (this.operation === 'Actualizar') {
       this.updateUser();
     }
   }
 
-  deleteUser(id: string){
-    this._sweetAlertService.showDeleteConfirmation().then(result => {
-      if(result.isConfirmed){
+  deleteUser(id: string) {
+    this._sweetAlertService.showMessageConfirmation('Se eliminarán en cascada todos los elementos ligados a este usuario; esta acción no podrá revertirse.').then(result => {
+      if (result.isConfirmed) {
         this._registerService.deleteUser(id).subscribe(data => {
-          console.log(data);
           this.getUsers();
           this._sweetAlertService.showSuccessToast('Usuario eliminado correctamente');
-        }, 
-        (error) => {
-          console.error('Error eliminando el usuario', error);
-          this._sweetAlertService.showErrorToast('Error eliminando el usuario');
-        });
+        },
+          (error) => {
+            this._sweetAlertService.showErrorToast('Error eliminando el usuario');
+          });
       }
     });
   }
 
   hide = true;
+
+  applyFilter() {
+    this.dataSource.filterPredicate = (data: User, filter: string) => {
+      return data.fullName.toLowerCase().includes(filter) || data.email.toLowerCase().includes(filter);
+    };
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
 
   logout() {
     localStorage.removeItem('user');

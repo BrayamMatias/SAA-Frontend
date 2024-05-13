@@ -76,4 +76,17 @@ export class SweetAlertService {
     });
   }
 
+  showMessageConfirmation(message: string): Promise<SweetAlertResult> {
+    return Swal.fire({
+      title: '¿Estás seguro?',
+      text: message,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#607d8b',
+      cancelButtonColor: '#ff5449',
+      confirmButtonText: '¡Sí, bórralo!',
+      cancelButtonText: 'Cancelar'
+    });
+  }
+
 }

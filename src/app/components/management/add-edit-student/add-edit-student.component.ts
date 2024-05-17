@@ -6,7 +6,6 @@ import { StudentService } from 'src/app/services/auth/student.service';
 import { EnrollmentService } from 'src/app/services/management/enrollment.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
-import { Enrollment } from 'src/app/interfaces/enrollment';
 
 @Component({
   selector: 'app-add-edit-student',
@@ -16,10 +15,10 @@ import { Enrollment } from 'src/app/interfaces/enrollment';
 export class AddEditStudentComponent implements OnInit {
   selectedStudentsAdd: Student[] = [];
   selectedStudentsDelete: Student[] = [];
-  subjectId: string ;
+  subjectId: string;
   searchTextAdd: string = '';
   searchTextDelete: string = '';
-  displayedColumns: string[] = ['selected','matricula', 'nombre', 'accion'];
+  displayedColumns: string[] = ['selected', 'matricula', 'nombre', 'accion'];
 
   // DataSource y ViewChild para la primera tabla (Añadir Estudiantes)
   dataSourceAdd = new MatTableDataSource<Student>();
@@ -44,28 +43,28 @@ export class AddEditStudentComponent implements OnInit {
     this.getStudents();
     this.getStudentsEnrolled();
   }
-  ngAfterViewInit(): void{
+  ngAfterViewInit(): void {
     this.dataSourceAdd.paginator = this.paginatorAdd;
     this.dataSourceDelete.paginator = this.paginatorDelete;
   }
 
-  onCheckboxChangeAdd(student: Student, isChecked: boolean){
-    if(isChecked){
+  onCheckboxChangeAdd(student: Student, isChecked: boolean) {
+    if (isChecked) {
       this.selectedStudentsAdd.push(student);
     } else {
       const index = this.selectedStudentsAdd.indexOf(student);
-      if(index >= 0){
+      if (index >= 0) {
         this.selectedStudentsAdd.splice(index, 1);
       }
     }
   }
 
-  onCheckboxChangeDelete(student: Student, isChecked: boolean){
-    if(isChecked){
+  onCheckboxChangeDelete(student: Student, isChecked: boolean) {
+    if (isChecked) {
       this.selectedStudentsDelete.push(student);
     } else {
       const index = this.selectedStudentsDelete.indexOf(student);
-      if(index >= 0){
+      if (index >= 0) {
         this.selectedStudentsDelete.splice(index, 1);
       }
     }
@@ -76,7 +75,7 @@ export class AddEditStudentComponent implements OnInit {
     this.selectedStudentsDelete = [];
   }
 
-  getStudents(){
+  getStudents() {
     this._studentService.getStudents().subscribe(data => {
       this.dataSourceAdd.data = data;
     });
@@ -89,14 +88,14 @@ export class AddEditStudentComponent implements OnInit {
     });
   }
 
-  createEnrollment(studentId: string[]){
+  createEnrollment(studentId: string[]) {
     if (!Array.isArray(studentId)) {
       studentId = [studentId];
     }
     let enrollments = (studentId as string[]).map(id => ({
       studentId: id
     }));
-  
+
     this._enrollmentService.createEnrollment(this.subjectId, enrollments).subscribe(data => {
       this.getStudents();
       this.getStudentsEnrolled();
@@ -107,13 +106,13 @@ export class AddEditStudentComponent implements OnInit {
     });
   }
 
-  createEnrollments(students: Student[]){
+  createEnrollments(students: Student[]) {
     let enrollments = students.filter(student => student.id !== undefined)
       .map(student => ({
         studentId: student.id!
       }));
-  
-    this._enrollmentService.createEnrollment(this.subjectId,enrollments).subscribe(data => {
+
+    this._enrollmentService.createEnrollment(this.subjectId, enrollments).subscribe(data => {
       this.getStudents();
       this.getStudentsEnrolled();
       this.deselectAllStudents();
@@ -123,11 +122,11 @@ export class AddEditStudentComponent implements OnInit {
     });
   }
 
-  deleteEnrollment(enrollmentId: string){
+  deleteEnrollment(enrollmentId: string) {
     let enrollment = [{
       enrollmentId: enrollmentId
     }];
-  
+
     this._enrollmentService.deleteEnrollments(enrollment).subscribe(data => {
       this.getStudents();
       this.getStudentsEnrolled();
@@ -138,12 +137,11 @@ export class AddEditStudentComponent implements OnInit {
     });
   }
 
-
-  deleteEnrollments(students: Student[]){
+  deleteEnrollments(students: Student[]) {
     let enrollments = students.filter(student => student.enrollmentId !== undefined)
-    .map(student => ({
-      enrollmentId: student.enrollmentId!
-    }));
+      .map(student => ({
+        enrollmentId: student.enrollmentId!
+      }));
     this._enrollmentService.deleteEnrollments(enrollments).subscribe(data => {
       this.getStudents();
       this.getStudentsEnrolled();
@@ -152,10 +150,8 @@ export class AddEditStudentComponent implements OnInit {
     });
   }
 
-
-
-  getStudentsEnrolled(){
-    this._enrollmentService.getEnrollments(this.subjectId).subscribe(data=> {
+  getStudentsEnrolled() {
+    this._enrollmentService.getEnrollments(this.subjectId).subscribe(data => {
       this.dataSourceDelete.data = data;
     });
   }
@@ -166,12 +162,16 @@ export class AddEditStudentComponent implements OnInit {
     };
     this.dataSourceAdd.filter = this.searchTextAdd.trim().toLowerCase();
   }
-  
+
   applyFilterDelete() {
     this.dataSourceDelete.filterPredicate = (data: Student, filter: string) => {
       return data.matricula.toLowerCase().includes(filter) || data.fullName.toLowerCase().includes(filter);
     };
     this.dataSourceDelete.filter = this.searchTextDelete.trim().toLowerCase();
+  }
+
+  back() {
+    this.router.navigate(['/management-list', this.subjectId]);
   }
 
   logout() {

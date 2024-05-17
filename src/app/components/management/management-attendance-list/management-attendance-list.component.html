@@ -6,7 +6,7 @@
         <span class="spacer"></span>
         <span>Gestión de Listas de Asistencia</span>
         <span class="spacer"></span>
-        <button mat-icon-button color="basic">
+        <button mat-icon-button color="basic" (click)="logout()">
             <mat-icon>logout</mat-icon>
         </button>
     </mat-toolbar-row>
@@ -19,16 +19,13 @@
 </div>
 
 <div class="card-container">
-    <div class="card">
+    <div class="card" *ngFor="let date of datesArray">
         <div class="card-header">
-            <h2>03/05/2024</h2>
+            <h2>{{date}}</h2>
             <hr>
         </div>
-        <div class="card-info-container">
-            <h5>Horario:</h5><p>14:00 - 16:00</p>
-        </div>
         <div class="card-footer">
-            <button mat-raised-button color="primary">Editar</button>
+            <button mat-raised-button color="primary" (click)="editAttendanceList(date)">Editar</button>
             <button mat-button color="warn">Eliminar</button>
         </div>
     </div>

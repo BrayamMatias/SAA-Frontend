@@ -19,9 +19,19 @@ export class AttendancesService {
     return this.http.post(`${this.myAppUrl}${this.myApiUrl}`, attendance, { headers });
   }
 
-  getAttendances() {
+  updateAttendance(attendance: any) {
     const headers = { 'Authorization': `Bearer ${localStorage.getItem('token')}` };
-    return this.http.get(`${this.myAppUrl}${this.myApiUrl}/attendance-dates`, { headers });
+    return this.http.patch(`${this.myAppUrl}${this.myApiUrl}`, attendance, { headers });
   }
 
+  getAttendances(id: string) {
+    const headers = { 'Authorization': `Bearer ${localStorage.getItem('token')}` };
+    return this.http.get(`${this.myAppUrl}${this.myApiUrl}/dates/${id}`, { headers });
+  }
+
+  getAttendanceByDate(subjectId: string, date: string) {
+    const headers = { 'Authorization': `Bearer ${localStorage.getItem('token')}` };
+    return this.http.get(`${this.myAppUrl}${this.myApiUrl}/by-date?subjectId=${subjectId}&date=${date}`, { headers });
+  }
+  
 }

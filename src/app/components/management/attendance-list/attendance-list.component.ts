@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { EnrollmentService } from 'src/app/services/management/enrollment.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AttendancesService } from 'src/app/services/management/attendances.service';
+import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
 
 
 @Component({
@@ -12,42 +13,73 @@ import { AttendancesService } from 'src/app/services/management/attendances.serv
 })
 export class AttendanceListComponent implements OnInit {
   attendanceArray: any;
+  attendanceByDate: any;
   searchText: string = '';
+  operation: string = 'Registrar';
   subjectId: string;
+  date: string;
   displayedColumns: string[] = ['matricula', 'fullName', 'attendance'];
   dataSource = new MatTableDataSource<any>();
 
   constructor(
+    private router: Router,
     private aRouter: ActivatedRoute,
     private _enrollmentService: EnrollmentService,
-    private _attendanceService: AttendancesService
+    private _attendanceService: AttendancesService,
+    private _sweetAlertService: SweetAlertService
   ) {
     this.subjectId = String(aRouter.snapshot.paramMap.get('id'));
+    this.date = String(aRouter.snapshot.paramMap.get('date'));
   }
 
   ngOnInit() {
-    this.getStudentAttendance();
+    if (this.subjectId && this.date != 'null') {
+      //Editar
+      this.operation = 'Editar';
+      this.getAttendanceByDate();
+    }
+    if (this.subjectId && this.date == 'null') {
+      //Crear
+      this.getStudentAttendance();
+    }
   }
 
   getStudentAttendance() {
-    this._enrollmentService.getEnrollments(this.subjectId).subscribe( data => {
+    this._enrollmentService.getEnrollments(this.subjectId).subscribe(data => {
       this.dataSource.data = data;
+      this.attendanceArray = data.map(student => ({
+        enrollmentId: student.enrollmentId,
+        attendance: 0
+      }));
     });
   }
 
-  getAttendanceArray() {
-    this.attendanceArray = this.dataSource.data.map(student => ({
-      enrollmentId: student.enrollmentId,
-      attendance: student.attendance || 0
-    }));
-    return this.attendanceArray;
+  getAttendanceByDate() {
+    this._attendanceService.getAttendanceByDate(this.subjectId, this.date).subscribe(dataDate => {
+      this.dataSource.data = (dataDate as any[]).map(item => item.student);
+      this.attendanceArray = (dataDate as any[]).map(item => ({ id: item.id, attendance: +item.attendance }));
+      this.attendanceByDate = dataDate;
+    });
   }
 
-  createAttendanceList() {
-    const attendanceList = this.getAttendanceArray();
-    this._attendanceService.createAttendance(attendanceList).subscribe( data => {
-      console.log(data);
-    });
+  createAttendance() {
+    if (this.operation == 'Registrar') {
+      this._attendanceService.createAttendance(this.attendanceArray).subscribe(data => {
+        this._sweetAlertService.showSuccessToast('Asistencia registrada correctamente');
+        this.router.navigate(['/management-list', this.subjectId])
+      }, (error) => {
+        this._sweetAlertService.showErrorAlert(error.error.message);
+      });
+    }
+
+    if (this.operation == 'Editar') {
+      this._attendanceService.updateAttendance(this.attendanceArray).subscribe(data => {
+        this._sweetAlertService.showSuccessToast('Asistencia actualizada correctamente');
+        this.router.navigate(['/management-list', this.subjectId])
+      }, (error) => {
+        this._sweetAlertService.showErrorToast('Error al actualizar la asistencia');
+      });
+    }
   }
 
   applyFilterAdd() {
@@ -55,6 +87,16 @@ export class AttendanceListComponent implements OnInit {
       return data.matricula.toLowerCase().includes(filter) || data.fullName.toLowerCase().includes(filter);
     };
     this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
+
+  back() {
+    this.router.navigate(['/management-list', this.subjectId]);
+  }
+
+  logout() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 
 }

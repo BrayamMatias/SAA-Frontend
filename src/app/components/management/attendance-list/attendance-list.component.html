@@ -1,12 +1,12 @@
 <mat-toolbar color="primary" class="toolbar">
     <mat-toolbar-row>
-        <button mat-icon-button color="basic" routerLink="/management-list">
+        <button mat-icon-button color="basic" (click)="back()">
             <mat-icon>arrow_back_ios</mat-icon>
         </button>
         <span class="spacer"></span>
         <span>Pase de Asistencia</span>
         <span class="spacer"></span>
-        <button mat-icon-button color="basic">
+        <button mat-icon-button color="basic" (click)="logout()">
             <mat-icon>logout</mat-icon>
         </button>
     </mat-toolbar-row>
@@ -34,9 +34,22 @@
     </ng-container>
 
     <!-- Accion Column -->
-        <ng-container matColumnDef="attendance">
-            <mat-header-cell *matHeaderCellDef> Asistencia </mat-header-cell>
-            <mat-cell *matCellDef="let data">
+    <ng-container matColumnDef="attendance">
+        <mat-header-cell *matHeaderCellDef> Asistencia </mat-header-cell>
+        <mat-cell *matCellDef="let data; let i = index">
+            <mat-form-field class="form-field" class="full-width">
+                <mat-label>Asistencia</mat-label>
+                <mat-select [(value)]="attendanceArray[i].attendance">
+                    <mat-option>--</mat-option>
+                    <mat-option [value]="+1">Asistencia</mat-option>
+                    <mat-option [value]="+0.5">Media</mat-option>
+                    <mat-option [value]="+0.25">Cuarto</mat-option>
+                    <mat-option [value]="+0">Inasistencia</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-cell>
+
+        <!-- <mat-cell *matCellDef="let data">
                 <div class="attendance-options">
                     <mat-radio-group [(ngModel)]="data.attendance">
                         <mat-radio-button [value]="+1">Asistencia</mat-radio-button>
@@ -45,12 +58,12 @@
                         <mat-radio-button [value]="+0">Nada</mat-radio-button>
                     </mat-radio-group>
                 </div>
-            </mat-cell>
-        </ng-container>
+            </mat-cell> -->
+    </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
 
 
-<button mat-raised-button color="primary" class="button" (click)="createAttendanceList()">Guardar</button>
+<button mat-raised-button color="primary" class="button" (click)="createAttendance()">Guardar</button>

@@ -19,14 +19,9 @@
 </div>
 
 <div class="card-container">
-    <div class="card" *ngFor="let date of datesArray">
+    <div class="card" *ngFor="let date of datesArray" (click)="editAttendanceList(date)">
         <div class="card-header">
             <h2>{{date}}</h2>
-            <hr>
-        </div>
-        <div class="card-footer">
-            <button mat-raised-button color="primary" (click)="editAttendanceList(date)">Editar</button>
-            <button mat-button color="warn">Eliminar</button>
         </div>
     </div>
 </div>

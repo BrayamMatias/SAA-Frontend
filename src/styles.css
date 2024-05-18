@@ -5,139 +5,160 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-/* Contenedor para el fondo */
-.page-container {
-    /*background: linear-gradient(to bottom, #e0a7b6, #cfcfcf);*/
-    background-color: #f0f4f9;
-    background-repeat: no-repeat;
-    /* Evita que el fondo se repita */
-    background-size: cover;
-    /* Hace que el fondo cubra todo el contenedor */
-    min-height: 100%;
-    /* Ocupa toda la altura de la pantalla */
-    box-sizing: border-box;
-    /* Incluye el padding y el borde en el tamaño total */
-}
-
 .spacer {
     flex: 1 1 auto;
 }
 
-.toolbar-admin{
+.toolbar-admin {
     color: white;
 }
 
-.button{
-    width: calc(100% - 20px); /* Ajuste de ancho */
-    height: 2rem;
-    margin: 0 10px; /* Espacio de 10px en cada lado */
+/* Contenedor para el fondo */
+.page-container {
+    background-color: #f0f4f9;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100%;
+    box-sizing: border-box;
 }
 
+/* Contenedor para centrar elementos */
 .wrapper {
     display: flex;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
-    height: auto; /* Altura automática */
+    justify-content: center;
+    align-items: center;
+    height: auto;
 }
 
+/* Estilos para el contenedor de la tarjeta */
 .container {
     background-color: white;
     width: 100%;
     height: auto;
     max-width: 50%;
-    margin: 2rem;
+    margin-inline: 1rem;
     border-radius: 1rem;
     padding: 20px;
 
     .heading {
-        margin-bottom: 2rem; /* Ajuste de espaciado */
+        margin-bottom: 2rem;
+
         h1 {
             margin-top: 2rem;
             margin-left: 2rem;
             font-size: 2rem;
             font-weight: bold;
-            /* text-align: center; */
             color: #1f1f1f;
-            margin-bottom: 10px; /* Ajuste de espaciado */
+            margin-bottom: 10px;
         }
-        h2{
+
+        h2 {
             margin-top: 4rem;
             margin-left: 2rem;
         }
+
         p {
             margin-top: 2rem;
             margin-left: 2rem;
             font-size: 1rem;
-            /* text-align: center; */
             color: #1f1f1f;
         }
     }
 
     .container-form {
-        margin-top: 5rem; /* Ajuste de espaciado */
-        margin-bottom: 1.5rem; /* Ajuste de espaciado */
+        margin-top: 5rem;
+        margin-bottom: 1.5rem;
     }
 
     .form-input {
-        margin-bottom: 1rem; /* Ajuste de espaciado */
+        margin-bottom: 1rem;
     }
 
     .full-width {
-        width: calc(100% - 20px); /* Ajuste de ancho */
-        margin: 0 10px; /* Espacio de 10px en cada lado */
+        width: calc(100% - 20px);
+        margin: 0 10px;
     }
 
     a {
-        display: block; /* Añadido para ocupar todo el ancho */
-        text-align: center; /* Centrado */
-        margin: 2rem 2rem; /* Ajuste de espaciado */
+        display: block;
+        text-align: center;
+        margin: 2rem 2rem;
         color: #0b57d0;
     }
-   
-    mat-icon{
-        color: #1f1f1f; /* Color del icono */
+
+    mat-icon {
+        color: #1f1f1f;
     }
 
     mat-label {
-        color: #1f1f1f; /* Color del texto */
+        color: #1f1f1f;
     }
 
 }
 
+/* Estilo para el boton general de la aplicación */
+.button {
+    width: calc(100% - 20px);
+    height: 2rem;
+    margin: 0 10px;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 /* Estilos para Toast de SeetAlert2 */
 
 .colored-toast.swal2-icon-success {
     background-color: #a5dc86 !important;
-  }
-  
-  .colored-toast.swal2-icon-error {
+}
+
+.colored-toast.swal2-icon-error {
     background-color: #f27474 !important;
-  }
-  
-  .colored-toast.swal2-icon-warning {
+}
+
+.colored-toast.swal2-icon-warning {
     background-color: #f8bb86 !important;
-  }
-  
-  .colored-toast.swal2-icon-info {
+}
+
+.colored-toast.swal2-icon-info {
     background-color: #3fc3ee !important;
-  }
-  
-  .colored-toast.swal2-icon-question {
+}
+
+.colored-toast.swal2-icon-question {
     background-color: #87adbd !important;
-  }
-  
-  .colored-toast .swal2-title {
+}
+
+.colored-toast .swal2-title {
     color: white;
-  }
-  
-  .colored-toast .swal2-close {
+}
+
+.colored-toast .swal2-close {
     color: white;
-  }
-  
-  .colored-toast .swal2-html-container {
+}
+
+.colored-toast .swal2-html-container {
     color: white;
-  }
+}
+
+/* Media queries para dispositivos de pantalla más pequeña */
+@media only screen and (max-width: 768px) {
+    .container {
+        max-width: calc(100% - 4rem);
+    }
+
+    .table-container {
+        max-width: calc(100% - 4rem);
+    }
+
+    .wrapper {
+        flex-direction: column;
+        padding: 20px;
+    }
+}

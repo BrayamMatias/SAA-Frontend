@@ -1,6 +1,14 @@
-.container{
-    border: 1px solid #dddddd; /* Borde */
+.container {
+    border: 1px solid #dddddd;
 }
+
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 20px;
+}
+
 .button-container {
     display: flex;
     width: 100%;
@@ -8,49 +16,44 @@
     margin-bottom: 2rem;
 }
 
-.button { /* Ajusta el ancho del botón */
+.button {
     margin-top: 1rem;
-    height: 50px; /* Ajusta la altura del botón */
-    padding: 10px 20px; /* Ajusta el padding interno del botón */
+    height: 50px;
+    padding: 10px 20px;
 }
 
 .user-table-container {
-    background-color: white; /* Color de fondo */
-    border: 1px solid #dddddd; /* Borde */
-    border-radius: 1rem; /* Borde redondeado */
-    padding: 20px; /* Ajuste de relleno */
-    margin: 2rem;
-    width: 100%; /* Ancho */
-    max-width: 50%; /* Ancho máximo */
-    max-height: auto; /* Altura máxima */
+    background-color: white;
+    border: 1px solid #dddddd;
+    border-radius: 1rem;
+    padding: 20px;
+    margin-inline: 1rem;
+    width: 100%;
+    max-width: 50%;
+    max-height: auto;
+
     .full-width {
         width: 100%;
-    }  
+    }
 }
 
 /* Media queries para dispositivos de pantalla más pequeña */
 @media only screen and (max-width: 768px) {
     .wrapper {
-        flex-direction: column; /* Cambia la dirección del flexbox a vertical */
-        padding: 20px; /* Agrega espacio alrededor del contenido */
-    }
-
-    .container {
-        max-width: calc(100% - 4rem); /* Resta el margen para mantener el ancho correcto */
+        flex-direction: column;
+        padding: 20px;
     }
 
     .user-table-container {
-        max-width: calc(100% - 4rem); /* Resta el margen para mantener el ancho correcto */
-        margin-bottom: 2rem;
+        max-width: calc(100% - 4rem);
+        margin-block: 2rem;
     }
+
     .button-container {
-        flex-direction: column; /* Cambia a una columna en dispositivos móviles */
+        flex-direction: column;
     }
-    .button{
+
+    .button {
         margin-top: .5rem;
     }
 }
-
-
-
-

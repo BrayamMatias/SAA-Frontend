@@ -1,11 +1,8 @@
-
-.button { /* Ajusta el ancho del botón */
-    height: 50px; /* Ajusta la altura del botón */
-    padding: 10px 20px; /* Ajusta el padding interno del botón */
+.button {
+    height: 50px;
+    padding: 10px 20px;
 }
-/* Media queries para dispositivos de pantalla más pequeña */
-@media only screen and (max-width: 768px) {
-    .container {
-        max-width: calc(100% - 4rem); /* Resta el margen para mantener el ancho correcto */
-    }
+
+.container{
+    margin-block: 2rem;
 }

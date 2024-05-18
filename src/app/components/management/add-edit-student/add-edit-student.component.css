@@ -1,17 +1,33 @@
-/* Media queries para dispositivos de pantalla más pequeña */
-@media only screen and (max-width: 768px) {
-    .container {
-        max-width: calc(100% - 4rem); /* Resta el margen para mantener el ancho correcto */
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.user-table-container {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 20px;
+    margin-inline: 1rem;
+    width: 100%;
+    max-width: 50%;
+    max-height: auto;
+
+    .full-width {
+        width: 100%;
     }
 }
+
 /* Media queries para dispositivos de pantalla más pequeña */
 @media only screen and (max-width: 768px) {
     .wrapper {
-        flex-direction: column; /* Cambia la dirección del flexbox a vertical */
-        padding: 20px; /* Agrega espacio alrededor del contenido */
+        flex-direction: column;
+    }
+
+    .user-table-container {
+        max-width: calc(100% - 4rem);
+        margin-top: 1rem;
+        margin-bottom: 2rem;
     }
 }
-
-
-
-

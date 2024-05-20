@@ -10,6 +10,7 @@ import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.servi
 })
 export class ManagementAttendanceListComponent implements OnInit {
     id:string;
+    periodId: string;
     datesArray: any;
 
     attendanceList: any[] = [];
@@ -46,6 +47,10 @@ export class ManagementAttendanceListComponent implements OnInit {
 
     editAttendanceList(date: string){
       this.router.navigate(['/edit-attendance-list', this.id, date]);
+    }
+
+    managementReports(){
+      this.router.navigate(['/management-reports', this.id]);
     }
 
     logout() {

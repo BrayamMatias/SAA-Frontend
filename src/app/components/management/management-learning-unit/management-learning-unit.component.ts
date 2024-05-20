@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LearningUnitService } from 'src/app/services/management/learning-unit.service';
+import { SharedService } from 'src/app/services/shared/shared.service';
 import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
 
 @Component({
@@ -8,25 +9,27 @@ import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.servi
   templateUrl: './management-learning-unit.component.html',
   styleUrls: ['./management-learning-unit.component.css']
 })
-export class ManagementLearningUnitComponent implements OnInit{
+export class ManagementLearningUnitComponent implements OnInit {
 
   learningUnits: any[] = [];
-  
+
   constructor(
     private router: Router,
     private _learnUnitService: LearningUnitService,
+    private _sharedService: SharedService,
     private _sweetAlertService: SweetAlertService,
   ) { }
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.getLearningUnits();
   }
 
-  managementList(id: string) {
+  managementList(id: string, periodId: string) {
     this.router.navigate(['/management-list', id]);
-    }
+    this._sharedService.changePeriodId(periodId);
+  }
 
-  getLearningUnits(){
+  getLearningUnits() {
     this._learnUnitService.getLearningUnits().subscribe((data) => {
       this.learningUnits = data.map((unit: any) => {
         if (unit.name) {
@@ -40,20 +43,20 @@ export class ManagementLearningUnitComponent implements OnInit{
     });
   }
 
-  editLearningUnit(id: string){
+  editLearningUnit(id: string) {
     this.router.navigate(['/edit-learning-unit', id]);
   }
 
-  deleteLearningUnit(id: string){
+  deleteLearningUnit(id: string) {
     this._sweetAlertService.showDeleteConfirmation().then((result) => {
       if (result.isConfirmed) {
         this._learnUnitService.deleteLearningUnit(id).subscribe(() => {
           this.getLearningUnits();
           this._sweetAlertService.showSuccessToast('Unidad de Aprendizaje eliminada correctamente');
         },
-        (error) => {
-          this._sweetAlertService.showErrorToast('Error al eliminar la Unidad de Aprendizaje');
-        });
+          (error) => {
+            this._sweetAlertService.showErrorToast('Error al eliminar la Unidad de Aprendizaje');
+          });
       }
     });
   }

@@ -1,1 +1,26 @@
-<p>management-reports works!</p>
+<mat-toolbar  color="primary" class="toolbar-list">
+    <mat-toolbar-row>
+        <button mat-icon-button color="basic" (click)="back()">
+            <mat-icon>arrow_back_ios</mat-icon>
+        </button>
+        <span class="spacer"></span>
+        <span>Gestión de Reportes</span>
+        <span class="spacer"></span>
+        <button mat-icon-button color="basic" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="wrapper">
+    <div class="container">
+        <div class="header">
+            <h1>Generar Reportes</h1>
+            <p>Selecciona el parcial o periodo que quieres generar</p>
+        </div>
+        <button mat-raised-button color="primary" class="button" (click)="getReportByPartial(this.firstPartial)">Generar reporte 1er Parcial</button>
+        <button mat-raised-button color="primary" class="button" (click)="getReportByPartial(this.secondPartial)">Generar reporte 2do Parcial</button>
+        <button mat-raised-button color="primary" class="button" (click)="getReportByPartial(this.thirdPartial)">Generar reporte 3er Parcial</button>
+        <button mat-raised-button color="primary" class="button" (click)="getReportByPeriod()">Generar reporte del Periodo</button>
+    </div>
+</div>

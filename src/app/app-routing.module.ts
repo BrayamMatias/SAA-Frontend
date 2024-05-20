@@ -50,7 +50,7 @@ const routes: Routes = [
   { path: 'edit-attendance-list/:id/:date', component: AttendanceListComponent, canActivate: [UserGuardService]},
 
   //Reports
-  { path: 'management-reports', component: ManagementReportsComponent, canActivate: [UserGuardService]},
+  { path: 'management-reports/:id', component: ManagementReportsComponent, canActivate: [UserGuardService]},
 
   //any other path
   { path: '**', redirectTo: 'login'},

@@ -15,7 +15,7 @@
 
 
 <div class="card-container">
-    <div class="card" (click)="managementList(subject.id)" *ngFor="let subject of learningUnits">
+    <div class="card" (click)="managementList(subject.id, subject.period.id)" *ngFor="let subject of learningUnits">
         <div class="card-header">
             <h2>{{subject.name}}</h2>
         </div>

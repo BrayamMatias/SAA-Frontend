@@ -26,6 +26,11 @@ export class LearningUnitService {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
     return this.http.get<LearnUnit[]>(`${this.myAppUrl}${this.myApiUrl}/own-subjects`, {headers});
   }
+
+  getPartialsBySubject(id: string): Promise<any> {
+    const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
+    return this.http.get<LearnUnit[]>(`${this.myAppUrl}${this.myApiUrl}/partial-by-subject/${id}`, {headers}).toPromise();
+  }
   
   createLearningUnit(learnUnit: LearnUnit): Observable<LearnUnit> {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)

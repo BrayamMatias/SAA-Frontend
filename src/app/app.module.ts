@@ -12,6 +12,9 @@ import { AttendanceListComponent } from './components/management/attendance-list
 import { ManagementReportsComponent } from './components/management/management-reports/management-reports.component';
 import { ForgotPasswordComponent } from './components/authentication/forgot-password/forgot-password.component';
 import { RegisterStudentComponent } from './components/authentication/register-student/register-student.component';
+import { PartialComponent } from './components/authentication/partial/partial.component';
+import { PeriodsComponent } from './components/authentication/periods/periods.component';
+import { ResetPasswordComponent } from './components/authentication/reset-password/reset-password.component';
 
 //Modules
 import { AppRoutingModule } from './app-routing.module';
@@ -25,9 +28,6 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { PartialComponent } from './components/authentication/partial/partial.component';
-import { PeriodsComponent } from './components/authentication/periods/periods.component';
-import { ResetPasswordComponent } from './components/authentication/reset-password/reset-password.component';
 
 
 @NgModule({

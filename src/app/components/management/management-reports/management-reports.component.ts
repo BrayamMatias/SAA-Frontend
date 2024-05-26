@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PartialService } from 'src/app/services/auth/partial.service';
-import { AttendancesService } from 'src/app/services/management/attendances.service';
-import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
-
-//Contruir PDF
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { LearningUnitService } from 'src/app/services/management/learning-unit.service';
 import { ReportsService } from 'src/app/services/management/reports.service';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { CookieService } from 'ngx-cookie-service';
+import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -22,6 +19,11 @@ export class ManagementReportsComponent implements OnInit {
   id: string;
   periodId: string;
   data: any;
+
+  nameSubject: string;
+  grade: string;
+  group: string;
+  period: any;
 
   datesArray: any;
   studentsArray: any;
@@ -55,11 +57,24 @@ export class ManagementReportsComponent implements OnInit {
     } catch (error) {
       this._sweetAlertService.showErrorToast('Error al obtener los parciales');
     }
+  }
 
+  async getSubjectData() {
+    try {
+      await this._learningUnitService.getLearningUnit(this.id).subscribe((data: any) => {
+        this.nameSubject = data.name;
+        this.grade = data.grade;
+        this.group = data.group;
+        this.period = data.period.name;
+      });
+    } catch (error) {
+      
+    }
   }
 
   async ngOnInit() {
     await this.getPartials();
+    await this.getSubjectData();
     this._sharedService.currentPeriodId.subscribe(periodId => {
       this.periodId = periodId || this._cookieService.get('periodId');
     });
@@ -77,22 +92,21 @@ export class ManagementReportsComponent implements OnInit {
     pdf.download();
   }
 
-
-
   getReportByPartial(partial) {
     let startDate = partial.startDate;
     let finishDate = partial.finishDate;
-    this._reportService.getReportByPartial(this.id, startDate, finishDate).subscribe(data => {
-      if (data == null || data == undefined || data == '') {
+    this._reportService.getReportByPartial(this.id, startDate, finishDate).subscribe((data: any) => {
+      if (data == null || data == undefined || data == '' || (data.students && data.students.length === 0)) {
         this._sweetAlertService.showErrorToast('No se encontraron datos');
       } else {
-        this.datesArray = (data as any[]).map(data => data.attendances.map(attendances => attendances.createdAt));
-        this.studentsArray = (data as any[]).map(data => data.student);
-        this.attendanceArray = (data as any[]).map(data => data.attendances);
-        this.attendanceByDate = (data as any[]).map(data => data.attendances.map(attendances => attendances.attendance));
-        this.totalAttendance = (data as any[]).map(data => data.totalAttendances);
-        this.percentageAttendance = (data as any[]).map(data => data.averageAttendance);
-        this.generateReportPartial();
+        this.totalAttendance = data.totalAttendances;
+        this.datesArray = data.students.map(studentData => studentData.attendances.map(attendance => attendance.createdAt));
+        this.studentsArray = data.students.map(studentData => studentData.student);
+        this.attendanceArray = data.students.map(studentData => studentData.attendances);
+        this.attendanceByDate = data.students.map(studentData => studentData.attendances.map(attendance => attendance.attendance));
+        this.percentageAttendance = data.students.map(studentData => studentData.averageAttendance);
+        
+        this.generateReportPartial(startDate, finishDate, this.nameSubject, this.grade, this.group, this.period);
         this._sweetAlertService.showSuccessToast('Reporte generado correctamente');
       }
     }, (error) => {
@@ -100,38 +114,36 @@ export class ManagementReportsComponent implements OnInit {
     });
   }
 
-  getReportByPeriod() {
-    this._reportService.getReportByPeriod(this.id, this.periodId).subscribe(data => {
-      if (data == null || data == undefined || data == '') {
-        this._sweetAlertService.showErrorToast('No se encontraron datos');
-      } else {
-        this.studentsArray = (data as any[]).map(data => data.student);
-        this.totalAttendance = (data as any[]).map(data => data.totalAttendances);
-        this.percentageAttendance = (data as any[]).map(data => data.averageAttendance);
-        this.generateReportPeriod();
-        this._sweetAlertService.showSuccessToast('Reporte generado correctamente');
-      }
-
-    }, (error) => {
-      console.log(error);
-      this._sweetAlertService.showErrorToast('Error al obtener el reporte');
-    });
-  }
-
-  generateReportPartial() {
+  generateReportPartial(startDate, finishDate, nameSubject, grade, group, period) {
     const dates = this.datesArray[0];
+    const groupedDates = this.groupByDate(dates);
     const students = this.studentsArray.map(student => student.fullName);
     const matriculas = this.studentsArray.map(student => student.matricula);
     const attendanceByDate = this.attendanceByDate;
-    const totalAttendance = this.totalAttendance;
     const percentageAttendance = this.percentageAttendance;
-    const header = ['No.', 'Matricula', 'Nombre', ...dates, 'T. Asis.', '%Asis.'];
+
+    let headerMonths = [{ text: `Total de asistencias: ${this.totalAttendance}`, colSpan: 3 }, '', ''];
+    let headerDetails = ['No.', 'Matricula', 'Nombre'];
+
+    for (let monthObj of groupedDates) {
+      headerMonths.push({ text: monthObj.month.charAt(0).toUpperCase() + monthObj.month.slice(1), colSpan: monthObj.days.length });
+      for (let day of monthObj.days) {
+        headerDetails.push(day);
+      }
+      for (let i = 1; i < monthObj.days.length; i++) {
+        headerMonths.push('');
+      }
+    }
+
+    headerMonths.push({ text: '', colSpan: 1 });
+    headerDetails.push('%Asis.');
 
     // Crear un array para el informe
     let report = [];
 
-    // Añadir la cabecera al informe
-    report.push(header);
+    // Añadir las cabeceras al informe
+    report.push(headerMonths);
+    report.push(headerDetails);
 
     // Añadir los datos de cada estudiante al informe
     for (let i = 0; i < students.length; i++) {
@@ -140,42 +152,84 @@ export class ManagementReportsComponent implements OnInit {
         matriculas[i] || 0,
         students[i] || 0,
         ...attendanceByDate[i],
-        totalAttendance[i] || 0,
-        percentageAttendance[i] || 0,
+        percentageAttendance[i] || '0.00',
       ];
-
-      // Rellenar con valores vacíos si la fila es más corta que el encabezado
-      while (row.length < header.length) {
-        row.push('');
-      }
-
       report.push(row);
     }
-
     // Crear la definición del documento para pdfmake
     let docDefinition = {
       pageOrientation: 'landscape',
       content: [
+        { text: 'Reporte Parcial\n', style: 'header' },
+        { text: `Materia: ${nameSubject} \tGrado: ${grade} \tGrupo: ${group} \tPeriodo: ${period}`, },
+        { text: `Fecha del parcial: ${startDate} - ${finishDate}\n\n`, },
         {
           table: {
-            headerRows: 1,
+            widths: new Array(headerDetails.length).fill('auto'),
+            headerRows: 2,
             body: report
           }
         }
-      ]
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true
+        },
+        bigger: {
+          fontSize: 15,
+          italics: true
+        }
+      }
     };
 
     // Crear el PDF
     const pdf = pdfMake.createPdf(docDefinition);
-    pdf.download();
+    pdf.download(`Reporte Parcial ${startDate} - ${finishDate}`);
   }
 
-  generateReportPeriod() {
+  groupByDate(dates: string[]) {
+    let groupedDates = [];
+    for (let date of dates) {
+      let dateObj = new Date(date);
+      let month = dateObj.toLocaleString('es-ES', { month: 'long' });
+
+      let monthObj = groupedDates.find(m => m.month === month);
+      if (!monthObj) {
+        monthObj = { month: month, days: [] };
+        groupedDates.push(monthObj);
+      }
+
+      monthObj.days.push(dateObj.getDate() + 1);
+    }
+    // Ordenar los días de cada mes de menor a mayor
+    for (let monthObj of groupedDates) {
+      monthObj.days.sort((a, b) => a - b);
+    }
+    return groupedDates;
+  }
+
+  getReportByPeriod() {
+    this._reportService.getReportByPeriod(this.id, this.periodId).subscribe((data: any) => {
+      if (data == null || data == undefined || data == '' || (data.students && data.students.length === 0)) {
+        this._sweetAlertService.showErrorToast('No se encontraron datos');
+      } else {
+        this.studentsArray = data.students.map(data => data.student);
+        this.totalAttendance = data.totalAttendances;
+        this.percentageAttendance = data.students.map(data => data.averageAttendance);
+        this.generateReportPeriod(this.nameSubject, this.grade, this.group,this.period,this.totalAttendance);
+        this._sweetAlertService.showSuccessToast('Reporte generado correctamente');
+      }
+    }, (error) => {
+      this._sweetAlertService.showErrorToast('Error al obtener el reporte');
+    });
+  }
+
+  generateReportPeriod(nameSubject, grade, group,period,totalAttendance) {
     const students = this.studentsArray.map(student => student.fullName);
     const matriculas = this.studentsArray.map(student => student.matricula);
-    const totalAttendance = this.totalAttendance;
     const percentageAttendance = this.percentageAttendance;
-    const header = ['No.', 'Matricula', 'Nombre', 'T. Asis.', '%Asis.'];
+    const header = ['No.', 'Matricula', 'Nombre', '%Asis.'];
 
     // Crear un array para el informe
     let report = [];
@@ -189,7 +243,6 @@ export class ManagementReportsComponent implements OnInit {
         i + 1,
         matriculas[i] || 0,
         students[i] || 0,
-        totalAttendance[i] || 0,
         percentageAttendance[i] || 0,
       ];
 
@@ -200,18 +253,31 @@ export class ManagementReportsComponent implements OnInit {
     let docDefinition = {
       pageOrientation: 'landscape',
       content: [
+        { text: `Reporte del periodo ${period}`, style: 'header' },
+        { text: `Materia: ${nameSubject}\tGrado: ${grade}\tGrupo: ${group}\n`, },
+        { text: `Total de asistencias: ${totalAttendance}\n\n`, },
         {
           table: {
             headerRows: 1,
             body: report
           }
         }
-      ]
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true
+        },
+        bigger: {
+          fontSize: 15,
+          italics: true
+        }
+      }
     };
 
     // Crear el PDF
     const pdf = pdfMake.createPdf(docDefinition);
-    pdf.download();
+    pdf.download(`Reporte periodo ${period}`);
   }
 
   back() {

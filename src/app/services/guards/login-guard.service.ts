@@ -11,6 +11,7 @@ export class LoginGuardService implements CanActivate{
 
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+
     if(user && user.roles){
       if(user.roles.includes('ADMIN_ROLE')){
         this.router.navigate(['/register']);

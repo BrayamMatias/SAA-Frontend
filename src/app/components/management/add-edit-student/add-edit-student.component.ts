@@ -123,31 +123,43 @@ export class AddEditStudentComponent implements OnInit {
   }
 
   deleteEnrollment(enrollmentId: string) {
-    let enrollment = [{
-      enrollmentId: enrollmentId
-    }];
-
-    this._enrollmentService.deleteEnrollments(enrollment).subscribe(data => {
-      this.getStudents();
-      this.getStudentsEnrolled();
-      this.deselectAllStudents();
-      this._sweetAlert.showSuccessToast('Estudiante eliminado correctamente');
-    }, error => {
-      this._sweetAlert.showErrorAlert('Error al eliminar al estudiante');
-    });
+    this._sweetAlert.showDeleteConfirmation()
+      .then((result) => {
+        if (result.value) {
+          let enrollment = [{
+            enrollmentId: enrollmentId
+          }];
+  
+          this._enrollmentService.deleteEnrollments(enrollment).subscribe(data => {
+            this.getStudents();
+            this.getStudentsEnrolled();
+            this.deselectAllStudents();
+            this._sweetAlert.showSuccessToast('Estudiante eliminado correctamente');
+          }, error => {
+            this._sweetAlert.showErrorAlert('Error al eliminar al estudiante');
+          });
+        }
+      });
   }
 
   deleteEnrollments(students: Student[]) {
-    let enrollments = students.filter(student => student.enrollmentId !== undefined)
-      .map(student => ({
-        enrollmentId: student.enrollmentId!
-      }));
-    this._enrollmentService.deleteEnrollments(enrollments).subscribe(data => {
-      this.getStudents();
-      this.getStudentsEnrolled();
-      this.deselectAllStudents();
-      this._sweetAlert.showSuccessToast('Estudiantes eliminados correctamente');
-    });
+    this._sweetAlert.showDeleteConfirmation()
+      .then((result) => {
+        if (result.value) {
+          let enrollments = students.filter(student => student.enrollmentId !== undefined)
+            .map(student => ({
+              enrollmentId: student.enrollmentId!
+            }));
+          this._enrollmentService.deleteEnrollments(enrollments).subscribe(data => {
+            this.getStudents();
+            this.getStudentsEnrolled();
+            this.deselectAllStudents();
+            this._sweetAlert.showSuccessToast('Estudiantes eliminados correctamente');
+          }, error => {
+            this._sweetAlert.showErrorAlert('Error al eliminar a los estudiantes');
+          });
+        }
+      });
   }
 
   getStudentsEnrolled() {

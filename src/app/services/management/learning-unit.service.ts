@@ -37,7 +37,7 @@ export class LearningUnitService {
     return this.http.post<LearnUnit>(`${this.myAppUrl}${this.myApiUrl}`, learnUnit, {headers});
   }
   
-  updateLearningUnit(id: string, learnUnit: Partial<LearnUnit>): Observable<LearnUnit> {
+  updateLearningUnit(id: string, learnUnit: LearnUnit): Observable<LearnUnit> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
     return this.http.patch<LearnUnit>(`${this.myAppUrl}${this.myApiUrl}/${id}`, learnUnit, { headers });
   }

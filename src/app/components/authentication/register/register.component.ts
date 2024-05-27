@@ -18,10 +18,16 @@ import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.servi
 export class RegisterComponent implements OnInit {
   searchText: string = '';
   formRegister: FormGroup;
-  displayedColumns: string[] = ['name', 'email', 'accion'];
+  displayedColumns: string[] = ['name', 'email','rol','accion'];
   dataSource = new MatTableDataSource<User>();
   operation: string = 'Registrar';
   id: string;
+
+  roleNames = {
+    'ADMIN_ROLE': 'Administrador',
+    'USER_ROLE': 'Docente',
+    // Agrega más roles aquí según sea necesario
+  };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -41,7 +47,8 @@ export class RegisterComponent implements OnInit {
         Validators.email,
         Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$'),
       ]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      roles: ['', Validators.required],
     });
 
     this.id = aRouter.snapshot.paramMap.get('id') || '';  // Obteniendo id como string
@@ -70,7 +77,8 @@ export class RegisterComponent implements OnInit {
       this.formRegister.setValue({
         fullName: data.fullName,
         email: data.email,
-        password: ''
+        password: '',
+        roles: data.roles[0],
       });
       // Deshabilita el campo de contraseña
       this.formRegister?.get('password')?.disable();
@@ -103,6 +111,8 @@ export class RegisterComponent implements OnInit {
   createUser() {
     if (this.operation === 'Registrar') {
       if (this.formRegister.valid) {
+        const formValue = this.formRegister.value;
+        formValue.roles = [formValue.roles];
         this._registerService.createUser(this.formRegister.value).subscribe(data => {
           this.formRegister.reset();
           this.router.navigate(['/register']);

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from 'src/app/services/auth/login.service';
 import { Router } from '@angular/router';
-import { User } from 'src/app/interfaces/user';
 import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.service';
 
 @Component({
@@ -42,16 +41,16 @@ export class LoginComponent implements OnInit {
       }, (error) => {
         this._sweetAlertService.showErrorAlert(error.error.message);
       });
-    } 
+    }
   }
 
-  redirectUser(role: string): string{
-    if(role.includes('ADMIN_ROLE')){
+  redirectUser(role: string): string {
+    if (role.includes('ADMIN_ROLE')) {
       return '/register';
-    } else if(role.includes('USER_ROLE')){
+    } else if (role.includes('USER_ROLE')) {
       return '/home';
-  }else{
-    return '/login';
+    } else {
+      return '/login';
     }
   }
 }

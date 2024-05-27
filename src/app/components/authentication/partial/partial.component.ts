@@ -19,8 +19,14 @@ export class PartialComponent implements OnInit {
   partialForm: FormGroup;
   periodForm: any;
   operation: string = 'Registrar';
-  partials_values: string[] = ['first', 'second', 'third']
   searchText: string = '';
+
+  partial = {
+    'first': 'Primero',
+    'second': 'Segundo',
+    'third': 'Tercero',
+    // Agrega más parciales aquí según sea necesario
+  };
 
   dataPartials: any[] = [];
   periods: any;

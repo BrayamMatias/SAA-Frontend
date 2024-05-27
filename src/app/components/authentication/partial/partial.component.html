@@ -26,6 +26,7 @@
             <mat-form-field class="full-width">
                 <mat-label>Periodo</mat-label>
                 <mat-select formControlName="id" required>
+                    <mat-option>--</mat-option>
                     <mat-option *ngFor="let period of periods" [value]="period.id">{{period.name}}</mat-option>
                 </mat-select>
                 <mat-hint>Selecciona el periodo</mat-hint>
@@ -36,7 +37,10 @@
             <mat-form-field class="full-width">
                 <mat-label>Parcial</mat-label>
                 <mat-select formControlName="partial" required>
-                    <mat-option *ngFor="let parcial of partials_values" [value]="parcial">{{parcial}}</mat-option>
+                    <mat-option>--</mat-option>
+                    <mat-option value="first">Primero</mat-option>
+                    <mat-option value="second">Segundo</mat-option>
+                    <mat-option value="third">Tercero</mat-option>
                 </mat-select>
                 <mat-hint>Selecciona el periodo</mat-hint>
             </mat-form-field>
@@ -81,7 +85,7 @@
             <!-- Partial Column -->
             <ng-container matColumnDef="partial">
                 <mat-header-cell *matHeaderCellDef> Parcial </mat-header-cell>
-                <mat-cell *matCellDef="let partials"> {{partials.partial}} </mat-cell>
+                <mat-cell *matCellDef="let partials"> {{partial[partials.partial]}} </mat-cell>
             </ng-container>
 
             <!-- StartDate Column -->

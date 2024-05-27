@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, delay } from 'rxjs';
 import { LearnUnit } from 'src/app/interfaces/learn-unit';
 import { PeriodsService } from 'src/app/services/auth/periods.service';
 import { LearningUnitService } from 'src/app/services/management/learning-unit.service';
@@ -38,6 +37,7 @@ export class AddEditLearningUnitComponent implements OnInit {
   val_hours = ['12:00 - 14:00', '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00'];
 
   constructor(
+    private cdRef:ChangeDetectorRef,
     private router: Router,
     private fb: FormBuilder,
     private aRouter: ActivatedRoute,
@@ -51,7 +51,6 @@ export class AddEditLearningUnitComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.id);
     if (this.id !== 'null') {
       this.operacion = 'Actualizar';
       this.getLearningUnit(this.id);
@@ -59,16 +58,19 @@ export class AddEditLearningUnitComponent implements OnInit {
     this.getPeriods();
   }
 
+  ngAfterViewInit() {
+    this.cdRef.detectChanges();
+    this.setStep(0);
+  }
+
   getPeriods() {
     this._periodService.getPeriods().subscribe(data => {
-      console.log(data);
       this.periods = data;
     });
   }
 
   getLearningUnit(id: string) {
     this._learnUnitService.getLearningUnit(id).subscribe((data: LearnUnit) => {
-      console.log(data);
       this.formLearningUnit.patchValue({
         name: data.name,
         period: data.period,
@@ -96,25 +98,31 @@ export class AddEditLearningUnitComponent implements OnInit {
 
   addLearningUnit() {
     let formValues = { ...this.formLearningUnit.value };
-
+    let period: any = this.formLearningUnit.get('period').value;
+    let periodId = period.id;
     if (this.id !== 'null') {
-      //Es actualizar
-      this._learnUnitService.updateLearningUnit(this.id, formValues as LearnUnit).subscribe(() => {
+      let formValues = {
+        name: this.formLearningUnit.get('name').value,
+        grade: this.formLearningUnit.get('grade').value,
+        group: this.formLearningUnit.get('group').value,
+        daysGiven: this.formLearningUnit.get('daysGiven').value,
+        endTime: this.formLearningUnit.get('endTime').value,
+        period: periodId,
+      };
+      this._learnUnitService.updateLearningUnit(this.id, formValues as LearnUnit).subscribe(data => {
         this.router.navigate(['/home']);
         this._sweetAlertService.showSuccessToast('Unidad de aprendizaje actualizada con éxito');
       },
         (error) => {
-          console.error('Error actualizando la unidad de aprendizaje', error);
           this._sweetAlertService.showErrorToast('Los datos coinciden con otra unidad de aprendizaje o hubo un error al actualizarla');
         });
     } else {
       //Es agregar
-      this._learnUnitService.createLearningUnit(formValues as LearnUnit).subscribe(() => {
+      this._learnUnitService.createLearningUnit(formValues as LearnUnit).subscribe(data => {
         this.router.navigate(['/home']);
         this._sweetAlertService.showSuccessToast('Unidad de aprendizaje creada con éxito');
       },
         (error) => {
-          console.error('Error creando la unidad de aprendizaje', error);
           this._sweetAlertService.showErrorToast('La unidad de aprendizaje ya existe o hubo un error al crearla');
         });
     }
@@ -179,7 +187,6 @@ export class AddEditLearningUnitComponent implements OnInit {
 
   submitForm() {
     if (this.formLearningUnit.valid) {
-      console.log(this.formLearningUnit.value);
       this.addLearningUnit();
     }
   }

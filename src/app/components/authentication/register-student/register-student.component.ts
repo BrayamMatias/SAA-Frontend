@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -20,11 +20,14 @@ export class RegisterStudentComponent implements OnInit{
   displayedColumns: string[] = ['fullName', 'matricula', 'accion'];
   dataSource = new MatTableDataSource<Student>();
   operation: string = 'Registrar';
-  id: string;  // Cambiado a string
+  id: string;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  
+  length = 100;
+  pageSizeOptions = [5, 10, 25];
+  pageIndex = 0;
+  pageSize = 10;
+  showFirstLastButtons = true;
+  pageEvent: PageEvent;
 
   constructor(
     private router: Router,
@@ -46,12 +49,18 @@ export class RegisterStudentComponent implements OnInit{
       this.operation = 'Actualizar';
       this.getStudent(this.id);  // Llamando a getUser si estamos actualizando
     }
-    this.getStudents();
   }
+
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
   };
+
+  handelPageEvent(event: PageEvent){
+    this.length = event.length;
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
+  }
 
   editStudent(id: string){
     this.id = id;
@@ -68,8 +77,8 @@ export class RegisterStudentComponent implements OnInit{
     });
   }
 
-  getStudents(){
-    this._studentService.getStudents().subscribe(data => {
+  getStudents(offset: number, limit: number){
+    this._studentService.getStudents(limit,offset).subscribe(data => {
       this.dataSource.data = data;
     });
   }
@@ -81,7 +90,7 @@ export class RegisterStudentComponent implements OnInit{
         this.id = '';
         this.formRegisterStudent.reset();
         this.router.navigate(['/register-student']);
-        this.getStudents();
+        this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
         this._sweetAlertService.showSuccessToast('Alumno actualizado correctamente');
       }, (error) => {
         this._sweetAlertService.showErrorAlert('Los datos coinciden con otro alumno o hubo un error al actualizar');
@@ -96,7 +105,7 @@ export class RegisterStudentComponent implements OnInit{
           this.formRegisterStudent.reset();
           this.router.navigate(['/register-student']);
           this._sweetAlertService.showSuccessToast('Alumno registrado correctamente');
-          this.getStudents();
+          this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
         }, (error) => {
           this._sweetAlertService.showErrorAlert(error.error.message);
         });
@@ -110,7 +119,7 @@ export class RegisterStudentComponent implements OnInit{
     this._sweetAlertService.showDeleteConfirmation().then(result => {
       if(result.isConfirmed){
         this._studentService.deleteStudent(id).subscribe(data => {
-          this.getStudents();
+          this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
           this._sweetAlertService.showSuccessToast('Alumno eliminado correctamente');
         }, 
         (error) => {

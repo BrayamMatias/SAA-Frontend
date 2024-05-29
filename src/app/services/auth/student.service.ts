@@ -22,9 +22,9 @@ export class StudentService {
     return this.http.get<Student>(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});
   }
 
-  getStudents(): Observable<Student[]> {
-    const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
-    return this.http.get<Student[]>(`${this.myAppUrl}${this.myApiUrl}`, {headers});
+  getStudents(limit: number, offset: number): Observable<Student[]> {
+    const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`);
+    return this.http.get<Student[]>(`${this.myAppUrl}${this.myApiUrl}?limit=${limit}&offset=${offset}`, {headers});
   }
 
   createStudent(student: Student): Observable<Student> {

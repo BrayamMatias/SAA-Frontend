@@ -19,6 +19,15 @@ export class EnrollmentService {
     this.myApiUrl = 'api/enrollments';
    }
 
+   getCountEnrollments(id: string): Observable<number> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
+    return this.http.get<number>(`${this.myAppUrl}${this.myApiUrl}/count-students-enrolled/${id}`, { headers });
+   }
+   getCountNotEnrollments(id: string): Observable<number> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
+    return this.http.get<number>(`${this.myAppUrl}${this.myApiUrl}/count-students-not-enrolled/${id}`, { headers });
+   }
+
    getEnrollment(id: string): Observable<Student>{
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
     return this.http.get<Student>(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});

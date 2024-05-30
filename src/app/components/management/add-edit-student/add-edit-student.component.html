@@ -64,7 +64,7 @@
         <mat-paginator
         #pageEventAdd
         (page)="handelPageEventAdd($event)"
-        [length]="length" 
+        [length]="lengthAdd" 
         [pageIndex]="pageIndexAdd"
         [pageSize]="pageSizeAdd" 
         [pageSizeOptions]="pageSizeOptionsAdd" 
@@ -124,7 +124,7 @@
         <mat-paginator
         #pageEventDelete
         (page)="handelPageEventDelete($event)"
-        [length]="length" 
+        [length]="lengthDelete" 
         [pageIndex]="pageIndexDelete"
         [pageSize]="pageSizeDelete" 
         [pageSizeOptions]="pageSizeOptionsDelete" 

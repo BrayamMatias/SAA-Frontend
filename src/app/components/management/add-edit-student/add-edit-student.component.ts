@@ -20,14 +20,13 @@ export class AddEditStudentComponent implements OnInit {
   searchTextDelete: string = '';
   displayedColumns: string[] = ['selected', 'matricula', 'nombre', 'accion'];
 
-  length = 100;
-
+  lengthAdd = 100;
   pageSizeOptionsAdd = [5, 10, 25];
   pageIndexAdd = 0;
   pageSizeAdd = 10;
   showFirstLastButtonsAdd = true;
 
-
+  lengthDelete = 100;
   pageSizeOptionsDelete = [5, 10, 25];
   pageIndexDelete = 0;
   pageSizeDelete = 10;
@@ -55,23 +54,26 @@ export class AddEditStudentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getCountEnrollments();
+    this.getCountNotEnrollments();
     this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
-    this.getNotEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
-  }
-  ngAfterViewInit(): void {
-    this.getEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
-    this.getNotEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
+    this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
   }
 
-  handelPageEventAdd(pageEventAdd: PageEvent){
-    this.length = pageEventAdd.length;
+  ngAfterViewInit(): void {
+    this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
+    this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
+  }
+
+  handelPageEventAdd(pageEventAdd: PageEvent) {
+    this.lengthAdd = pageEventAdd.length;
     this.pageIndexAdd = pageEventAdd.pageIndex;
     this.pageSizeAdd = pageEventAdd.pageSize;
-    this.getNotEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
+    this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
   }
 
-  handelPageEventDelete(pageEventDelete: PageEvent){
-    this.length = pageEventDelete.length;
+  handelPageEventDelete(pageEventDelete: PageEvent) {
+    this.lengthDelete = pageEventDelete.length;
     this.pageIndexDelete = pageEventDelete.pageIndex;
     this.pageSizeDelete = pageEventDelete.pageSize;
     this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
@@ -104,14 +106,26 @@ export class AddEditStudentComponent implements OnInit {
     this.selectedStudentsDelete = [];
   }
 
- getEnrolledStudents(offset: number, limit: number) {
-  this._enrollmentService.getEnrollmentspaginated(this.subjectId, limit, offset).subscribe(data => {
-    this.dataSourceDelete.data = data;
-  });
- }
+  getCountEnrollments() {
+    this._enrollmentService.getCountEnrollments(this.subjectId).subscribe((data: any) => {
+      this.lengthDelete = data.count;
+    });
+  }
+
+  getCountNotEnrollments() {
+    this._enrollmentService.getCountNotEnrollments(this.subjectId).subscribe((data: any) => {
+      this.lengthAdd = data.count;
+    });
+  }
+
+  getEnrolledStudents(offset: number, limit: number) {
+    this._enrollmentService.getEnrollmentspaginated(this.subjectId, limit, offset).subscribe(data => {
+      this.dataSourceDelete.data = data;
+    });
+  }
 
   getNotEnrolledStudents(offset: number, limit: number) {
-    this._enrollmentService.getNotEnrolledStudents(this.subjectId,limit, offset).subscribe(data => {
+    this._enrollmentService.getNotEnrolledStudents(this.subjectId, limit, offset).subscribe(data => {
       this.dataSourceAdd.data = data;
     });
   }
@@ -126,7 +140,9 @@ export class AddEditStudentComponent implements OnInit {
 
     this._enrollmentService.createEnrollment(this.subjectId, enrollments).subscribe(data => {
       this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
-      this.getNotEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
+      this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
+      this.getCountEnrollments();
+      this.getCountNotEnrollments();
       this.deselectAllStudents();
       this._sweetAlert.showSuccessToast('Estudiante añadido correctamente');
     }, error => {
@@ -142,7 +158,9 @@ export class AddEditStudentComponent implements OnInit {
 
     this._enrollmentService.createEnrollment(this.subjectId, enrollments).subscribe(data => {
       this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
-      this.getNotEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
+      this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
+      this.getCountEnrollments();
+      this.getCountNotEnrollments();
       this.deselectAllStudents();
       this._sweetAlert.showSuccessToast('Estudiantes añadidos correctamente');
     }, error => {
@@ -157,10 +175,12 @@ export class AddEditStudentComponent implements OnInit {
           let enrollment = [{
             enrollmentId: enrollmentId
           }];
-  
+
           this._enrollmentService.deleteEnrollments(enrollment).subscribe(data => {
-            this.getEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
-            this.getNotEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
+            this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
+            this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
+            this.getCountEnrollments();
+            this.getCountNotEnrollments();
             this.deselectAllStudents();
             this._sweetAlert.showSuccessToast('Estudiante eliminado correctamente');
           }, error => {
@@ -179,8 +199,10 @@ export class AddEditStudentComponent implements OnInit {
               enrollmentId: student.enrollmentId!
             }));
           this._enrollmentService.deleteEnrollments(enrollments).subscribe(data => {
-            this.getEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
-            this.getNotEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
+            this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
+            this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
+            this.getCountEnrollments();
+            this.getCountNotEnrollments();
             this.deselectAllStudents();
             this._sweetAlert.showSuccessToast('Estudiantes eliminados correctamente');
           }, error => {

@@ -18,6 +18,7 @@ export class AttendanceListComponent implements OnInit {
   operation: string = 'Registrar';
   subjectId: string;
   date: string;
+  length: number;
   displayedColumns: string[] = ['matricula', 'fullName', 'attendance'];
   dataSource = new MatTableDataSource<any>();
 
@@ -36,16 +37,26 @@ export class AttendanceListComponent implements OnInit {
     if (this.subjectId && this.date != 'null') {
       //Editar
       this.operation = 'Editar';
+      this.getCountEnrollments();
       this.getAttendanceByDate();
     }
     if (this.subjectId && this.date == 'null') {
       //Crear
-      this.getStudentAttendance();
+      this.getCountEnrollments();
     }
   }
+  
+  getCountEnrollments() {
+    this._enrollmentService.getCountEnrollments(this.subjectId).subscribe((data:any) => {
+      this.length = data.count;
+      if (this.date == 'null') {
+        this.getStudentAttendance(this.length, 0);
+      }
+    });
+  }
 
-  getStudentAttendance() {
-    this._enrollmentService.getEnrollments(this.subjectId).subscribe(data => {
+  getStudentAttendance(limit, offset) {
+    this._enrollmentService.getEnrollmentspaginated(this.subjectId,limit, offset).subscribe(data => {
       this.dataSource.data = data;
       this.attendanceArray = data.map(student => ({
         enrollmentId: student.enrollmentId,

@@ -31,5 +31,6 @@
 
     .table-container {
         max-width: calc(100% - 4rem);
+        margin-block: 1rem;
     }
 }

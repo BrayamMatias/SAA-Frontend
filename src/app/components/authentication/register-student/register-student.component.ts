@@ -14,7 +14,7 @@ import { StudentService } from 'src/app/services/auth/student.service';
   styleUrl: './register-student.component.css'
 })
 
-export class RegisterStudentComponent implements OnInit{
+export class RegisterStudentComponent implements OnInit {
   searchText: string = '';
   formRegisterStudent: FormGroup;
   displayedColumns: string[] = ['fullName', 'matricula', 'accion'];
@@ -35,17 +35,18 @@ export class RegisterStudentComponent implements OnInit{
     private fb: FormBuilder,
     private _studentService: StudentService,
     private _sweetAlertService: SweetAlertService,
-    ) { 
-      this.formRegisterStudent = this.fb.group({
-        fullName: ['', Validators.required],
-        matricula: ['', Validators.required],
-      });
+  ) {
+    this.formRegisterStudent = this.fb.group({
+      fullName: ['', Validators.required],
+      matricula: ['', Validators.required],
+    });
 
-      this.id = aRouter.snapshot.paramMap.get('id') || '';  // Obteniendo id como string
-    }
+    this.id = aRouter.snapshot.paramMap.get('id') || '';  // Obteniendo id como string
+  }
 
   ngOnInit(): void {
-    if(this.id != '' ){  // Comprobando si id no es una cadena vacía
+    this.getCountStudents();
+    if (this.id != '') {  // Comprobando si id no es una cadena vacía
       this.operation = 'Actualizar';
       this.getStudent(this.id);  // Llamando a getUser si estamos actualizando
     }
@@ -55,20 +56,26 @@ export class RegisterStudentComponent implements OnInit{
     this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
   };
 
-  handelPageEvent(event: PageEvent){
+  handelPageEvent(event: PageEvent) {
     this.length = event.length;
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
     this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
   }
 
-  editStudent(id: string){
+  getCountStudents() {
+    this._studentService.getCountStudents().subscribe((data: any) => {
+      this.length = data.totalStudents;
+    });
+  }
+
+  editStudent(id: string) {
     this.id = id;
     this.operation = 'Actualizar';
     this.getStudent(id);
   }
 
-  getStudent(id: string){
+  getStudent(id: string) {
     this._studentService.getStudent(this.id).subscribe(data => {
       this.formRegisterStudent.setValue({
         fullName: data.fullName,
@@ -77,20 +84,21 @@ export class RegisterStudentComponent implements OnInit{
     });
   }
 
-  getStudents(offset: number, limit: number){
-    this._studentService.getStudents(limit,offset).subscribe(data => {
+  getStudents(offset: number, limit: number) {
+    this._studentService.getStudents(limit, offset).subscribe(data => {
       this.dataSource.data = data;
     });
   }
 
-  updateStudent(){
-    if(this.formRegisterStudent.valid){
+  updateStudent() {
+    if (this.formRegisterStudent.valid) {
       this._studentService.updateStudent(this.id, this.formRegisterStudent.value).subscribe(data => {
         this.operation = 'Registrar';
         this.id = '';
         this.formRegisterStudent.reset();
         this.router.navigate(['/register-student']);
         this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
+        this.getCountStudents();
         this._sweetAlertService.showSuccessToast('Alumno actualizado correctamente');
       }, (error) => {
         this._sweetAlertService.showErrorAlert('Los datos coinciden con otro alumno o hubo un error al actualizar');
@@ -98,33 +106,35 @@ export class RegisterStudentComponent implements OnInit{
     }
   }
 
-  createStudent(){
-    if(this.operation === 'Registrar'){
-      if(this.formRegisterStudent.valid){
+  createStudent() {
+    if (this.operation === 'Registrar') {
+      if (this.formRegisterStudent.valid) {
         this._studentService.createStudent(this.formRegisterStudent.value).subscribe(data => {
           this.formRegisterStudent.reset();
           this.router.navigate(['/register-student']);
           this._sweetAlertService.showSuccessToast('Alumno registrado correctamente');
           this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
+          this.getCountStudents();
         }, (error) => {
           this._sweetAlertService.showErrorAlert(error.error.message);
         });
       }
-    } else if(this.operation === 'Actualizar'){
+    } else if (this.operation === 'Actualizar') {
       this.updateStudent();
     }
   }
 
-  deleteStudent(id: string){
+  deleteStudent(id: string) {
     this._sweetAlertService.showDeleteConfirmation().then(result => {
-      if(result.isConfirmed){
+      if (result.isConfirmed) {
         this._studentService.deleteStudent(id).subscribe(data => {
           this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
+          this.getCountStudents();
           this._sweetAlertService.showSuccessToast('Alumno eliminado correctamente');
-        }, 
-        (error) => {
-          this._sweetAlertService.showErrorToast('Error eliminando al alumno');
-        });
+        },
+          (error) => {
+            this._sweetAlertService.showErrorToast('Error eliminando al alumno');
+          });
       }
     });
   }

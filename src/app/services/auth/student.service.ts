@@ -17,6 +17,11 @@ export class StudentService {
     this.myApiUrl = 'api/students';
   }
 
+  getCountStudents(): Observable<number> {
+    const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`);
+    return this.http.get<number>(`${this.myAppUrl}${this.myApiUrl}/count-students`, {headers});
+  }
+
   getStudent(id: string): Observable<Student> {
     const headers = new HttpHeaders().set('Authorization',  `Bearer ${localStorage.getItem('token')}`)
     return this.http.get<Student>(`${this.myAppUrl}${this.myApiUrl}/${id}`, {headers});

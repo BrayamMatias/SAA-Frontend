@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -18,20 +18,23 @@ import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.servi
 export class RegisterComponent implements OnInit {
   searchText: string = '';
   formRegister: FormGroup;
-  displayedColumns: string[] = ['name', 'email','rol','accion'];
+  displayedColumns: string[] = ['name', 'email', 'rol', 'accion'];
   dataSource = new MatTableDataSource<User>();
   operation: string = 'Registrar';
   id: string;
+
+  length = 100;
+  pageSizeOptions = [5, 10, 25];
+  pageIndex = 0;
+  pageSize = 10;
+  showFirstLastButtons = true;
+  pageEvent: PageEvent;
 
   roleNames = {
     'ADMIN_ROLE': 'Administrador',
     'USER_ROLE': 'Docente',
     // Agrega más roles aquí según sea necesario
   };
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
 
   constructor(
     private router: Router,
@@ -55,16 +58,28 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getCountUsers();
     if (this.id != '') {  // Comprobando si id no es una cadena vacía
       this.operation = 'Actualizar';
       this.getUser(this.id);  // Llamando a getUser si estamos actualizando
     }
-    this.getUsers();
   }
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.getUsers(this.pageIndex * this.pageSize, this.pageSize);
   };
+
+  handelPageEvent(event: PageEvent) {
+    this.length = event.length;
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.getUsers(this.pageIndex * this.pageSize, this.pageSize);
+  }
+
+  getCountUsers() {
+    this._registerService.getCountUsers().subscribe((data: any) => {
+      this.length = data.totalUsers;
+    });
+  }
 
   editUser(id: string) {
     this.id = id;
@@ -85,8 +100,8 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this._registerService.getUsers().subscribe(data => {
+  getUsers(offset: number, limit: number) {
+    this._registerService.getUsersPaginated(limit, offset).subscribe(data => {
       this.dataSource.data = data;
     });
 
@@ -99,7 +114,8 @@ export class RegisterComponent implements OnInit {
         this.id = '';
         this.formRegister.reset();
         this.router.navigate(['/register']);
-        this.getUsers();
+        this.getUsers(this.pageIndex * this.pageSize, this.pageSize);
+        this.getCountUsers();
         this._sweetAlertService.showSuccessToast('Usuario actualizado correctamente');
         this.formRegister?.get('password')?.enable();
       }, (error) => {
@@ -117,7 +133,8 @@ export class RegisterComponent implements OnInit {
           this.formRegister.reset();
           this.router.navigate(['/register']);
           this._sweetAlertService.showSuccessToast('Usuario registrado correctamente');
-          this.getUsers();
+          this.getUsers(this.pageIndex * this.pageSize, this.pageSize);
+          this.getCountUsers();
         }, (error) => {
           this._sweetAlertService.showErrorAlert(error.error.message);
         });
@@ -131,7 +148,8 @@ export class RegisterComponent implements OnInit {
     this._sweetAlertService.showMessageConfirmation('Se eliminarán en cascada todos los elementos ligados a este usuario; esta acción no podrá revertirse.').then(result => {
       if (result.isConfirmed) {
         this._registerService.deleteUser(id).subscribe(data => {
-          this.getUsers();
+          this.getUsers(this.pageIndex * this.pageSize, this.pageSize);
+          this.getCountUsers();
           this._sweetAlertService.showSuccessToast('Usuario eliminado correctamente');
         },
           (error) => {

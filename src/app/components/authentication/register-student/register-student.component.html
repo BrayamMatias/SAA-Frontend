@@ -25,7 +25,7 @@
                 <div class="form-input">
                     <mat-form-field appearance="outline" class="full-width">
                         <mat-label>Matricula</mat-label>
-                        <input matInput formControlName="matricula" placeholder="Matricula" required>
+                        <input type="number" matInput formControlName="matricula" placeholder="Matricula" required>
                         <mat-error
                             *ngIf="formRegisterStudent.get('matricula')?.hasError('required') && formRegisterStudent.get('matricula')?.touched">El
                             campo es requerido</mat-error>

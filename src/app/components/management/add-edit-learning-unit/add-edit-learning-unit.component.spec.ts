@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddEditLearningUnitComponent } from './add-edit-learning-unit.component';
+import { AddEditLearningUnitComponent } from './add-edit-learning-unit';
 
 describe('AddEditLearningUnitComponent', () => {
   let component: AddEditLearningUnitComponent;

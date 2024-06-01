@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', data.token);
         this.router.navigate([this.redirectUser(data.roles)]);
       }, (error) => {
-        this._sweetAlertService.showErrorAlert(error.error.message);
+        this._sweetAlertService.showErrorAlert('Datos incorrectos o el usuario no existe');
       });
     }
   }

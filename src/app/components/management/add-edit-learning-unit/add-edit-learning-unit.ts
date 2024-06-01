@@ -114,7 +114,7 @@ export class AddEditLearningUnitComponent implements OnInit {
         this._sweetAlertService.showSuccessToast('Unidad de aprendizaje actualizada con éxito');
       },
         (error) => {
-          this._sweetAlertService.showErrorToast('Los datos coinciden con otra unidad de aprendizaje o hubo un error al actualizarla');
+          this._sweetAlertService.showErrorAlert('Los datos coinciden con otra unidad de aprendizaje o hubo un error al actualizarla');
         });
     } else {
       //Es agregar
@@ -123,7 +123,7 @@ export class AddEditLearningUnitComponent implements OnInit {
         this._sweetAlertService.showSuccessToast('Unidad de aprendizaje creada con éxito');
       },
         (error) => {
-          this._sweetAlertService.showErrorToast('La unidad de aprendizaje ya existe o hubo un error al crearla');
+          this._sweetAlertService.showErrorAlert('La unidad de aprendizaje ya existe o hubo un error al crearla');
         });
     }
   }

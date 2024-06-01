@@ -90,7 +90,7 @@ export class PeriodsComponent implements OnInit{
           this.formPeriod.reset();
           this._sweetAlertService.showSuccessAlert('Periodo creado correctamente');
         }, (error) => {
-          this._sweetAlertService.showErrorAlert(error.error.message);
+          this._sweetAlertService.showErrorAlert('El periodo ya existe o hubo un error creando el periodo');
         })
       }
     }else if(this.operation === 'Actualizar'){
@@ -101,7 +101,7 @@ export class PeriodsComponent implements OnInit{
           this.operation = 'Registrar';
           this._sweetAlertService.showSuccessToast('Periodo actualizado correctamente');
         }, (error) => {
-          this._sweetAlertService.showErrorAlert(error.error.message);
+          this._sweetAlertService.showErrorAlert('El periodo ya existe o hubo un error actualizando el periodo');
         })
       }
     }

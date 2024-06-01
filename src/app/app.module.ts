@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { LoginComponent } from './components/authentication/login/login.component';
 import { RegisterComponent } from './components/authentication/register/register.component';
 import { AddEditStudentComponent } from './components/management/add-edit-student/add-edit-student.component';
-import { AddEditLearningUnitComponent } from './components/management/add-edit-learning-unit/add-edit-learning-unit.component';
+import { AddEditLearningUnitComponent } from './components/management/add-edit-learning-unit/add-edit-learning-unit';
 import { ManagementLearningUnitComponent } from './components/management/management-learning-unit/management-learning-unit.component';
 import { ManagementAttendanceListComponent } from './components/management/management-attendance-list/management-attendance-list.component';
 import { AttendanceListComponent } from './components/management/attendance-list/attendance-list.component';

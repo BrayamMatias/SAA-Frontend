@@ -76,17 +76,17 @@ export class AttendanceListComponent implements OnInit {
   createAttendance() {
     if (this.operation == 'Registrar') {
       this._attendanceService.createAttendance(this.attendanceArray).subscribe(data => {
-        this._sweetAlertService.showSuccessToast('Asistencia registrada correctamente');
         this.router.navigate(['/management-list', this.subjectId])
+        this._sweetAlertService.showSuccessToast('Asistencia registrada correctamente');
       }, (error) => {
-        this._sweetAlertService.showErrorAlert(error.error.message);
+        this._sweetAlertService.showErrorAlert('No se puede volver a pasar lista el mismo día para la misma materia o hubo un error al registrar la asistencia');
       });
     }
 
     if (this.operation == 'Editar') {
       this._attendanceService.updateAttendance(this.attendanceArray).subscribe(data => {
-        this._sweetAlertService.showSuccessToast('Asistencia actualizada correctamente');
         this.router.navigate(['/management-list', this.subjectId])
+        this._sweetAlertService.showSuccessToast('Asistencia actualizada correctamente');
       }, (error) => {
         this._sweetAlertService.showErrorToast('Error al actualizar la asistencia');
       });

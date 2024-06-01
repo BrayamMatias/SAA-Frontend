@@ -25,8 +25,8 @@ export class ManagementLearningUnitComponent implements OnInit {
   }
 
   managementList(id: string, periodId: string) {
-    this.router.navigate(['/management-list', id]);
     this._sharedService.changePeriodId(periodId);
+    this.router.navigate(['/management-list', id]);
   }
 
   getLearningUnits() {

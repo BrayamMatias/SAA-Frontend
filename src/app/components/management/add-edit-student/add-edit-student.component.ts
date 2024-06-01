@@ -54,10 +54,7 @@ export class AddEditStudentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCountEnrollments();
-    this.getCountNotEnrollments();
-    this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
-    this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
+    this.updateDatas();
   }
 
   ngAfterViewInit(): void {
@@ -101,11 +98,6 @@ export class AddEditStudentComponent implements OnInit {
     }
   }
 
-  deselectAllStudents() {
-    this.selectedStudentsAdd = [];
-    this.selectedStudentsDelete = [];
-  }
-
   getCountEnrollments() {
     this._enrollmentService.getCountEnrollments(this.subjectId).subscribe((data: any) => {
       this.lengthDelete = data.count;
@@ -139,10 +131,7 @@ export class AddEditStudentComponent implements OnInit {
     }));
 
     this._enrollmentService.createEnrollment(this.subjectId, enrollments).subscribe(data => {
-      this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
-      this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
-      this.getCountEnrollments();
-      this.getCountNotEnrollments();
+      this.updateDatas();
       this.deselectAllStudents();
       this._sweetAlert.showSuccessToast('Estudiante añadido correctamente');
     }, error => {
@@ -157,10 +146,7 @@ export class AddEditStudentComponent implements OnInit {
       }));
 
     this._enrollmentService.createEnrollment(this.subjectId, enrollments).subscribe(data => {
-      this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
-      this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
-      this.getCountEnrollments();
-      this.getCountNotEnrollments();
+      this.updateDatas();
       this.deselectAllStudents();
       this._sweetAlert.showSuccessToast('Estudiantes añadidos correctamente');
     }, error => {
@@ -177,10 +163,7 @@ export class AddEditStudentComponent implements OnInit {
           }];
 
           this._enrollmentService.deleteEnrollments(enrollment).subscribe(data => {
-            this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
-            this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
-            this.getCountEnrollments();
-            this.getCountNotEnrollments();
+            this.updateDatas();
             this.deselectAllStudents();
             this._sweetAlert.showSuccessToast('Estudiante eliminado correctamente');
           }, error => {
@@ -199,10 +182,7 @@ export class AddEditStudentComponent implements OnInit {
               enrollmentId: student.enrollmentId!
             }));
           this._enrollmentService.deleteEnrollments(enrollments).subscribe(data => {
-            this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
-            this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
-            this.getCountEnrollments();
-            this.getCountNotEnrollments();
+            this.updateDatas();
             this.deselectAllStudents();
             this._sweetAlert.showSuccessToast('Estudiantes eliminados correctamente');
           }, error => {
@@ -224,6 +204,18 @@ export class AddEditStudentComponent implements OnInit {
       return data.matricula.toLowerCase().includes(filter) || data.fullName.toLowerCase().includes(filter);
     };
     this.dataSourceDelete.filter = this.searchTextDelete.trim().toLowerCase();
+  }
+
+  deselectAllStudents() {
+    this.selectedStudentsAdd = [];
+    this.selectedStudentsDelete = [];
+  }
+
+  updateDatas() {
+    this.getCountEnrollments();
+    this.getCountNotEnrollments();
+    this.getEnrolledStudents(this.pageIndexDelete * this.pageSizeDelete, this.pageSizeDelete);
+    this.getNotEnrolledStudents(this.pageIndexAdd * this.pageSizeAdd, this.pageSizeAdd);
   }
 
   back() {

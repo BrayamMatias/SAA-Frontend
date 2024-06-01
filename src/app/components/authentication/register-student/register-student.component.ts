@@ -97,8 +97,7 @@ export class RegisterStudentComponent implements OnInit {
         this.id = '';
         this.formRegisterStudent.reset();
         this.router.navigate(['/register-student']);
-        this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
-        this.getCountStudents();
+        this.updateDatas();
         this._sweetAlertService.showSuccessToast('Alumno actualizado correctamente');
       }, (error) => {
         this._sweetAlertService.showErrorAlert('Los datos coinciden con otro alumno o hubo un error al actualizar');
@@ -112,11 +111,10 @@ export class RegisterStudentComponent implements OnInit {
         this._studentService.createStudent(this.formRegisterStudent.value).subscribe(data => {
           this.formRegisterStudent.reset();
           this.router.navigate(['/register-student']);
+          this.updateDatas();
           this._sweetAlertService.showSuccessToast('Alumno registrado correctamente');
-          this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
-          this.getCountStudents();
         }, (error) => {
-          this._sweetAlertService.showErrorAlert(error.error.message);
+          this._sweetAlertService.showErrorAlert('El alumno ya existe o hubo un error creando el alumno');
         });
       }
     } else if (this.operation === 'Actualizar') {
@@ -128,8 +126,7 @@ export class RegisterStudentComponent implements OnInit {
     this._sweetAlertService.showDeleteConfirmation().then(result => {
       if (result.isConfirmed) {
         this._studentService.deleteStudent(id).subscribe(data => {
-          this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
-          this.getCountStudents();
+          this.updateDatas();
           this._sweetAlertService.showSuccessToast('Alumno eliminado correctamente');
         },
           (error) => {
@@ -146,6 +143,11 @@ export class RegisterStudentComponent implements OnInit {
       return data.fullName.toLowerCase().includes(filter) || data.matricula.toLowerCase().includes(filter);
     };
     this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
+
+  updateDatas(){
+    this.getStudents(this.pageIndex * this.pageSize, this.pageSize);
+    this.getCountStudents();
   }
 
   logout() {

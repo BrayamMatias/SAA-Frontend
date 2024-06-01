@@ -104,22 +104,22 @@ export class RegisterComponent implements OnInit {
     this._registerService.getUsersPaginated(limit, offset).subscribe(data => {
       this.dataSource.data = data;
     });
-
   }
 
   updateUser() {
     if (this.formRegister.valid) {
+      const formValue = this.formRegister.value;
+      formValue.roles = [formValue.roles];
       this._registerService.updateUser(this.id, this.formRegister.value).subscribe(data => {
         this.operation = 'Registrar';
         this.id = '';
         this.formRegister.reset();
         this.router.navigate(['/register']);
-        this.getUsers(this.pageIndex * this.pageSize, this.pageSize);
-        this.getCountUsers();
+        this.updateDatas();
         this._sweetAlertService.showSuccessToast('Usuario actualizado correctamente');
         this.formRegister?.get('password')?.enable();
       }, (error) => {
-        this._sweetAlertService.showErrorAlert(error.error.message);
+        this._sweetAlertService.showErrorAlert('El correo ya existe o hubo un error al actualizar');
       });
     }
   }
@@ -132,11 +132,10 @@ export class RegisterComponent implements OnInit {
         this._registerService.createUser(this.formRegister.value).subscribe(data => {
           this.formRegister.reset();
           this.router.navigate(['/register']);
+          this.updateDatas();
           this._sweetAlertService.showSuccessToast('Usuario registrado correctamente');
-          this.getUsers(this.pageIndex * this.pageSize, this.pageSize);
-          this.getCountUsers();
         }, (error) => {
-          this._sweetAlertService.showErrorAlert(error.error.message);
+          this._sweetAlertService.showErrorAlert('El correo ya existe o hubo un error creando el usuario');
         });
       }
     } else if (this.operation === 'Actualizar') {
@@ -147,9 +146,9 @@ export class RegisterComponent implements OnInit {
   deleteUser(id: string) {
     this._sweetAlertService.showMessageConfirmation('Se eliminarán en cascada todos los elementos ligados a este usuario; esta acción no podrá revertirse.').then(result => {
       if (result.isConfirmed) {
+
         this._registerService.deleteUser(id).subscribe(data => {
-          this.getUsers(this.pageIndex * this.pageSize, this.pageSize);
-          this.getCountUsers();
+          this.updateDatas();
           this._sweetAlertService.showSuccessToast('Usuario eliminado correctamente');
         },
           (error) => {
@@ -166,6 +165,11 @@ export class RegisterComponent implements OnInit {
       return data.fullName.toLowerCase().includes(filter) || data.email.toLowerCase().includes(filter);
     };
     this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
+
+  updateDatas() {
+    this.getUsers(this.pageIndex * this.pageSize, this.pageSize);
+    this.getCountUsers();
   }
 
   logout() {

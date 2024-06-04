@@ -10,7 +10,7 @@ import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.servi
   styleUrls: ['./management-learning-unit.component.css']
 })
 export class ManagementLearningUnitComponent implements OnInit {
-
+  user: any = JSON.parse(localStorage.getItem('user') || '{}');
   learningUnits: any[] = [];
 
   constructor(
@@ -22,6 +22,10 @@ export class ManagementLearningUnitComponent implements OnInit {
 
   ngOnInit(): void {
     this.getLearningUnits();
+  }
+
+  userHasBothRoles(): boolean {
+    return this.user.roles.includes('ADMIN_ROLE') && this.user.roles.includes('USER_ROLE');
   }
 
   managementList(id: string, periodId: string) {

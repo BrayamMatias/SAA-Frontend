@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegisterService } from 'src/app/services/auth/register.service';
@@ -16,6 +15,7 @@ import { SweetAlertService } from 'src/app/services/sweetAlert/sweet-alert.servi
 })
 
 export class RegisterComponent implements OnInit {
+  user: any = JSON.parse(localStorage.getItem('user'));
   searchText: string = '';
   formRegister: FormGroup;
   displayedColumns: string[] = ['name', 'email', 'rol', 'accion'];
@@ -53,7 +53,6 @@ export class RegisterComponent implements OnInit {
       password: ['', Validators.required],
       roles: ['', Validators.required],
     });
-
     this.id = aRouter.snapshot.paramMap.get('id') || '';  // Obteniendo id como string
   }
 
@@ -75,6 +74,10 @@ export class RegisterComponent implements OnInit {
     this.getUsers(this.pageIndex * this.pageSize, this.pageSize);
   }
 
+  userHasBothRoles(): boolean {
+    return this.user.roles.includes('ADMIN_ROLE') && this.user.roles.includes('USER_ROLE');
+  }
+
   getCountUsers() {
     this._registerService.getCountUsers().subscribe((data: any) => {
       this.length = data.totalUsers;
@@ -93,7 +96,7 @@ export class RegisterComponent implements OnInit {
         fullName: data.fullName,
         email: data.email,
         password: '',
-        roles: data.roles[0],
+        roles: data.roles,
       });
       // Deshabilita el campo de contraseña
       this.formRegister?.get('password')?.disable();
@@ -108,8 +111,6 @@ export class RegisterComponent implements OnInit {
 
   updateUser() {
     if (this.formRegister.valid) {
-      const formValue = this.formRegister.value;
-      formValue.roles = [formValue.roles];
       this._registerService.updateUser(this.id, this.formRegister.value).subscribe(data => {
         this.operation = 'Registrar';
         this.id = '';
@@ -127,8 +128,6 @@ export class RegisterComponent implements OnInit {
   createUser() {
     if (this.operation === 'Registrar') {
       if (this.formRegister.valid) {
-        const formValue = this.formRegister.value;
-        formValue.roles = [formValue.roles];
         this._registerService.createUser(this.formRegister.value).subscribe(data => {
           this.formRegister.reset();
           this.router.navigate(['/register']);

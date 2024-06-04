@@ -1,5 +1,8 @@
 <mat-toolbar color="primary" class="toolbar-admin">
     <mat-toolbar-row>
+        <button mat-icon-button title="Ir al administrador" routerLink="/register" *ngIf="userHasBothRoles()">
+            <mat-icon>admin_panel_settings</mat-icon>
+        </button>
         <span class="spacer"></span>
         <span>Inicio</span>
         <span class="spacer"></span>

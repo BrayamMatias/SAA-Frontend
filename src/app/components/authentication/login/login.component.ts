@@ -45,6 +45,9 @@ export class LoginComponent implements OnInit {
   }
 
   redirectUser(role: string): string {
+    if (role.includes('ADMIN_ROLE') && role.includes('USER_ROLE')){
+      return '/home';
+    }
     if (role.includes('ADMIN_ROLE')) {
       return '/register';
     } else if (role.includes('USER_ROLE')) {

@@ -1,6 +1,9 @@
 <!-- Interfaz Registro -->
 <mat-toolbar color="primary" class="toolbar-admin">
     <mat-toolbar-row>
+        <button mat-icon-button title="Ir a docencia" routerLink="/home" *ngIf="userHasBothRoles()">
+            <mat-icon>home</mat-icon>
+        </button>
         <span>Administrador</span>
         <span class="spacer"></span>
         <button mat-icon-button color="basic" (click)="logout()">
@@ -60,8 +63,7 @@
                 <div class="form-input">
                     <mat-form-field class="full-width">
                         <mat-label>Rol del usuario</mat-label>
-                        <mat-select formControlName="roles" required>
-                            <mat-option>--</mat-option>
+                        <mat-select formControlName="roles" multiple required>
                             <mat-option value="ADMIN_ROLE">Administrador</mat-option>
                             <mat-option value="USER_ROLE">Docente</mat-option>
                         </mat-select>
@@ -95,7 +97,11 @@
 
             <ng-container matColumnDef="rol">
                 <mat-header-cell *matHeaderCellDef> Rol </mat-header-cell>
-                <mat-cell *matCellDef="let user"> {{roleNames[user.roles]}} </mat-cell>
+                <mat-cell *matCellDef="let user">
+                <ng-container *ngFor="let role of user.roles">
+                    {{roleNames[role]}}
+                </ng-container>
+                </mat-cell>
             </ng-container>
 
             <!-- Accion Column -->

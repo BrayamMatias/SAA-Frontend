@@ -13,6 +13,10 @@ export class LoginGuardService implements CanActivate{
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
     if(user && user.roles){
+      if(user.roles.includes('ADMIN_ROLE') && user.roles.includes('USER_ROLE')){
+        this.router.navigate(['/home']);
+        return false;
+      }
       if(user.roles.includes('ADMIN_ROLE')){
         this.router.navigate(['/register']);
         return false;

@@ -34,12 +34,10 @@ export class ResetPasswordComponent implements OnInit{
     if(this.formResetPassword.valid){
       this._forgotPasswordService.resetPassword(this.token, this.formResetPassword.value.password).subscribe(
         data => {
-          console.log(data);
           this._sweetAlert.showSuccessAlert('Contraseña actualizada con éxito');
           this.router.navigate(['/login']);
         },
         error => {
-          console.log(error);
           this._sweetAlert.showErrorAlert('Error al actualizar la contraseña, intente más tarde');
         }
       );

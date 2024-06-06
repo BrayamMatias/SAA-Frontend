@@ -51,6 +51,10 @@ export class ManagementReportsComponent implements OnInit {
   async getPartials() {
     try {
       this.data = await this._learningUnitService.getPartialsBySubject(this.id);
+      if (this.data.length != 3) {
+        this._sweetAlertService.showErrorToast('Para continuar deben existir los tres parciales');
+        return this.back();
+      }
       this.firstPartial = this.data[0];
       this.secondPartial = this.data[1];
       this.thirdPartial = this.data[2];
@@ -68,7 +72,7 @@ export class ManagementReportsComponent implements OnInit {
         this.period = data.period.name;
       });
     } catch (error) {
-      
+      this._sweetAlertService.showErrorToast('Error al obtener los datos de la materia');
     }
   }
 
@@ -95,6 +99,7 @@ export class ManagementReportsComponent implements OnInit {
   getReportByPartial(partial) {
     let startDate = partial.startDate;
     let finishDate = partial.finishDate;
+    
     this._reportService.getReportByPartial(this.id, startDate, finishDate).subscribe((data: any) => {
       if (data == null || data == undefined || data == '' || (data.students && data.students.length === 0)) {
         this._sweetAlertService.showErrorToast('No se encontraron datos');

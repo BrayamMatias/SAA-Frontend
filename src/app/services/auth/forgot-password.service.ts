@@ -22,8 +22,8 @@ export class ForgotPasswordService {
     });
   }
 
-  resetPassword(token: string, newPassword: string) {
-    const body = { newPassword };
+  resetPassword(token: string, password: string) {
+    const body = { password };
   
     return this.http.post(`${this.myAppUrl}${this.myApiUrl}/reset-password/${token}`, body, {
       headers: { 'Content-Type': 'application/json' }

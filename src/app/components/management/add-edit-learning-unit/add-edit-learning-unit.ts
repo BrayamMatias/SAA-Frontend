@@ -72,7 +72,10 @@ export class AddEditLearningUnitComponent implements OnInit {
   getLearningUnit(id: string) {
     this._learnUnitService.getLearningUnit(id).subscribe((data: LearnUnit) => {
       this.formLearningUnit.patchValue({
-        name: data.name,
+        name: data.name.replace(/-/g, ' ')
+        .split(' ')
+        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' '),
         period: data.period,
         grade: data.grade,
         group: data.group,
@@ -93,6 +96,18 @@ export class AddEditLearningUnitComponent implements OnInit {
       data.endTime.forEach(time => {
         endTimeControl.push(this.fb.control(time));
       });
+
+      // Update validation for all time controls
+    this.endTime.controls.forEach((control, i) => {
+      control.setValidators([Validators.required, this.validateTimeNotRepeated(i)]);
+      control.updateValueAndValidity();
+    });
+
+    // Update validation for all day controls
+    this.daysGiven.controls.forEach((control, i) => {
+      control.setValidators([Validators.required, this.validateDayNotRepeated(i)]);
+      control.updateValueAndValidity();
+    });
     });
   }
 
@@ -112,8 +127,7 @@ export class AddEditLearningUnitComponent implements OnInit {
       this._learnUnitService.updateLearningUnit(this.id, formValues as LearnUnit).subscribe(data => {
         this.router.navigate(['/home']);
         this._sweetAlertService.showSuccessToast('Unidad de aprendizaje actualizada con éxito');
-      },
-        (error) => {
+      },(error) => {
           this._sweetAlertService.showErrorAlert('Los datos coinciden con otra unidad de aprendizaje o hubo un error al actualizarla');
         });
     } else {
@@ -146,7 +160,7 @@ export class AddEditLearningUnitComponent implements OnInit {
 
   addDayAndTime() {
     const index = this.daysGiven.length;
-    const dayControl = this.fb.control('', Validators.required) as FormControl;
+    const dayControl = this.fb.control('', [Validators.required, this.validateDayNotRepeated(index)]) as FormControl;
     const timeControl = this.fb.control('', [Validators.required, this.validateTimeNotRepeated(index)]) as FormControl;
 
     // Update validation when the day changes
@@ -166,10 +180,16 @@ export class AddEditLearningUnitComponent implements OnInit {
       this.endTime.removeAt(index);
       this.selectedDays.splice(index, 1);
       this.selectedTime.splice(index, 1);
-
+  
       // Update validation for all time controls
       this.endTime.controls.forEach((control, i) => {
         control.setValidators([Validators.required, this.validateTimeNotRepeated(i)]);
+        control.updateValueAndValidity();
+      });
+  
+      // Update validation for all day controls
+      this.daysGiven.controls.forEach((control, i) => {
+        control.setValidators([Validators.required, this.validateDayNotRepeated(i)]);
         control.updateValueAndValidity();
       });
     }
@@ -182,6 +202,15 @@ export class AddEditLearningUnitComponent implements OnInit {
         return i !== index && timeControl.value && timeControl.value === control.value && dayControl.value === this.getDayControl(index).value;
       });
       return invalid ? { 'timeRepeated': { value: control.value } } : null;
+    };
+  }
+
+  validateDayNotRepeated(index: number): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const invalid = this.daysGiven.controls.some((dayControl, i) => {
+        return i !== index && dayControl.value === control.value;
+      });
+      return invalid ? { 'dayRepeated': { value: control.value } } : null;
     };
   }
 

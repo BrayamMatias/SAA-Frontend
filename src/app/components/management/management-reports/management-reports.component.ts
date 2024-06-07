@@ -66,7 +66,10 @@ export class ManagementReportsComponent implements OnInit {
   async getSubjectData() {
     try {
       await this._learningUnitService.getLearningUnit(this.id).subscribe((data: any) => {
-        this.nameSubject = data.name;
+        this.nameSubject = data.name.replace(/-/g, ' ')
+        .split(' ')
+        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
         this.grade = data.grade;
         this.group = data.group;
         this.period = data.period.name;
@@ -97,6 +100,17 @@ export class ManagementReportsComponent implements OnInit {
   }
 
   getReportByPartial(partial) {
+    let namePartial;
+    if(partial == this.firstPartial) {
+      namePartial = 'primer';
+    }
+    if(partial == this.secondPartial) {
+      namePartial = 'segundo';
+    }
+    if(partial == this.thirdPartial) {
+      namePartial = 'tercer';
+    }
+
     let startDate = partial.startDate;
     let finishDate = partial.finishDate;
     
@@ -111,7 +125,7 @@ export class ManagementReportsComponent implements OnInit {
         this.attendanceByDate = data.students.map(studentData => studentData.attendances.map(attendance => attendance.attendance));
         this.percentageAttendance = data.students.map(studentData => studentData.averageAttendance);
         
-        this.generateReportPartial(startDate, finishDate, this.nameSubject, this.grade, this.group, this.period);
+        this.generateReportPartial(startDate, finishDate, this.nameSubject, this.grade, this.group, this.period, namePartial);
         this._sweetAlertService.showSuccessToast('Reporte generado correctamente');
       }
     }, (error) => {
@@ -119,7 +133,7 @@ export class ManagementReportsComponent implements OnInit {
     });
   }
 
-  generateReportPartial(startDate, finishDate, nameSubject, grade, group, period) {
+  generateReportPartial(startDate, finishDate, nameSubject, grade, group, period, namePartial) {
     const dates = this.datesArray[0];
     const groupedDates = this.groupByDate(dates);
     const students = this.studentsArray.map(student => student.fullName);
@@ -165,9 +179,9 @@ export class ManagementReportsComponent implements OnInit {
     let docDefinition = {
       pageOrientation: 'landscape',
       content: [
-        { text: 'Reporte Parcial\n', style: 'header' },
+        { text: `Reporte de ${namePartial} parcial\n`, style: 'header' },
         { text: `Materia: ${nameSubject} \tGrado: ${grade} \tGrupo: ${group} \tPeriodo: ${period}`, },
-        { text: `Fecha del parcial: ${startDate} - ${finishDate}\n\n`, },
+        { text: `Fecha del ${namePartial} parcial: ${startDate} - ${finishDate}\n\n`, },
         {
           table: {
             widths: new Array(headerDetails.length).fill('auto'),
@@ -190,7 +204,7 @@ export class ManagementReportsComponent implements OnInit {
 
     // Crear el PDF
     const pdf = pdfMake.createPdf(docDefinition);
-    pdf.download(`Reporte Parcial ${startDate} - ${finishDate}`);
+    pdf.download(`Reporte ${namePartial} parcial ${startDate} - ${finishDate}`);
   }
 
   groupByDate(dates: string[]) {

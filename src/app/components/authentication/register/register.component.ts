@@ -145,7 +145,6 @@ export class RegisterComponent implements OnInit {
   deleteUser(id: string) {
     this._sweetAlertService.showMessageConfirmation('Se eliminarán en cascada todos los elementos ligados a este usuario; esta acción no podrá revertirse.').then(result => {
       if (result.isConfirmed) {
-
         this._registerService.deleteUser(id).subscribe(data => {
           this.updateDatas();
           this._sweetAlertService.showSuccessToast('Usuario eliminado correctamente');
